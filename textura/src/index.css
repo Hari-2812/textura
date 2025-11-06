@@ -3,16 +3,7 @@ body {
   font-family: "Poppins", sans-serif;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2rem;
-  background: white;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}
+
 html, body {
   overflow-x: hidden;
   width: 100%;
@@ -31,10 +22,7 @@ html, body {
   overflow-x: hidden;
 }
 
-.search-bar {
-  width: 40%;
-  padding: 0.5rem;
-}
+
 
 .icons span {
   margin-left: 1rem;

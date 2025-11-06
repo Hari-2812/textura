@@ -1,13 +1,23 @@
 import React, { useState, useEffect } from "react";
 import "./Header.css";
-import { FaBars, FaHeart, FaShoppingCart, FaUser, FaSearch } from "react-icons/fa";
+import {
+  FaBars,
+  FaHeart,
+  FaShoppingCart,
+  FaUser,
+  FaSearch,
+} from "react-icons/fa";
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleOutsideClick = (e) => {
-      if (menuOpen && !e.target.closest(".sidebar") && !e.target.closest(".menu-icon")) {
+      if (
+        menuOpen &&
+        !e.target.closest(".sidebar") &&
+        !e.target.closest(".menu-icon")
+      ) {
         setMenuOpen(false);
       }
     };
@@ -17,36 +27,57 @@ const Header = () => {
 
   return (
     <>
-      {/* Full-width Offer Bar */}
+      {/* Offer Bar */}
       <div className="offer-bar">
-        <p>✨ Free Shipping on Orders Above ₹999 ✨</p>
+        <p>✨ Festive Sale! Flat 50% Off on Kidswear | Free Shipping Above ₹999 ✨</p>
       </div>
 
-      {/* Header / Navbar Line */}
+      {/* Header */}
       <header className="header">
         <nav className="navbar">
-          <div className="menu-icon" onClick={() => setMenuOpen(true)}>
-            <FaBars />
+          {/* Left: Menu + Logo */}
+          <div className="navbar-left">
+            <div className="menu-icon" onClick={() => setMenuOpen(true)}>
+              <FaBars />
+            </div>
+            <div className="logo">
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/2769/2769346.png"
+                alt="Textura Logo"
+              />
+              <h1>Textura</h1>
+            </div>
           </div>
 
-          <div className="logo">
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/2769/2769346.png"
-              alt="Textura Logo"
-            />
-            <h1>Textura</h1>
+          {/* Center: Search */}
+          <div className="navbar-center">
+            <div className="search-container">
+              <input type="text" placeholder="Search products..."  FaSearch />
+              <FaSearch className="search-icon" />
+            </div>
           </div>
 
-          <div className="nav-icons">
-            <FaSearch />
-            <FaHeart />
-            <FaUser />
-            <FaShoppingCart />
+
+
+          {/* Right: Icons */}
+          <div className="navbar-right">
+            <div className="nav-item">
+              <FaHeart />
+              <span>Wishlist</span>
+            </div>
+            <div className="nav-item">
+              <FaUser />
+              <span>Account</span>
+            </div>
+            <div className="nav-item">
+              <FaShoppingCart />
+              <span>Cart</span>
+            </div>
           </div>
         </nav>
       </header>
 
-      {/* Sidebar Menu */}
+      {/* Sidebar */}
       <div className={`sidebar ${menuOpen ? "open" : ""}`}>
         <div className="sidebar-header">
           <h2>Menu</h2>
@@ -54,7 +85,6 @@ const Header = () => {
             &times;
           </span>
         </div>
-
         <ul className="sidebar-links">
           <li>🏠 Home</li>
           <li>🛒 Shop</li>

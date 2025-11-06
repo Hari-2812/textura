@@ -1,16 +1,16 @@
 /* =========================
-   Offer Bar (Top-most line)
+   Offer Bar
    ========================= */
 .offer-bar {
   width: 100%;
   background-color: #FFD166;
   color: #073B4C;
   text-align: center;
-  padding: 8px 0;
+  padding: 6px 0;
   font-weight: 600;
   font-size: 0.95rem;
-  letter-spacing: 0.5px;
-  z-index: 1100;
+  letter-spacing: 0.3px;
+  z-index: 1200;
 }
 
 /* =========================
@@ -18,27 +18,33 @@
    ========================= */
 .header {
   width: 100%;
-  background: #fff;
+  background: #ffffff;
+  position: sticky;
+  top: 0;
+  z-index: 1100;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  z-index: 1000;
-  position: relative;
 }
 
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 30px;
+  padding: 10px 40px;
   max-width: 1300px;
-  margin: 0 auto; /* centers content inside header */
+  margin: 0 auto;
+}
+
+/* Left Section */
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
 .menu-icon {
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   color: #073B4C;
   cursor: pointer;
-  display: flex;
-  align-items: center;
 }
 
 .logo {
@@ -56,26 +62,136 @@
   font-family: "Quicksand", sans-serif;
   color: #073B4C;
   font-weight: 700;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
 }
 
-.nav-icons {
+/* Center: Search Bar */
+.navbar-center {
+  flex: 1;
   display: flex;
-  gap: 18px;
-  font-size: 1.2rem;
-  color: #073B4C;
+  justify-content: center;
+  align-items: center;
 }
 
-.nav-icons svg {
+.search-container {
+  position: relative;
+  width: 90%;
+  max-width: 700px; /* Increased size */
+}
+
+.search-container input {
+  width: 100%;
+  padding: 12px 50px 12px 20px; /* Right padding for icon */
+  font-size: 1rem;
+  border: 2px solid #000000;
+  border-radius: 50px;
+  outline: none;
+  color: #073B4C;
+  transition: all 0.3s ease;
+  background-color: #fff;
+}
+
+.search-container input::placeholder {
+  color: #777;
+}
+
+.search-container input:focus {
+  border-color: #000000;
+  box-shadow: 0 0 6px rgba(6, 214, 160, 0.3);
+}
+
+/* Icon inside the bar */
+.search-icon {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #000000;
+  font-size: 1.3rem;
   cursor: pointer;
   transition: color 0.3s ease;
 }
 
-.nav-icons svg:hover {
+.search-icon:hover {
+  color: #000000;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+  .search-container {
+    width: 95%;
+    max-width: 600px;
+  }
+}
+
+@media (max-width: 768px) {
+  .search-container {
+    width: 90%;
+  }
+}
+
+
+/* Icon inside the bar */
+.search-icon {
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #000000;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.search-icon:hover {
+  color: #000000;
+}
+
+/* Responsive width adjustment */
+@media (max-width: 1024px) {
+  .search-container {
+    width: 95%;
+    max-width: 600px;
+  }
+}
+
+@media (max-width: 768px) {
+  .search-container {
+    width: 90%;
+    max-width: none;
+  }
+}
+
+
+/* Right: Icons with labels */
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 1.1rem;
+  color: #073B4C;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.nav-item span {
+  font-size: 0.75rem;
+  margin-top: 3px;
+}
+
+.nav-item:hover {
   color: #EF476F;
 }
 
-/* Sidebar (unchanged) */
+/* =========================
+   Sidebar
+   ========================= */
 .sidebar {
   position: fixed;
   top: 0;
@@ -83,9 +199,9 @@
   height: 100%;
   width: 250px;
   background-color: white;
-  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
   transition: left 0.4s ease;
-  z-index: 1200;
+  z-index: 1300;
   padding: 20px;
 }
 
@@ -139,26 +255,40 @@
   width: 100vw;
   height: 100vh;
   background: rgba(0,0,0,0.4);
-  z-index: 1100;
+  z-index: 1200;
 }
 
-/* Responsive Sidebar */
-@media (max-width: 768px) {
-  .sidebar {
-    width: 100%;
-    left: -100%;
-  }
-
-  .sidebar.open {
-    left: 0;
-  }
-
+/* =========================
+   Responsive
+   ========================= */
+@media (max-width: 1024px) {
   .navbar {
+    flex-wrap: wrap;
     padding: 10px 20px;
   }
 
-  .logo img {
-    width: 40px;
-    height: 40px;
+  .navbar-center {
+    order: 3;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .search-container {
+    width: 95%;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar-right .nav-item span {
+    display: none;
+  }
+
+  .navbar-right {
+    gap: 18px;
+  }
+
+  .navbar-left h1 {
+    font-size: 1.2rem;
   }
 }
