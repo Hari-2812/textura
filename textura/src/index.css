@@ -13,6 +13,23 @@ body {
   top: 0;
   z-index: 1000;
 }
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.hero-banner,
+.product-slider,
+.blogs,
+.newsletter,
+.footer {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
 
 .search-bar {
   width: 40%;
@@ -44,22 +61,32 @@ body {
 
 .hero-text {
   position: absolute;
-  bottom: 20%;
-  left: 10%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   color: white;
+  text-align: center;
 }
 
 .hero-text h2 {
   font-size: 2rem;
+  margin-bottom: 1rem;
 }
 
 .hero-text button {
-  margin-top: 1rem;
-  padding: 0.5rem 1.2rem;
+  padding: 0.6rem 1.5rem;
   background: black;
   color: white;
   border: none;
+  border-radius: 4px;
   cursor: pointer;
+  transition: 0.3s ease;
+}
+
+
+.hero-text button:hover {
+  background: white;
+  color: black;
 }
 
 /* PRODUCT SLIDER */
