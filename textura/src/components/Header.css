@@ -1,0 +1,164 @@
+/* =========================
+   Offer Bar (Top-most line)
+   ========================= */
+.offer-bar {
+  width: 100%;
+  background-color: #FFD166;
+  color: #073B4C;
+  text-align: center;
+  padding: 8px 0;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+  z-index: 1100;
+}
+
+/* =========================
+   Header / Navbar
+   ========================= */
+.header {
+  width: 100%;
+  background: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  z-index: 1000;
+  position: relative;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 30px;
+  max-width: 1300px;
+  margin: 0 auto; /* centers content inside header */
+}
+
+.menu-icon {
+  font-size: 1.5rem;
+  color: #073B4C;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo img {
+  width: 45px;
+  height: 45px;
+}
+
+.logo h1 {
+  font-family: "Quicksand", sans-serif;
+  color: #073B4C;
+  font-weight: 700;
+  font-size: 1.4rem;
+}
+
+.nav-icons {
+  display: flex;
+  gap: 18px;
+  font-size: 1.2rem;
+  color: #073B4C;
+}
+
+.nav-icons svg {
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.nav-icons svg:hover {
+  color: #EF476F;
+}
+
+/* Sidebar (unchanged) */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -250px;
+  height: 100%;
+  width: 250px;
+  background-color: white;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  transition: left 0.4s ease;
+  z-index: 1200;
+  padding: 20px;
+}
+
+.sidebar.open {
+  left: 0;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sidebar-header h2 {
+  color: #073B4C;
+}
+
+.close-btn {
+  font-size: 2rem;
+  cursor: pointer;
+  color: #EF476F;
+}
+
+.close-btn:hover {
+  color: #06D6A0;
+}
+
+.sidebar-links {
+  list-style: none;
+  padding: 0;
+  margin-top: 30px;
+}
+
+.sidebar-links li {
+  padding: 12px 0;
+  font-size: 1.1rem;
+  color: #073B4C;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.sidebar-links li:hover {
+  color: #06D6A0;
+}
+
+/* Overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.4);
+  z-index: 1100;
+}
+
+/* Responsive Sidebar */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    left: -100%;
+  }
+
+  .sidebar.open {
+    left: 0;
+  }
+
+  .navbar {
+    padding: 10px 20px;
+  }
+
+  .logo img {
+    width: 40px;
+    height: 40px;
+  }
+}
