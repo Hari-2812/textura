@@ -1,10 +1,10 @@
 /* =========================
-   Offer Bar
+   OFFER BAR
    ========================= */
 .offer-bar {
   width: 100%;
   background-color: #FFD166;
-  color: #073B4C;
+  color: #fdfdfd;
   text-align: center;
   padding: 6px 0;
   font-weight: 600;
@@ -14,37 +14,45 @@
 }
 
 /* =========================
-   Header / Navbar
+   HEADER (Flipkart Style)
    ========================= */
 .header {
   width: 100%;
-  background: #ffffff;
   position: sticky;
   top: 0;
   z-index: 1100;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  background: linear-gradient(180deg, #5bbcff 0%, #ffffff 85%);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+  padding-bottom: 0.5rem;
 }
 
+/* =========================
+   NAVBAR WRAPPER
+   ========================= */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 40px;
   max-width: 1300px;
   margin: 0 auto;
+  padding: 10px 20px;
+  flex-wrap: wrap;
 }
 
-/* Left Section */
+/* =========================
+   LEFT SECTION (Logo + Menu)
+   ========================= */
 .navbar-left {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 12px;
 }
 
 .menu-icon {
   font-size: 1.6rem;
   color: #073B4C;
   cursor: pointer;
+  display: none; /* hidden for desktop */
 }
 
 .logo {
@@ -54,130 +62,125 @@
 }
 
 .logo img {
-  width: 45px;
-  height: 45px;
+  width: 40px;
+  height: 40px;
 }
 
 .logo h1 {
   font-family: "Quicksand", sans-serif;
   color: #073B4C;
   font-weight: 700;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
+}
+/* =========================
+   SIDEBAR HEADER FIX
+   ========================= */
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+  padding: 10px 0;
+  z-index: 10;
+  border-bottom: 1px solid #f0f0f0;
 }
 
-/* Center: Search Bar */
+/* Brand logo + text inside sidebar */
+.sidebar-header .brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sidebar-header img {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+}
+
+.sidebar-header h2 {
+  color: #073B4C;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Close button */
+.close-btn {
+  font-size: 1.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: #EF476F;
+  line-height: 1;
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.close-btn:hover {
+  color: #06D6A0;
+  transform: scale(1.1);
+}
+
+/* =========================
+   CENTER: SEARCH BAR
+   ========================= */
 .navbar-center {
   flex: 1;
   display: flex;
   justify-content: center;
-  align-items: center;
+  margin: 0.5rem 0;
 }
 
 .search-container {
   position: relative;
   width: 90%;
-  max-width: 700px; /* Increased size */
+  max-width: 600px;
 }
 
 .search-container input {
   width: 100%;
-  padding: 12px 50px 12px 20px; /* Right padding for icon */
-  font-size: 1rem;
-  border: 2px solid #000000;
-  border-radius: 50px;
+  padding: 10px 45px 10px 20px;
+  font-size: 0.95rem;
+  border: none;
   outline: none;
-  color: #073B4C;
-  transition: all 0.3s ease;
+  border-radius: 25px;
+  color: #333;
   background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .search-container input::placeholder {
   color: #777;
 }
 
-.search-container input:focus {
-  border-color: #000000;
-  box-shadow: 0 0 6px rgba(6, 214, 160, 0.3);
-}
-
-/* Icon inside the bar */
 .search-icon {
   position: absolute;
-  right: 20px;
+  right: 15px;
   top: 50%;
   transform: translateY(-50%);
-  color: #000000;
-  font-size: 1.3rem;
-  cursor: pointer;
-  transition: color 0.3s ease;
-}
-
-.search-icon:hover {
-  color: #000000;
-}
-
-/* Responsive Adjustments */
-@media (max-width: 1024px) {
-  .search-container {
-    width: 95%;
-    max-width: 600px;
-  }
-}
-
-@media (max-width: 768px) {
-  .search-container {
-    width: 90%;
-  }
-}
-
-
-/* Icon inside the bar */
-.search-icon {
-  position: absolute;
-  right: 18px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #000000;
+  color: #444;
   font-size: 1.2rem;
   cursor: pointer;
-  transition: color 0.3s ease;
 }
 
-.search-icon:hover {
-  color: #000000;
-}
-
-/* Responsive width adjustment */
-@media (max-width: 1024px) {
-  .search-container {
-    width: 95%;
-    max-width: 600px;
-  }
-}
-
-@media (max-width: 768px) {
-  .search-container {
-    width: 90%;
-    max-width: none;
-  }
-}
-
-
-/* Right: Icons with labels */
+/* =========================
+   RIGHT SECTION (Icons)
+   ========================= */
 .navbar-right {
   display: flex;
   align-items: center;
-  gap: 25px;
+  gap: 20px;
 }
 
 .nav-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: #073B4C;
   cursor: pointer;
-  transition: color 0.3s;
+  transition: 0.3s;
 }
 
 .nav-item span {
@@ -190,9 +193,8 @@
 }
 
 /* =========================
-   Sidebar
+   SIDEBAR (Mobile Menu)
    ========================= */
-/* SIDEBAR BASE */
 .sidebar {
   position: fixed;
   top: 0;
@@ -209,12 +211,10 @@
   justify-content: space-between;
 }
 
-/* When sidebar is open */
 .sidebar.open {
   left: 0;
 }
 
-/* SIDEBAR HEADER */
 .sidebar-header {
   display: flex;
   justify-content: space-between;
@@ -222,26 +222,11 @@
 }
 
 .sidebar-header h2 {
-  color: #073B4C; /* Primary text color */
+  color: #073B4C;
   font-size: 1.4rem;
   font-weight: 600;
 }
 
-/* Add logo styling inside header */
-.sidebar-header img {
-  width: 35px;
-  height: 35px;
-  margin-right: 8px;
-  vertical-align: middle;
-}
-
-.sidebar-header .brand {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-/* CLOSE BUTTON */
 .close-btn {
   font-size: 1.8rem;
   cursor: pointer;
@@ -254,7 +239,6 @@
   transform: scale(1.1);
 }
 
-/* LINKS SECTION */
 .sidebar-links {
   list-style: none;
   padding: 0;
@@ -263,7 +247,7 @@
 }
 
 .sidebar-links li {
- display: flex;
+  display: flex;
   align-items: center;
   gap: 12px;
   padding: 12px 0;
@@ -278,125 +262,49 @@
   color: #06D6A0;
   padding-left: 6px;
 }
-.sidebar-links .icon {
-  font-size: 1.2rem;
-  color: #EF476F;
-  transition: color 0.3s ease;
-}
-
-.sidebar-links li:hover .icon {
-  color: #06D6A0;
-}
-
-/* FOOTER SECTION */
-.sidebar-footer {
-  text-align: center;
-  border-top: 1px solid #eee;
-  padding-top: 15px;
-}
-
-.sidebar-footer p {
-  margin: 0;
-  font-size: 0.9rem;
-  color: #888;
-}
-
-.sidebar-footer .tagline {
-  color: #EF476F;
-  font-weight: 500;
-  margin-top: 4px;
-}
-
-/* BACKDROP (optional overlay when open) */
-.sidebar.open::after {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 260px;
-  width: calc(100vw - 260px);
-  height: 100%;
-  background: rgba(0, 0, 0, 0.4);
-  z-index: 1200;
-}
-
-
-/* Overlay */
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0,0,0,0.4);
-  z-index: 1200;
-}
 
 /* =========================
-   Responsive
+   RESPONSIVE DESIGN
    ========================= */
 @media (max-width: 1024px) {
   .navbar {
-    flex-wrap: wrap;
-    padding: 10px 20px;
+    padding: 8px 15px;
   }
 
   .navbar-center {
-    order: 3;
     width: 100%;
+    order: 3;
     margin-top: 10px;
   }
 
   .search-container {
-    width: 95%;
-    margin: 0 auto;
+    width: 92%;
   }
 }
 
 @media (max-width: 768px) {
+  .menu-icon {
+    display: block;
+  }
+
+  .navbar-left h1 {
+    font-size: 1.1rem;
+  }
+
   .navbar-right .nav-item span {
     display: none;
   }
 
   .navbar-right {
-    gap: 18px;
+    gap: 15px;
   }
 
-  .navbar-left h1 {
-    font-size: 1.2rem;
-  }
-}
-.desktop-nav {
-  display: flex;
-  gap: 1.5rem;
-}
-
-/* Hide desktop nav on mobile */
-@media (max-width: 768px) {
-  .desktop-nav {
-    display: none;
-  }
-}
-/* Step 2A — Hide menu icon by default (for desktop view) */
-.menu-icon {
-  display: none;
-}
-
-/* Step 2B — Show menu icon only on mobile or smaller screens */
-@media (max-width: 768px) {
-  .menu-icon {
-    display: block;
-    font-size: 1.8rem; /* adjust icon size */
-    cursor: pointer;
+  .search-container input {
+    padding: 9px 40px 9px 15px;
+    font-size: 0.9rem;
   }
 
-  /* Optional: adjust header layout for mobile */
-  .navbar-left {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .logo h1 {
-    font-size: 1.2rem;
+  .search-icon {
+    right: 10px;
   }
 }
