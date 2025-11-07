@@ -19,7 +19,7 @@ const BlogSection = () => {
             <img src={b.image} alt={b.title} />
             <h3>{b.title}</h3>
             <p>{b.text}</p>
-            <button>Read More</button>
+            <button className="read-btn">Read More</button>
           </div>
         ))}
       </div>

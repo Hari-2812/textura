@@ -104,6 +104,97 @@ html, body {
   cursor: pointer;
 }
 
+/* ---------- CATEGORY SECTION ---------- */
+.category-section {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 4rem 0;
+}
+
+.category-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 2.5rem;
+  color: #222;
+}
+
+.category-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
+  gap: 2rem;
+}
+
+/* Each card */
+.category-card {
+  position: relative;
+  width: 350px;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  background: #fff;
+}
+
+.category-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Image styling */
+.category-image {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+}
+
+/* Info overlay */
+.category-info {
+  padding: 1rem;
+  text-align: center;
+}
+
+.category-info h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.category-info p {
+  color: #555;
+  margin-bottom: 1rem;
+}
+
+/* Buy button */
+.buy-btn {
+  padding: 0.6rem 1.4rem;
+  border: none;
+  border-radius: 6px;
+  background-color: black;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.buy-btn:hover {
+  background-color: #333;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .category-card {
+    width: 100%;
+  }
+
+  .category-image {
+    height: 250px;
+  }
+}
+
+
 /* BLOGS */
 .blogs {
   padding: 3rem 0;
@@ -125,6 +216,21 @@ html, body {
   width: 100%;
   height: 200px;
   object-fit: cover;
+
+}
+.read-btn {
+  padding: 0.6rem 1.4rem;
+  border: none;
+  border-radius: 6px;
+  background-color: black;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.read-btn:hover {
+  background-color: #333;
 }
 
 /* NEWSLETTER */
