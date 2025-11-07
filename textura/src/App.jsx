@@ -1,25 +1,25 @@
 import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
-import HeroBanner from "./components/HeroBanner";
-import ProductSlider from "./components/ProductSlider";
-import CategorySection from "./components/CategorySection"; 
-import BlogSection from "./components/BlogSection";
-import Newsletter from "./components/Newsletter";
 import Footer from "./components/Footer";
-import "./index.css";
+import Home from "./pages/Home";
+import BoysPage from "./pages/BoysPage";
 
 const App = () => {
   return (
-    <>
+    <Router>
+      {/* Common Header */}
       <Header />
-      <HeroBanner />
-      <ProductSlider title="New Arrivals" />
-      {/* <ProductSlider title="Back in Stock" /> */}
-      <CategorySection />
-      <BlogSection />
-      <Newsletter />
+
+      {/* Page Routes */}
+      <Routes>
+        <Route path="/" element={<Home />} />        {/* ✅ Homepage */}
+        <Route path="/boys" element={<BoysPage />} /> {/* ✅ Boys Page */}
+      </Routes>
+
+      {/* Common Footer */}
       <Footer />
-    </>
+    </Router>
   );
 };
 
