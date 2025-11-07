@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Header.css";
+import { FiHome, FiPackage, FiHeart, FiPhone, FiInfo } from "react-icons/fi";
 import {
   FaBars,
   FaHeart,
@@ -80,20 +81,47 @@ const Header = () => {
       {/* Sidebar */}
       <div className={`sidebar ${menuOpen ? "open" : ""}`}>
         <div className="sidebar-header">
-          <h2>Menu</h2>
+          <div className="sidebar-logo">
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/2769/2769346.png"
+              alt="Textura Logo"
+            />
+            <h2>Textura</h2>
+          </div>
           <span className="close-btn" onClick={() => setMenuOpen(false)}>
             &times;
           </span>
         </div>
+
         <ul className="sidebar-links">
-          <li>🏠 Home</li>
-          <li>🛒 Shop</li>
-          <li>📦 My Orders</li>
-          <li>❤️ Wishlist</li>
-          <li>👤 Profile</li>
-          <li>📞 Contact Us</li>
+          <li>
+            <FiHome className="icon" />
+            Home
+          </li>
+          <li>
+            <FiPackage className="icon" />
+            My Orders
+          </li>
+          <li>
+            <FiHeart className="icon" />
+            Wishlist
+          </li>
+          <li>
+            <FiPhone className="icon" />
+            Contact Us
+          </li>
+          <li>
+            <FiInfo className="icon" />
+            About Textura
+          </li>
         </ul>
+
+        <div className="sidebar-footer">
+          <p>© 2025 Textura</p>
+          <p className="tagline">Style. Comfort. Confidence.</p>
+        </div>
       </div>
+
 
       {/* Overlay */}
       {menuOpen && <div className="overlay"></div>}

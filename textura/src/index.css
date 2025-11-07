@@ -80,7 +80,8 @@ html, body {
 /* PRODUCT SLIDER */
 .product-slider {
   text-align: center;
-  padding: 3rem 0;
+  padding: 3rem 2rem;
+  
 }
 
 .product-card {

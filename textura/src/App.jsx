@@ -13,7 +13,7 @@ const App = () => {
       <Header />
       <HeroBanner />
       <ProductSlider title="New Arrivals" />
-      <ProductSlider title="Back in Stock" />
+      {/* <ProductSlider title="Back in Stock" /> */}
       <BlogSection />
       <Newsletter />
       <Footer />

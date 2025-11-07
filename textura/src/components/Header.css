@@ -192,23 +192,29 @@
 /* =========================
    Sidebar
    ========================= */
+/* SIDEBAR BASE */
 .sidebar {
   position: fixed;
   top: 0;
-  left: -250px;
+  left: -260px;
   height: 100%;
-  width: 250px;
-  background-color: white;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  width: 260px;
+  background-color: #ffffff;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15);
   transition: left 0.4s ease;
   z-index: 1300;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
+/* When sidebar is open */
 .sidebar.open {
   left: 0;
 }
 
+/* SIDEBAR HEADER */
 .sidebar-header {
   display: flex;
   justify-content: space-between;
@@ -216,36 +222,103 @@
 }
 
 .sidebar-header h2 {
-  color: #073B4C;
+  color: #073B4C; /* Primary text color */
+  font-size: 1.4rem;
+  font-weight: 600;
 }
 
+/* Add logo styling inside header */
+.sidebar-header img {
+  width: 35px;
+  height: 35px;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.sidebar-header .brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* CLOSE BUTTON */
 .close-btn {
-  font-size: 2rem;
+  font-size: 1.8rem;
   cursor: pointer;
   color: #EF476F;
+  transition: 0.3s;
 }
 
 .close-btn:hover {
   color: #06D6A0;
+  transform: scale(1.1);
 }
 
+/* LINKS SECTION */
 .sidebar-links {
   list-style: none;
   padding: 0;
   margin-top: 30px;
+  flex-grow: 1;
 }
 
 .sidebar-links li {
+ display: flex;
+  align-items: center;
+  gap: 12px;
   padding: 12px 0;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   color: #073B4C;
   cursor: pointer;
-  transition: color 0.3s;
+  border-bottom: 1px solid #f3f3f3;
+  transition: all 0.2s ease-in-out;
 }
 
 .sidebar-links li:hover {
   color: #06D6A0;
+  padding-left: 6px;
 }
+.sidebar-links .icon {
+  font-size: 1.2rem;
+  color: #EF476F;
+  transition: color 0.3s ease;
+}
+
+.sidebar-links li:hover .icon {
+  color: #06D6A0;
+}
+
+/* FOOTER SECTION */
+.sidebar-footer {
+  text-align: center;
+  border-top: 1px solid #eee;
+  padding-top: 15px;
+}
+
+.sidebar-footer p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #888;
+}
+
+.sidebar-footer .tagline {
+  color: #EF476F;
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+/* BACKDROP (optional overlay when open) */
+.sidebar.open::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 260px;
+  width: calc(100vw - 260px);
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1200;
+}
+
 
 /* Overlay */
 .overlay {
