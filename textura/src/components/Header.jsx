@@ -52,7 +52,7 @@ const Header = () => {
           {/* Center: Search */}
           <div className="navbar-center">
             <div className="search-container">
-              <input type="text" placeholder="Search products..."  FaSearch />
+              <input type="text" placeholder="Search products..." />
               <FaSearch className="search-icon" />
             </div>
           </div>

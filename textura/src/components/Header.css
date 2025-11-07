@@ -292,3 +292,38 @@
     font-size: 1.2rem;
   }
 }
+.desktop-nav {
+  display: flex;
+  gap: 1.5rem;
+}
+
+/* Hide desktop nav on mobile */
+@media (max-width: 768px) {
+  .desktop-nav {
+    display: none;
+  }
+}
+/* Step 2A — Hide menu icon by default (for desktop view) */
+.menu-icon {
+  display: none;
+}
+
+/* Step 2B — Show menu icon only on mobile or smaller screens */
+@media (max-width: 768px) {
+  .menu-icon {
+    display: block;
+    font-size: 1.8rem; /* adjust icon size */
+    cursor: pointer;
+  }
+
+  /* Optional: adjust header layout for mobile */
+  .navbar-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .logo h1 {
+    font-size: 1.2rem;
+  }
+}
