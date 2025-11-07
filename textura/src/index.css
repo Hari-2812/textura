@@ -62,20 +62,22 @@ html, body {
 }
 
 .hero-text button {
-  padding: 0.6rem 1.5rem;
-  background: black;
-  color: white;
+  padding: 0.6rem 1.4rem;     /* ✅ matches all other buttons */
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;         /* ✅ same rounded style */
+  background-color: black;
+  color: white;
+  font-size: 1rem;            /* ✅ uniform text size */
   cursor: pointer;
-  transition: 0.3s ease;
+  transition: all 0.3s ease;  /* ✅ smooth hover transition */
 }
-
 
 .hero-text button:hover {
-  background: white;
-  color: black;
+  background-color: white;    /* ✅ invert background */
+  color: black;               /* ✅ invert text */
+  border: 1px solid black;    /* ✅ adds subtle border for better contrast */
 }
+
 
 /* PRODUCT SLIDER */
 .product-slider {
@@ -97,12 +99,20 @@ html, body {
 
 .product-card button {
   margin-top: 0.5rem;
-  padding: 0.4rem 1rem;
-  background: black;
-  color: white;
+  padding: 0.6rem 1.4rem;   /* ✅ updated to match .buy-btn */
   border: none;
+  border-radius: 6px;       /* ✅ added rounded corners */
+  background-color: black;
+  color: white;
+  font-size: 1rem;          /* ✅ same text size */
   cursor: pointer;
+  transition: background 0.3s ease; /* ✅ smooth hover transition */
 }
+
+.product-card button:hover {
+  background-color: #333;   /* ✅ consistent hover effect */
+}
+
 
 /* ---------- CATEGORY SECTION ---------- */
 .category-section {
@@ -248,8 +258,21 @@ html, body {
   padding: 0.6rem;
   width: 250px;
   margin-right: 0.5rem;
-}
 
+}
+.subscribe-btn{
+  padding: 0.6rem 1.4rem;
+  border: none;
+  border-radius: 2px;
+  background-color: black;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.subscribe-btn:hover {
+  background-color: #333;
+}
 /* FOOTER */
 .footer {
   background: black;
