@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./Header.css";
 import { useNavigate } from "react-router-dom";
+import { products } from "../data/products";
+import { useCart } from "../context/CartContext";
 import { FiHome, FiPackage, FiHeart, FiPhone, FiInfo } from "react-icons/fi";
 import {
   FaBars,
@@ -13,8 +15,38 @@ import {
 
 const Header = ({ onFilterToggle }) => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [search, setSearch] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
   const navigate = useNavigate();
 
+  const { cartCount } = useCart();
+
+  // ✅ Handle input typing
+  const handleSearchChange = (e) => {
+    const value = e.target.value.toLowerCase();
+    setSearch(value);
+
+    if (value.trim() === "") {
+      setSuggestions([]);
+      return;
+    }
+
+    // Filter product suggestions
+    const filtered = products.filter((p) =>
+      p.name.toLowerCase().includes(value)
+    );
+    setSuggestions(filtered.slice(0, 5)); // show only top 5
+  };
+
+  // ✅ Handle suggestion click
+  const handleSuggestionClick = (product) => {
+    setSearch(product.name);
+    setSuggestions([]);
+    if (product.category === "boys") navigate("/boys");
+    if (product.category === "girls") navigate("/girls"); // ready for future
+  };
+
+  // ✅ Close sidebar when clicking outside
   useEffect(() => {
     const handleOutsideClick = (e) => {
       if (
@@ -56,8 +88,25 @@ const Header = ({ onFilterToggle }) => {
           {/* Center: Search */}
           <div className="navbar-center">
             <div className="search-container">
-              <input type="text" placeholder="Search products..." />
+              <input
+                type="text"
+                placeholder="Search for T-Shirts, Jeans, Jackets..."
+                value={search}
+                onChange={handleSearchChange}
+              />
               <FaSearch className="search-icon" />
+
+              {/* 🔹 Suggestions Dropdown */}
+              {suggestions.length > 0 && (
+                <ul className="search-suggestions">
+                  {suggestions.map((item) => (
+                    <li key={item.id} onClick={() => handleSuggestionClick(item)}>
+                      <img src={item.img} alt={item.name} />
+                      <span>{item.name}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           </div>
 
@@ -75,13 +124,14 @@ const Header = ({ onFilterToggle }) => {
               <span>Account</span>
             </div>
 
-            {/* Cart */}
-            <div className="nav-item" onClick={() => navigate("/cart")}>
+            {/* Cart with badge */}
+            <div className="nav-item cart-icon" onClick={() => navigate("/cart")}>
               <FaShoppingCart />
               <span>Cart</span>
+              {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
             </div>
 
-            {/* Filter (Triggers BoysPage filter popup) */}
+            {/* Filter Button */}
             <div className="nav-item filter-btn" onClick={onFilterToggle}>
               <FaFilter />
               <span>Filter</span>
