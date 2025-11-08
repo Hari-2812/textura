@@ -7,9 +7,10 @@ import {
   FaShoppingCart,
   FaUser,
   FaSearch,
+  FaFilter,
 } from "react-icons/fa";
 
-const Header = () => {
+const Header = ({ onFilterToggle }) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -58,22 +59,32 @@ const Header = () => {
             </div>
           </div>
 
-
-
           {/* Right: Icons */}
           <div className="navbar-right">
+            {/* Wishlist */}
             <div className="nav-item">
               <FaHeart />
               <span>Wishlist</span>
             </div>
+
+            {/* Account */}
             <div className="nav-item">
               <FaUser />
               <span>Account</span>
             </div>
+
+          
+            {/* Cart */}
             <div className="nav-item">
               <FaShoppingCart />
               <span>Cart</span>
             </div>
+              {/* 🧠 Filter Button */}
+            <div className="nav-item filter-btn" onClick={onFilterToggle}>
+              <FaFilter />
+              <span>Filter</span>
+            </div>
+
           </div>
         </nav>
       </header>
@@ -122,9 +133,8 @@ const Header = () => {
         </div>
       </div>
 
-
       {/* Overlay */}
-      {menuOpen && <div className="overlay"></div>}
+      {menuOpen && <div className="overlay" onClick={() => setMenuOpen(false)} />}
     </>
   );
 };

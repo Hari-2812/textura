@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -6,18 +6,23 @@ import Home from "./pages/Home";
 import BoysPage from "./pages/BoysPage";
 
 const App = () => {
+  const [showFilters, setShowFilters] = useState(false);
+
   return (
     <Router>
-      {/* Common Header */}
-      <Header />
-
-      {/* Page Routes */}
+      <Header onFilterToggle={() => setShowFilters((prev) => !prev)} />
       <Routes>
-        <Route path="/" element={<Home />} />        {/* ✅ Homepage */}
-        <Route path="/boys" element={<BoysPage />} /> {/* ✅ Boys Page */}
+        <Route path="/" element={<Home />} />
+        <Route
+          path="/boys"
+          element={
+            <BoysPage
+              showFilters={showFilters}
+              setShowFilters={setShowFilters}
+            />
+          }
+        />
       </Routes>
-
-      {/* Common Footer */}
       <Footer />
     </Router>
   );
