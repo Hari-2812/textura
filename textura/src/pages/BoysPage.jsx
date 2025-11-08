@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { products } from "../data/products";
 import "../styles/BoysPage.css";
+import { useCart } from "../context/CartContext";
 
 const BoysPage = ({ showFilters, setShowFilters }) => {
   const boysProducts = products.filter((p) => p.category === "boys");
@@ -9,11 +10,13 @@ const BoysPage = ({ showFilters, setShowFilters }) => {
   const [price, setPrice] = useState("all");
   const [style, setStyle] = useState("all");
 
-  // ✅ Filter logic (improved)
+  const { addToCart } = useCart();
+  const [popup, setPopup] = useState(false);
+
+  // ✅ Filter Logic
   const handleFilter = () => {
     let filtered = [...boysProducts];
 
-    // 🔹 Price Filter
     if (price !== "all") {
       const [min, max] = price.split("-");
       filtered = filtered.filter((p) => {
@@ -22,7 +25,6 @@ const BoysPage = ({ showFilters, setShowFilters }) => {
       });
     }
 
-    // 🔹 Style Filter (now supports partial matches)
     if (style !== "all") {
       filtered = filtered.filter((p) =>
         p.style?.toLowerCase().includes(style.toLowerCase())
@@ -33,18 +35,24 @@ const BoysPage = ({ showFilters, setShowFilters }) => {
     setShowFilters(false);
   };
 
-  // ✅ Don’t reset filteredProducts when popup closes
+  // ✅ Reset when no filters active
   useEffect(() => {
     if (!showFilters && filteredProducts.length === 0) {
       setFilteredProducts(boysProducts);
     }
   }, [showFilters]);
 
+  // ✅ Popup animation handler
+  const showCartPopup = () => {
+    setPopup(true);
+    setTimeout(() => setPopup(false), 2000);
+  };
+
   return (
     <section className="boys-page">
       <h2>Boys Collection</h2>
 
-      {/* ✅ Filter Popup (from Header button) */}
+      {/* ✅ Filter Popup */}
       {showFilters && (
         <div className="filter-popup">
           <div className="filter-header">
@@ -71,10 +79,8 @@ const BoysPage = ({ showFilters, setShowFilters }) => {
               <option value="striped">Striped</option>
               <option value="checked">Checked</option>
               <option value="denim">Denim</option>
-              <option value="track">Track</option>
               <option value="hoodie">Hoodie</option>
-              <option value="casual">Casual</option>
-              <option value="winter">Winter</option>
+              <option value="track">Track</option>
             </select>
 
             <button className="apply-btn" onClick={handleFilter}>
@@ -84,7 +90,7 @@ const BoysPage = ({ showFilters, setShowFilters }) => {
         </div>
       )}
 
-      {/* ✅ Mobile overlay */}
+      {/* ✅ Overlay */}
       {showFilters && (
         <div className="overlay" onClick={() => setShowFilters(false)} />
       )}
@@ -97,13 +103,23 @@ const BoysPage = ({ showFilters, setShowFilters }) => {
               <img src={p.img} alt={p.name} />
               <h3>{p.name}</h3>
               <p>{p.price}</p>
-              <button>Add to Cart</button>
+              <button
+                onClick={() => {
+                  addToCart(p);
+                  showCartPopup();
+                }}
+              >
+                Add to Cart
+              </button>
             </div>
           ))
         ) : (
           <p>No products found</p>
         )}
       </div>
+
+      {/* ✅ Popup */}
+      {popup && <div className="popup">🛒 Item added to cart!</div>}
     </section>
   );
 };

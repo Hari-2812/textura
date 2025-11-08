@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Header.css";
+import { useNavigate } from "react-router-dom";
 import { FiHome, FiPackage, FiHeart, FiPhone, FiInfo } from "react-icons/fi";
 import {
   FaBars,
@@ -12,6 +13,7 @@ import {
 
 const Header = ({ onFilterToggle }) => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleOutsideClick = (e) => {
@@ -42,7 +44,7 @@ const Header = ({ onFilterToggle }) => {
             <div className="menu-icon" onClick={() => setMenuOpen(true)}>
               <FaBars />
             </div>
-            <div className="logo">
+            <div className="logo" onClick={() => navigate("/")}>
               <img
                 src="https://cdn-icons-png.flaticon.com/512/2769/2769346.png"
                 alt="Textura Logo"
@@ -73,18 +75,17 @@ const Header = ({ onFilterToggle }) => {
               <span>Account</span>
             </div>
 
-          
             {/* Cart */}
-            <div className="nav-item">
+            <div className="nav-item" onClick={() => navigate("/cart")}>
               <FaShoppingCart />
               <span>Cart</span>
             </div>
-              {/* 🧠 Filter Button */}
+
+            {/* Filter (Triggers BoysPage filter popup) */}
             <div className="nav-item filter-btn" onClick={onFilterToggle}>
               <FaFilter />
               <span>Filter</span>
             </div>
-
           </div>
         </nav>
       </header>
@@ -105,7 +106,7 @@ const Header = ({ onFilterToggle }) => {
         </div>
 
         <ul className="sidebar-links">
-          <li>
+          <li onClick={() => navigate("/")}>
             <FiHome className="icon" />
             Home
           </li>
