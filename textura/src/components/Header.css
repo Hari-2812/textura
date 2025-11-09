@@ -413,8 +413,7 @@
   .cart-icon svg {
     font-size: 1.9rem;
   }
-}
-/* =========================
+}/* =========================
    PROFILE / ACCOUNT SECTION
    ========================= */
 
@@ -438,13 +437,13 @@
 }
 
 .profile-display:hover {
-  background: linear-gradient(90deg, #5bbcff10, #ef476f10);
+  background: linear-gradient(90deg, #5bbcff15, #ef476f10);
   transform: scale(1.03);
 }
 
 .profile-avatar {
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   border: 2px solid #06d6a0;
   object-fit: cover;
@@ -466,11 +465,11 @@
   position: absolute;
   top: 115%;
   right: 0;
-  width: 180px;
+  width: 170px;
   background: #ffffff;
   border-radius: 12px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
-  padding: 0.5rem 0;
+  padding: 0.4rem 0;
   z-index: 2000;
   animation: fadeDown 0.25s ease forwards;
 }
@@ -514,12 +513,12 @@
   }
 
   .profile-username {
-    display: none; /* hide name on mobile */
+    display: none; /* hide username on mobile for clean look */
   }
 
   .profile-dropdown {
     top: 120%;
     right: 0;
-    width: 160px;
+    width: 150px;
   }
 }
