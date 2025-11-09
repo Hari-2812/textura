@@ -3,7 +3,8 @@ import "./Header.css";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useCart } from "../context/CartContext";
-import { products } from "../data/products"; // ✅ Product data for suggestions
+import { useUser } from "../context/UserContext"; // ✅ added
+import { products } from "../data/products";
 import {
   FiHome,
   FiGlobe,
@@ -18,22 +19,24 @@ import {
   FaSearch,
   FaHeart,
   FaFilter,
+  FaUserCircle,
 } from "react-icons/fa";
 
 const Header = ({ onFilterToggle }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [suggestions, setSuggestions] = useState([]);
+  const [showProfile, setShowProfile] = useState(false);
 
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { cartCount } = useCart(); // ✅ Real-time count from context
+  const { cartCount } = useCart();
+  const { user } = useUser(); // ✅ get profile info
 
-  // ✅ Sidebar toggle
   const toggleMenu = () => setMenuOpen(!menuOpen);
   const closeMenu = () => setMenuOpen(false);
+  const toggleProfile = () => setShowProfile(!showProfile);
 
-  // ✅ Auto-close sidebar when clicking outside
   useEffect(() => {
     const handleOutsideClick = (e) => {
       if (
@@ -43,48 +46,42 @@ const Header = ({ onFilterToggle }) => {
       ) {
         closeMenu();
       }
+      if (!e.target.closest(".profile-menu") && !e.target.closest(".profile-icon")) {
+        setShowProfile(false);
+      }
     };
     document.addEventListener("click", handleOutsideClick);
     return () => document.removeEventListener("click", handleOutsideClick);
   }, [menuOpen]);
 
-  // ✅ Handle search input change and filter suggestions
   const handleSearchChange = (e) => {
     const value = e.target.value.toLowerCase();
     setSearch(value);
-
     if (value.trim() === "") {
       setSuggestions([]);
       return;
     }
-
-    // Filter products for matching names
     const filtered = products.filter((p) =>
       p.name.toLowerCase().includes(value)
     );
-    setSuggestions(filtered.slice(0, 5)); // show top 5
+    setSuggestions(filtered.slice(0, 5));
   };
 
-  // ✅ Handle suggestion click
   const handleSuggestionClick = (product) => {
     setSearch(product.name);
     setSuggestions([]);
-    // Navigate based on product category
     if (product.category === "boys") navigate("/boys");
     if (product.category === "girls") navigate("/girls");
   };
 
   return (
     <>
-      {/* 🌟 Offer Bar */}
       <div className="offer-bar">
-         <p>✨ Festive Sale! Flat 50% Off on Kidswear | Free Shipping Above ₹999 ✨</p>
+        <p>✨ Festive Sale! Flat 50% Off on Kidswear | Free Shipping Above ₹999 ✨</p>
       </div>
 
-      {/* 🧭 Header */}
       <header className="header">
         <nav className="navbar">
-          {/* Left: Menu + Logo */}
           <div className="navbar-left">
             <div className="menu-icon" onClick={toggleMenu}>
               <FaBars />
@@ -98,7 +95,6 @@ const Header = ({ onFilterToggle }) => {
             </div>
           </div>
 
-          {/* Center: Search with suggestions */}
           <div className="navbar-center">
             <div className="search-container">
               <input
@@ -108,15 +104,10 @@ const Header = ({ onFilterToggle }) => {
                 onChange={handleSearchChange}
               />
               <FaSearch className="search-icon" />
-
-              {/* 🔽 Suggestions Dropdown */}
               {suggestions.length > 0 && (
                 <ul className="search-suggestions">
                   {suggestions.map((item) => (
-                    <li
-                      key={item.id}
-                      onClick={() => handleSuggestionClick(item)}
-                    >
+                    <li key={item.id} onClick={() => handleSuggestionClick(item)}>
                       <img src={item.img} alt={item.name} />
                       <span>{item.name}</span>
                     </li>
@@ -126,30 +117,45 @@ const Header = ({ onFilterToggle }) => {
             </div>
           </div>
 
-          {/* Right: Icons */}
           <div className="navbar-right">
-            {/* ❤️ Wishlist */}
             <div className="nav-item">
               <FaHeart />
               <span>{t("wishlist")}</span>
             </div>
 
-            {/* 🛒 Cart Icon with badge */}
             <div className="nav-item" onClick={() => navigate("/cart")}>
               <div className="cart-icon">
                 <FaShoppingCart />
-                {cartCount > 0 && (
-                  <span className="cart-badge">{cartCount}</span>
-                )}
+                {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
               </div>
               <span>{t("cart") || "Cart"}</span>
             </div>
 
-            {/* 🔍 Filter */}
             <div className="nav-item filter-btn" onClick={onFilterToggle}>
               <FaFilter />
               <span>{t("filter") || "Filter"}</span>
             </div>
+
+            {/* ✅ Account/Profile Icon */}
+            <div className="nav-item profile-section" onClick={() => setShowProfile(!showProfile)}>
+              <div className="profile-display">
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+                  alt="User Avatar"
+                  className="profile-avatar"
+                />
+                <span className="profile-username">{user.name}</span>
+              </div>
+
+              {showProfile && (
+                <div className="profile-dropdown">
+                  <p onClick={() => navigate("/profile")}>My Profile</p>
+                  <p onClick={() => navigate("/orders")}>My Orders</p>
+                  <p onClick={() => alert("Logged out successfully!")}>Logout</p>
+                </div>
+              )}
+            </div>
+
           </div>
         </nav>
       </header>
@@ -179,7 +185,7 @@ const Header = ({ onFilterToggle }) => {
           <li onClick={() => { navigate("/orders"); closeMenu(); }}>
             <FiPackage className="icon" /> {t("orders")}
           </li>
-          <li onClick={() => { navigate("/account"); closeMenu(); }}>
+          <li onClick={() => { navigate("/profile"); closeMenu(); }}>
             <FiUser className="icon" /> {t("account")}
           </li>
           <li onClick={() => { navigate("/help"); closeMenu(); }}>
@@ -198,7 +204,6 @@ const Header = ({ onFilterToggle }) => {
         </div>
       </div>
 
-      {/* Overlay */}
       {menuOpen && <div className="overlay" onClick={closeMenu} />}
     </>
   );
