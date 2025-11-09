@@ -24,6 +24,7 @@ const Header = ({ onFilterToggle }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [suggestions, setSuggestions] = useState([]);
+    const [showSearchBar, setShowSearchBar] = useState(false); 
   const [showProfile, setShowProfile] = useState(false); // ✅ profile dropdown toggle
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -131,6 +132,31 @@ const Header = ({ onFilterToggle }) => {
               )}
             </div>
           </div>
+          {/* 📱 Mobile Search Bar (Appears when icon clicked) */}
+        {showSearchBar && (
+          <div className="mobile-search-container">
+            <input
+              type="text"
+              placeholder="Search for products..."
+              value={search}
+              onChange={handleSearchChange}
+              autoFocus
+            />
+            {suggestions.length > 0 && (
+              <ul className="search-suggestions">
+                {suggestions.map((item) => (
+                  <li
+                    key={item.id}
+                    onClick={() => handleSuggestionClick(item)}
+                  >
+                    <img src={item.img} alt={item.name} />
+                    <span>{item.name}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
 
           {/* Right: Icons */}
           <div className="navbar-right">
