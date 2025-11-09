@@ -11,7 +11,9 @@
   z-index: 1200;
 }
 
-/* HEADER */
+/* =========================
+   HEADER
+   ========================= */
 .header {
   width: 100%;
   position: sticky;
@@ -21,7 +23,9 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
-/* NAVBAR */
+/* =========================
+   NAVBAR
+   ========================= */
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -32,7 +36,9 @@
   flex-wrap: wrap;
 }
 
-/* LEFT */
+/* =========================
+   LEFT SECTION (Logo + Menu)
+   ========================= */
 .navbar-left {
   display: flex;
   align-items: center;
@@ -70,12 +76,15 @@
   font-size: 1.3rem;
 }
 
-/* SEARCH BAR */
+/* =========================
+   SEARCH BAR + SUGGESTIONS
+   ========================= */
 .navbar-center {
   flex: 1;
   display: flex;
   justify-content: center;
   position: relative;
+  margin: 0.5rem 0;
 }
 
 .search-container {
@@ -92,10 +101,15 @@
   background: #fff;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   font-size: 0.9rem;
+  color: #333;
 }
 
 .search-container input:focus {
   outline: 2px solid #06d6a0;
+}
+
+.search-container input::placeholder {
+  color: #777;
 }
 
 .search-icon {
@@ -105,9 +119,69 @@
   transform: translateY(-50%);
   color: #444;
   font-size: 1.1rem;
+  cursor: pointer;
 }
 
-/* RIGHT */
+/* ---------- SEARCH SUGGESTIONS ---------- */
+.search-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  z-index: 2000;
+  max-height: 240px;
+  overflow-y: auto;
+  animation: dropdown 0.2s ease-in;
+}
+
+@keyframes dropdown {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.search-suggestions li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  transition: background 0.25s ease;
+}
+
+.search-suggestions li:hover {
+  background: #f1f9f7;
+}
+
+.search-suggestions img {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.search-suggestions span {
+  font-size: 0.9rem;
+  color: #333;
+  font-weight: 500;
+}
+
+/* =========================
+   RIGHT SECTION (Icons)
+   ========================= */
 .navbar-right {
   display: flex;
   align-items: center;
@@ -122,6 +196,12 @@
   font-size: 1rem;
   cursor: pointer;
   transition: 0.2s ease;
+  position: relative;
+}
+
+.nav-item span {
+  font-size: 0.75rem;
+  margin-top: 3px;
 }
 
 .nav-item:hover {
@@ -129,7 +209,7 @@
   transform: translateY(-2px);
 }
 
-/* FILTER BUTTON */
+/* ✅ Filter Button */
 .nav-item.filter-btn {
   background: #073b4c;
   color: white;
@@ -138,34 +218,75 @@
   display: flex;
   align-items: center;
   gap: 6px;
+  transition: all 0.3s ease;
 }
 
 .nav-item.filter-btn:hover {
   background: #06d6a0;
+  transform: scale(1.05);
 }
 
-/* CART BADGE */
+/* =========================
+   🛒 CART ICON + BADGE
+   ========================= */
 .cart-icon {
   position: relative;
-}
-
-.cart-badge {
-  position: absolute;
-  top: -6px;
-  right: -8px;
-  background: #ef476f;
-  color: white;
-  font-size: 0.65rem;
-  font-weight: 700;
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* SIDEBAR */
+.cart-icon svg {
+  font-size: 1.7rem;
+  color: #073b4c;
+  transition: transform 0.25s ease, color 0.25s ease;
+}
+
+.cart-icon:hover svg {
+  transform: scale(1.1);
+  color: #ef476f;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  background: #ef476f;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: bold;
+  border-radius: 50%;
+  width: 17px;
+  height: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+  transition: transform 0.25s ease;
+}
+
+/* Pop Animation when updated */
+.cart-badge.updated {
+  animation: popBadge 0.25s ease-in-out;
+}
+
+@keyframes popBadge {
+  0% {
+    transform: scale(0.7);
+  }
+  50% {
+    transform: scale(1.3);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* =========================
+   SIDEBAR (Mobile Menu)
+   ========================= */
 .sidebar {
   position: fixed;
   top: 0;
@@ -227,7 +348,7 @@
   color: #073b4c;
 }
 
-/* OVERLAY */
+/* Overlay */
 .overlay {
   position: fixed;
   inset: 0;
@@ -235,21 +356,32 @@
   z-index: 1200;
 }
 
-/* RESPONSIVE */
-@media (max-width: 768px) {
-  .menu-icon {
-    display: block;
+/* =========================
+   RESPONSIVE DESIGN
+   ========================= */
+@media (max-width: 1024px) {
+  .navbar {
+    padding: 8px 15px;
   }
 
   .navbar-center {
     width: 100%;
     order: 3;
-    margin-top: 8px;
+    margin-top: 10px;
   }
 
-  .search-container input {
-    font-size: 0.85rem;
-    padding: 9px 40px 9px 15px;
+  .search-container {
+    width: 92%;
+  }
+}
+
+@media (max-width: 768px) {
+  .menu-icon {
+    display: block;
+  }
+
+  .navbar-left h1 {
+    font-size: 1.1rem;
   }
 
   .navbar-right .nav-item span {
@@ -258,5 +390,27 @@
 
   .navbar-right {
     gap: 14px;
+  }
+
+  .search-container input {
+    font-size: 0.85rem;
+    padding: 9px 40px 9px 15px;
+  }
+
+  .search-icon {
+    right: 10px;
+  }
+
+  /* 🛒 Adjust badge for small screens */
+  .cart-badge {
+    top: -10px;
+    right: -6px;
+    width: 16px;
+    height: 16px;
+    font-size: 0.65rem;
+  }
+
+  .cart-icon svg {
+    font-size: 1.9rem;
   }
 }

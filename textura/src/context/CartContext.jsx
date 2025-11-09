@@ -8,49 +8,43 @@ export const CartProvider = ({ children }) => {
     return saved ? JSON.parse(saved) : [];
   });
 
-  // 🔁 Save to localStorage so it persists
+  // 🔁 Keep localStorage updated
   useEffect(() => {
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
   }, [cartItems]);
 
-  // 🛒 Add to cart OR increase quantity
+  // 🛒 Add product to cart
   const addToCart = (product) => {
     setCartItems((prev) => {
       const existing = prev.find((item) => item.id === product.id);
       if (existing) {
-        // increment quantity if product already exists
         return prev.map((item) =>
           item.id === product.id
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
       }
-      // else add new item
       return [...prev, { ...product, quantity: 1 }];
     });
   };
 
-  // ➖ Remove one item or decrease quantity
+  // ➖ Remove or reduce quantity
   const removeFromCart = (id) => {
     setCartItems((prev) => {
       const existing = prev.find((item) => item.id === id);
-      if (existing.quantity > 1) {
-        // just decrease quantity
+      if (existing && existing.quantity > 1) {
         return prev.map((item) =>
           item.id === id ? { ...item, quantity: item.quantity - 1 } : item
         );
       }
-      // remove item completely
       return prev.filter((item) => item.id !== id);
     });
   };
 
-  // 🧹 Clear all
-  const clearCart = () => {
-    setCartItems([]);
-  };
+  // 🧹 Clear all items
+  const clearCart = () => setCartItems([]);
 
-  // 🧮 Total count (for header icon)
+  // 🧮 Total items count for Header badge
   const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
