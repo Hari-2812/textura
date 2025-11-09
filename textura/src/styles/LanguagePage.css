@@ -1,0 +1,99 @@
+.language-page {
+  min-height: 100vh;
+  background: #f8f9fa;
+  color: #073b4c;
+  font-family: "Poppins", sans-serif;
+  text-align: center;
+  padding: 2rem 1rem 4rem;
+}
+
+/* ---------- HEADER ---------- */
+.language-header {
+  margin-bottom: 2rem;
+}
+
+.lang-icon {
+  font-size: 3rem;
+  color: #06d6a0;
+}
+
+.language-header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #073b4c;
+  margin-top: 0.5rem;
+}
+
+.language-header p {
+  color: #555;
+  font-size: 0.95rem;
+  margin-top: 0.4rem;
+}
+
+/* ---------- LANGUAGE GRID ---------- */
+.language-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.5rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.language-card {
+  background: white;
+  border-radius: 15px;
+  padding: 1.5rem;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.language-card:hover {
+  transform: translateY(-5px);
+  border-color: #06d6a0;
+}
+
+.language-card.selected {
+  border-color: #06d6a0;
+  background: #e8fdf7;
+}
+
+.flag {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.language-card h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.active-label {
+  margin-top: 0.4rem;
+  font-size: 0.85rem;
+  color: #06d6a0;
+  font-weight: 600;
+}
+
+/* ---------- FOOTER ---------- */
+.language-footer {
+  margin-top: 2.5rem;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 600px) {
+  .language-header h1 {
+    font-size: 1.6rem;
+  }
+
+  .language-card {
+    padding: 1rem;
+  }
+
+  .flag {
+    font-size: 1.8rem;
+  }
+}

@@ -1,0 +1,97 @@
+.about-page {
+  width: 100%;
+  min-height: 100vh;
+  background: #f8f9fa;
+  color: #073b4c;
+  font-family: "Poppins", sans-serif;
+}
+
+/* ---------- HERO SECTION ---------- */
+.about-hero {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.about-hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(70%);
+}
+
+.about-hero .overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.about-hero h1 {
+  position: absolute;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #fff;
+  z-index: 2;
+  text-align: center;
+  text-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+}
+
+.about-hero h1 span {
+  color: #ffd166;
+}
+
+/* ---------- CONTENT SECTION ---------- */
+.about-content {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+}
+
+.about-content h2 {
+  color: #073b4c;
+  margin-top: 1.5rem;
+  font-size: 1.4rem;
+  border-left: 4px solid #06d6a0;
+  padding-left: 10px;
+}
+
+.about-content p {
+  line-height: 1.7;
+  color: #333;
+  margin-top: 0.8rem;
+  font-size: 1rem;
+}
+
+.about-content ul {
+  margin-top: 1rem;
+  padding-left: 20px;
+}
+
+.about-content li {
+  line-height: 1.8;
+  color: #333;
+  font-size: 1rem;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 768px) {
+  .about-hero {
+    height: 220px;
+  }
+
+  .about-hero h1 {
+    font-size: 1.8rem;
+  }
+
+  .about-content {
+    margin: 1.5rem;
+    padding: 1.5rem;
+  }
+}

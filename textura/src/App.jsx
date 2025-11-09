@@ -4,12 +4,18 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 // ✅ Shared Components
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import AboutPage from "./pages/AboutPage";
+import ContactPage from "./pages/ContactPage";
+
+
 
 // ✅ Pages
 import Home from "./pages/Home";
 import BoysPage from "./pages/BoysPage";
 import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
+import LanguagePage from "./pages/LanguagePage";
+
 
 const App = () => {
   const [showFilters, setShowFilters] = useState(false);
@@ -35,6 +41,12 @@ const App = () => {
               />
             }
           />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/language" element={<LanguagePage />} />
+
+
+
 
           {/* 🛒 Cart Page */}
           <Route path="/cart" element={<CartPage />} />

@@ -1,52 +1,34 @@
 import React, { useState, useEffect } from "react";
 import "./Header.css";
 import { useNavigate } from "react-router-dom";
-import { products } from "../data/products";
-import { useCart } from "../context/CartContext";
-import { FiHome, FiPackage, FiHeart, FiPhone, FiInfo } from "react-icons/fi";
+import { useTranslation } from "react-i18next";
+import {
+  FiHome,
+  FiGlobe,
+  FiPackage,
+  FiUser,
+  FiHelpCircle,
+  FiInfo,
+} from "react-icons/fi";
 import {
   FaBars,
-  FaHeart,
   FaShoppingCart,
-  FaUser,
   FaSearch,
+  FaHeart,
   FaFilter,
 } from "react-icons/fa";
 
 const Header = ({ onFilterToggle }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [search, setSearch] = useState("");
-  const [suggestions, setSuggestions] = useState([]);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
-  const { cartCount } = useCart();
+  // ✅ Sidebar toggle
+  const toggleMenu = () => setMenuOpen(!menuOpen);
+  const closeMenu = () => setMenuOpen(false);
 
-  // ✅ Handle input typing
-  const handleSearchChange = (e) => {
-    const value = e.target.value.toLowerCase();
-    setSearch(value);
-
-    if (value.trim() === "") {
-      setSuggestions([]);
-      return;
-    }
-
-    // Filter product suggestions
-    const filtered = products.filter((p) =>
-      p.name.toLowerCase().includes(value)
-    );
-    setSuggestions(filtered.slice(0, 5)); // show only top 5
-  };
-
-  // ✅ Handle suggestion click
-  const handleSuggestionClick = (product) => {
-    setSearch(product.name);
-    setSuggestions([]);
-    if (product.category === "boys") navigate("/boys");
-    if (product.category === "girls") navigate("/girls"); // ready for future
-  };
-
-  // ✅ Close sidebar when clicking outside
+  // ✅ Auto-close sidebar when clicking outside
   useEffect(() => {
     const handleOutsideClick = (e) => {
       if (
@@ -54,26 +36,28 @@ const Header = ({ onFilterToggle }) => {
         !e.target.closest(".sidebar") &&
         !e.target.closest(".menu-icon")
       ) {
-        setMenuOpen(false);
+        closeMenu();
       }
     };
     document.addEventListener("click", handleOutsideClick);
     return () => document.removeEventListener("click", handleOutsideClick);
   }, [menuOpen]);
 
+  const handleSearchChange = (e) => setSearch(e.target.value);
+
   return (
     <>
-      {/* Offer Bar */}
+      {/* 🌟 Offer Bar */}
       <div className="offer-bar">
-        <p>✨ Festive Sale! Flat 50% Off on Kidswear | Free Shipping Above ₹999 ✨</p>
+        <p>✨ {t("welcome")} ✨</p>
       </div>
 
-      {/* Header */}
+      {/* 🧭 Header */}
       <header className="header">
         <nav className="navbar">
           {/* Left: Menu + Logo */}
           <div className="navbar-left">
-            <div className="menu-icon" onClick={() => setMenuOpen(true)}>
+            <div className="menu-icon" onClick={toggleMenu}>
               <FaBars />
             </div>
             <div className="logo" onClick={() => navigate("/")}>
@@ -90,57 +74,38 @@ const Header = ({ onFilterToggle }) => {
             <div className="search-container">
               <input
                 type="text"
-                placeholder="Search for T-Shirts, Jeans, Jackets..."
+                placeholder={t("searchPlaceholder") || "Search for products..."}
                 value={search}
                 onChange={handleSearchChange}
               />
               <FaSearch className="search-icon" />
-
-              {/* 🔹 Suggestions Dropdown */}
-              {suggestions.length > 0 && (
-                <ul className="search-suggestions">
-                  {suggestions.map((item) => (
-                    <li key={item.id} onClick={() => handleSuggestionClick(item)}>
-                      <img src={item.img} alt={item.name} />
-                      <span>{item.name}</span>
-                    </li>
-                  ))}
-                </ul>
-              )}
             </div>
           </div>
 
           {/* Right: Icons */}
           <div className="navbar-right">
-            {/* Wishlist */}
             <div className="nav-item">
               <FaHeart />
-              <span>Wishlist</span>
+              <span>{t("wishlist")}</span>
             </div>
 
-            {/* Account */}
-            <div className="nav-item">
-              <FaUser />
-              <span>Account</span>
+            <div className="nav-item" onClick={() => navigate("/cart")}>
+              <div className="cart-icon">
+                <FaShoppingCart />
+                <span className="cart-badge">2</span>
+              </div>
+              <span>{t("cart")}</span>
             </div>
 
-            {/* Cart with badge */}
-            <div className="nav-item cart-icon" onClick={() => navigate("/cart")}>
-              <FaShoppingCart />
-              <span>Cart</span>
-              {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
-            </div>
-
-            {/* Filter Button */}
             <div className="nav-item filter-btn" onClick={onFilterToggle}>
               <FaFilter />
-              <span>Filter</span>
+              <span>{t("filter")}</span>
             </div>
           </div>
         </nav>
       </header>
 
-      {/* Sidebar */}
+      {/* 📱 Sidebar */}
       <div className={`sidebar ${menuOpen ? "open" : ""}`}>
         <div className="sidebar-header">
           <div className="sidebar-logo">
@@ -148,44 +113,53 @@ const Header = ({ onFilterToggle }) => {
               src="https://cdn-icons-png.flaticon.com/512/2769/2769346.png"
               alt="Textura Logo"
             />
-            <h2>Textura</h2>
+            <h2>Menu</h2>
           </div>
-          <span className="close-btn" onClick={() => setMenuOpen(false)}>
+          <span className="close-btn" onClick={closeMenu}>
             &times;
           </span>
         </div>
 
         <ul className="sidebar-links">
-          <li onClick={() => navigate("/")}>
+          <li onClick={() => { navigate("/"); closeMenu(); }}>
             <FiHome className="icon" />
-            Home
+            {t("home")}
           </li>
-          <li>
+
+          <li onClick={() => { navigate("/language"); closeMenu(); }}>
+            <FiGlobe className="icon" />
+            {t("chooseLanguage")}
+          </li>
+
+          <li onClick={() => { navigate("/orders"); closeMenu(); }}>
             <FiPackage className="icon" />
-            My Orders
+            {t("orders") || "My Orders"}
           </li>
-          <li>
-            <FiHeart className="icon" />
-            Wishlist
+
+          <li onClick={() => { navigate("/account"); closeMenu(); }}>
+            <FiUser className="icon" />
+            {t("account") || "My Account"}
           </li>
-          <li>
-            <FiPhone className="icon" />
-            Contact Us
+
+          <li onClick={() => { navigate("/help"); closeMenu(); }}>
+            <FiHelpCircle className="icon" />
+            {t("help") || "Help"}
           </li>
-          <li>
+
+          <li onClick={() => { navigate("/about"); closeMenu(); }}>
             <FiInfo className="icon" />
-            About Textura
+            {t("about")}
           </li>
         </ul>
 
         <div className="sidebar-footer">
           <p>© 2025 Textura</p>
-          <p className="tagline">Style. Comfort. Confidence.</p>
+          <p className="tagline">{t("tagline") || "Style. Comfort. Confidence."}</p>
         </div>
       </div>
 
       {/* Overlay */}
-      {menuOpen && <div className="overlay" onClick={() => setMenuOpen(false)} />}
+      {menuOpen && <div className="overlay" onClick={closeMenu} />}
     </>
   );
 };
