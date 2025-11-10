@@ -285,138 +285,8 @@
 }
 
 /* =========================
-   SIDEBAR (Mobile Menu)
-   ========================= */
-.sidebar {
-  position: fixed;
-  top: 0;
-  left: -270px;
-  width: 250px;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(12px);
-  box-shadow: 3px 0 10px rgba(0, 0, 0, 0.15);
-  transition: left 0.35s ease;
-  z-index: 1300;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 1.2rem;
-}
-
-.sidebar.open {
-  left: 0;
-}
-
-.sidebar-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.sidebar-header img {
-  width: 36px;
-  height: 36px;
-}
-
-.sidebar-links {
-  list-style: none;
-  margin-top: 2rem;
-  padding: 0;
-}
-
-.sidebar-links li {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 0.8rem 0;
-  font-size: 1rem;
-  color: #073b4c;
-  cursor: pointer;
-  border-bottom: 1px solid #f3f3f3;
-  transition: all 0.3s ease;
-}
-
-.sidebar-links li:hover {
-  color: #06d6a0;
-  padding-left: 8px;
-}
-
-.sidebar-footer {
-  text-align: center;
-  font-size: 0.8rem;
-  color: #073b4c;
-}
-
-/* Overlay */
-.overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.45);
-  z-index: 1200;
-}
-
-/* =========================
-   RESPONSIVE DESIGN
-   ========================= */
-@media (max-width: 1024px) {
-  .navbar {
-    padding: 8px 15px;
-  }
-
-  .navbar-center {
-    width: 100%;
-    order: 3;
-    margin-top: 10px;
-  }
-
-  .search-container {
-    width: 92%;
-  }
-}
-
-@media (max-width: 768px) {
-  .menu-icon {
-    display: block;
-  }
-
-  .navbar-left h1 {
-    font-size: 1.1rem;
-  }
-
-  .navbar-right .nav-item span {
-    display: none;
-  }
-
-  .navbar-right {
-    gap: 14px;
-  }
-
-  .search-container input {
-    font-size: 0.85rem;
-    padding: 9px 40px 9px 15px;
-  }
-
-  .search-icon {
-    right: 10px;
-  }
-
-  /* 🛒 Adjust badge for small screens */
-  .cart-badge {
-    top: -10px;
-    right: -6px;
-    width: 16px;
-    height: 16px;
-    font-size: 0.65rem;
-  }
-
-  .cart-icon svg {
-    font-size: 1.9rem;
-  }
-}/* =========================
    PROFILE / ACCOUNT SECTION
    ========================= */
-
 .profile-section {
   position: relative;
   display: flex;
@@ -501,24 +371,296 @@
   cursor: pointer;
 }
 
-/* 📱 Mobile tweaks */
+/* =========================
+   SIDEBAR (Mobile Menu)
+   ========================= */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -270px;
+  width: 250px;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  box-shadow: 3px 0 10px rgba(0, 0, 0, 0.15);
+  transition: left 0.35s ease;
+  z-index: 1300;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.2rem;
+}
+
+.sidebar.open {
+  left: 0;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sidebar-logo img {
+  width: 36px;
+  height: 36px;
+}
+
+.sidebar-logo h2 {
+  color: #073b4c;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.close-btn {
+  font-size: 2rem;
+  color: #073b4c;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.close-btn:hover {
+  color: #ef476f;
+  transform: rotate(90deg);
+}
+
+.sidebar-links {
+  list-style: none;
+  margin-top: 2rem;
+  padding: 0;
+}
+
+.sidebar-links li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0.8rem 0;
+  font-size: 1rem;
+  color: #073b4c;
+  cursor: pointer;
+  border-bottom: 1px solid #f3f3f3;
+  transition: all 0.3s ease;
+}
+
+.sidebar-links li .icon {
+  font-size: 1.2rem;
+}
+
+.sidebar-links li:hover {
+  color: #06d6a0;
+  padding-left: 8px;
+}
+
+.sidebar-footer {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #073b4c;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid #f3f3f3;
+}
+
+.sidebar-footer .tagline {
+  font-style: italic;
+  color: #06d6a0;
+  margin-top: 5px;
+}
+
+/* Overlay */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 1200;
+}
+
+/* ===============================
+   📱 BOTTOM NAVIGATION (MOBILE)
+   =============================== */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 65px;
+  background: #ffffff;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  display: none; /* Hidden by default */
+  justify-content: space-around;
+  align-items: center;
+  z-index: 1150;
+  border-top: 1px solid #eaeaea;
+}
+
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  color: #073b4c;
+  cursor: pointer;
+  flex: 1;
+  transition: all 0.25s ease;
+  position: relative;
+  padding: 8px 0;
+}
+
+.bottom-nav-item svg {
+  font-size: 1.4rem;
+}
+
+.bottom-nav-item span {
+  font-size: 0.7rem;
+  margin-top: 4px;
+  color: #073b4c;
+  font-weight: 500;
+}
+
+.bottom-nav-item:hover {
+  color: #ef476f;
+  transform: translateY(-2px);
+}
+
+.bottom-nav-item:active {
+  transform: scale(0.95);
+}
+
+/* 🛒 Cart Badge in Bottom Nav */
+.bottom-nav-item .cart-icon {
+  position: relative;
+}
+
+.bottom-nav-item .cart-badge {
+  position: absolute;
+  top: -8px;
+  right: -12px;
+  background: #ef476f;
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: bold;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+}
+
+/* Profile in bottom nav */
+.bottom-nav-item .profile-avatar-small {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid #06d6a0;
+  object-fit: cover;
+}
+
+/* =========================
+   RESPONSIVE DESIGN
+   ========================= */
+@media (max-width: 1024px) {
+  .navbar {
+    padding: 8px 15px;
+  }
+
+  .navbar-center {
+    width: 100%;
+    order: 3;
+    margin-top: 10px;
+  }
+
+  .search-container {
+    width: 92%;
+  }
+}
+
+/* 📱 MOBILE VIEW - Major Changes */
 @media (max-width: 768px) {
-  .profile-display {
-    padding: 5px 8px;
+  .menu-icon {
+    display: block;
+    font-size: 1.6rem;
   }
 
-  .profile-avatar {
-    width: 30px;
-    height: 30px;
+  .logo h1 {
+    font-size: 1.1rem;
   }
 
-  .profile-username {
-    display: none; /* hide username on mobile for clean look */
+  /* ✅ HIDE all navbar-right items on mobile */
+  .navbar-right {
+    display: none !important;
   }
 
+  /* ✅ SHOW bottom navigation on mobile */
+  .bottom-nav {
+    display: flex !important;
+  }
+
+  /* Adjust navbar center for mobile */
+  .navbar-center {
+    width: 100%;
+    order: 3;
+    margin-top: 8px;
+  }
+
+  .search-container {
+    width: 100%;
+  }
+
+  .search-container input {
+    font-size: 0.85rem;
+    padding: 9px 40px 9px 15px;
+  }
+
+  .search-icon {
+    right: 10px;
+  }
+
+  /* Profile dropdown position adjustment for bottom nav */
   .profile-dropdown {
-    top: 120%;
-    right: 0;
-    width: 150px;
+    bottom: 70px;
+    top: auto;
+    right: 10px;
+  }
+
+  /* Add padding to body for bottom nav */
+  body {
+    padding-bottom: 70px;
+  }
+}
+
+/* Very small mobile screens */
+@media (max-width: 480px) {
+  .logo h1 {
+    font-size: 1rem;
+  }
+
+  .logo img {
+    width: 32px;
+    height: 32px;
+  }
+
+  .search-container input {
+    font-size: 0.8rem;
+    padding: 8px 38px 8px 12px;
+  }
+
+  .bottom-nav {
+    height: 60px;
+  }
+
+  .bottom-nav-item svg {
+    font-size: 1.3rem;
+  }
+
+  .bottom-nav-item span {
+    font-size: 0.65rem;
   }
 }

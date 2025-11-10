@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./Header.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom"; // ✅ Corrected import
 import { useTranslation } from "react-i18next";
 import { useCart } from "../context/CartContext";
-import { useUser } from "../context/UserContext"; // ✅ added
+import { useUser } from "../context/UserContext";
 import { products } from "../data/products";
 import {
   FiHome,
@@ -19,7 +19,7 @@ import {
   FaSearch,
   FaHeart,
   FaFilter,
-  FaUserCircle,
+  FaCompass,
 } from "react-icons/fa";
 
 const Header = ({ onFilterToggle }) => {
@@ -29,13 +29,19 @@ const Header = ({ onFilterToggle }) => {
   const [showProfile, setShowProfile] = useState(false);
 
   const navigate = useNavigate();
+  const location = useLocation(); // ✅ Detect current page
   const { t } = useTranslation();
   const { cartCount } = useCart();
-  const { user } = useUser(); // ✅ get profile info
+  const { user, setUser } = useUser();
+
+  // ✅ Identify if we’re on a product page
+  const isProductPage =
+    location.pathname.includes("/boys") ||
+    location.pathname.includes("/girls") ||
+    location.pathname.includes("/products");
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
   const closeMenu = () => setMenuOpen(false);
-  const toggleProfile = () => setShowProfile(!showProfile);
 
   useEffect(() => {
     const handleOutsideClick = (e) => {
@@ -46,14 +52,19 @@ const Header = ({ onFilterToggle }) => {
       ) {
         closeMenu();
       }
-      if (!e.target.closest(".profile-menu") && !e.target.closest(".profile-icon")) {
+      if (
+        showProfile &&
+        !e.target.closest(".profile-section") &&
+        !e.target.closest(".profile-dropdown")
+      ) {
         setShowProfile(false);
       }
     };
     document.addEventListener("click", handleOutsideClick);
     return () => document.removeEventListener("click", handleOutsideClick);
-  }, [menuOpen]);
+  }, [menuOpen, showProfile]);
 
+  // ✅ Search Logic
   const handleSearchChange = (e) => {
     const value = e.target.value.toLowerCase();
     setSearch(value);
@@ -74,14 +85,25 @@ const Header = ({ onFilterToggle }) => {
     if (product.category === "girls") navigate("/girls");
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    setUser(null);
+    setShowProfile(false);
+    alert("Logged out successfully!");
+    navigate("/");
+  };
+
   return (
     <>
+      {/* 🌟 Offer Bar */}
       <div className="offer-bar">
         <p>✨ Festive Sale! Flat 50% Off on Kidswear | Free Shipping Above ₹999 ✨</p>
       </div>
 
+      {/* 🧭 Header - Desktop & Mobile */}
       <header className="header">
         <nav className="navbar">
+          {/* Left Section - Menu + Logo */}
           <div className="navbar-left">
             <div className="menu-icon" onClick={toggleMenu}>
               <FaBars />
@@ -91,10 +113,10 @@ const Header = ({ onFilterToggle }) => {
                 src="https://cdn-icons-png.flaticon.com/512/2769/2769346.png"
                 alt="Textura Logo"
               />
-              <h1>Textura</h1>
             </div>
           </div>
 
+          {/* Center Search */}
           <div className="navbar-center">
             <div className="search-container">
               <input
@@ -107,7 +129,10 @@ const Header = ({ onFilterToggle }) => {
               {suggestions.length > 0 && (
                 <ul className="search-suggestions">
                   {suggestions.map((item) => (
-                    <li key={item.id} onClick={() => handleSuggestionClick(item)}>
+                    <li
+                      key={item.id}
+                      onClick={() => handleSuggestionClick(item)}
+                    >
                       <img src={item.img} alt={item.name} />
                       <span>{item.name}</span>
                     </li>
@@ -117,8 +142,9 @@ const Header = ({ onFilterToggle }) => {
             </div>
           </div>
 
+          {/* Right Section - Desktop Only */}
           <div className="navbar-right">
-            <div className="nav-item">
+            <div className="nav-item" onClick={() => navigate("/wishlist")}>
               <FaHeart />
               <span>{t("wishlist")}</span>
             </div>
@@ -126,7 +152,9 @@ const Header = ({ onFilterToggle }) => {
             <div className="nav-item" onClick={() => navigate("/cart")}>
               <div className="cart-icon">
                 <FaShoppingCart />
-                {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
+                {cartCount > 0 && (
+                  <span className="cart-badge">{cartCount}</span>
+                )}
               </div>
               <span>{t("cart") || "Cart"}</span>
             </div>
@@ -136,31 +164,112 @@ const Header = ({ onFilterToggle }) => {
               <span>{t("filter") || "Filter"}</span>
             </div>
 
-            {/* ✅ Account/Profile Icon */}
-            <div className="nav-item profile-section" onClick={() => setShowProfile(!showProfile)}>
+            {/* Profile Section - Desktop */}
+            <div
+              className="nav-item profile-section"
+              onClick={() => setShowProfile(!showProfile)}
+            >
               <div className="profile-display">
                 <img
                   src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
                   alt="User Avatar"
                   className="profile-avatar"
                 />
-                <span className="profile-username">{user.name}</span>
+                <span className="profile-username">
+                  {user?.name || "Guest"}
+                </span>
               </div>
 
               {showProfile && (
                 <div className="profile-dropdown">
-                  <p onClick={() => navigate("/profile")}>My Profile</p>
-                  <p onClick={() => navigate("/orders")}>My Orders</p>
-                  <p onClick={() => alert("Logged out successfully!")}>Logout</p>
+                  <p
+                    onClick={() => {
+                      navigate("/profile");
+                      setShowProfile(false);
+                    }}
+                  >
+                    My Profile
+                  </p>
+                  <p
+                    onClick={() => {
+                      navigate("/orders");
+                      setShowProfile(false);
+                    }}
+                  >
+                    My Orders
+                  </p>
+                  <p onClick={handleLogout}>Logout</p>
                 </div>
               )}
             </div>
-
           </div>
         </nav>
       </header>
 
-      {/* 📱 Sidebar */}
+      {/* 📱 Bottom Navigation - Mobile Only */}
+      <div className="bottom-nav">
+        {/* Wishlist */}
+        <div
+          className={`bottom-nav-item ${
+            location.pathname === "/wishlist" ? "active" : ""
+          }`}
+          onClick={() => navigate("/wishlist")}
+        >
+          <FaHeart />
+          <span>Wishlist</span>
+        </div>
+
+        {/* Cart */}
+        <div
+          className={`bottom-nav-item ${
+            location.pathname === "/cart" ? "active" : ""
+          }`}
+          onClick={() => navigate("/cart")}
+        >
+          <div className="cart-icon">
+            <FaShoppingCart />
+            {cartCount > 0 && (
+              <span className="cart-badge">{cartCount}</span>
+            )}
+          </div>
+          <span>Cart</span>
+        </div>
+
+        {/* Dynamic Filter / Explore */}
+        {isProductPage ? (
+          <div className="bottom-nav-item" onClick={onFilterToggle}>
+            <FaFilter />
+            <span>Filter</span>
+          </div>
+        ) : (
+          <div
+            className={`bottom-nav-item ${
+              location.pathname === "/explore" ? "active" : ""
+            }`}
+            onClick={() => navigate("/explore")}
+          >
+            <FaCompass />
+            <span>Explore</span>
+          </div>
+        )}
+
+        {/* Profile */}
+        <div
+          className={`bottom-nav-item ${
+            location.pathname === "/profile" ? "active" : ""
+          }`}
+          onClick={() => navigate("/profile")}
+        >
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+            alt="Profile"
+            className="profile-avatar-small"
+          />
+          <span>Profile</span>
+        </div>
+      </div>
+
+      {/* 📂 Sidebar */}
       <div className={`sidebar ${menuOpen ? "open" : ""}`}>
         <div className="sidebar-header">
           <div className="sidebar-logo">
