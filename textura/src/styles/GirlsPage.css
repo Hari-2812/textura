@@ -1,0 +1,236 @@
+/* ---------- GIRLS CATEGORY PAGE ---------- */
+.girls-page {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 4rem 0;
+}
+
+.girls-page h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  color: #7b2cbf;
+}
+
+/* ---------- FILTER POPUP ---------- */
+.filter-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  width: 90%;
+  max-width: 420px;
+  padding: 1.5rem;
+  border-radius: 15px;
+  box-shadow: 0 6px 25px rgba(123, 44, 191, 0.25);
+  z-index: 1001;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.filter-header h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #5a189a;
+}
+
+.close-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+  color: #333;
+}
+
+.close-btn:hover {
+  color: #ef476f;
+}
+
+.filter-options label {
+  display: block;
+  margin: 0.6rem 0 0.3rem;
+  font-weight: 500;
+  text-align: left;
+  color: #333;
+}
+
+.filter-options select {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  outline: none;
+  background: #fdfdfd;
+  color: #333;
+}
+
+.filter-options select:focus {
+  border-color: #c77dff;
+  box-shadow: 0 0 6px rgba(199, 125, 255, 0.4);
+}
+
+.apply-btn {
+  background: linear-gradient(90deg, #9d4edd, #7b2cbf);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.7rem 1.2rem;
+  margin-top: 1rem;
+  width: 100%;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s ease;
+}
+
+.apply-btn:hover {
+  transform: scale(1.05);
+  background: linear-gradient(90deg, #7b2cbf, #5a189a);
+}
+
+/* ---------- OVERLAY ---------- */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+  animation: fadeOverlay 0.3s ease;
+}
+
+/* ---------- PRODUCT GRID ---------- */
+.girls-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  justify-items: center;
+  padding: 1rem;
+}
+
+.girls-card {
+  background: linear-gradient(180deg, #fff 0%, #ffe6ff 100%);
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(123, 44, 191, 0.15);
+  padding: 1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+  max-width: 280px;
+  text-align: center;
+}
+
+.girls-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(123, 44, 191, 0.25);
+}
+
+.girls-card img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+.girls-card h3 {
+  font-size: 1.1rem;
+  color: #5a189a;
+  margin-bottom: 0.3rem;
+}
+
+.girls-card p {
+  color: #555;
+  margin-bottom: 0.6rem;
+  font-weight: 500;
+}
+
+.girls-card button {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #ff7eb9, #ff65a3);
+  color: #fff;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.girls-card button:hover {
+  transform: scale(1.05);
+  background: linear-gradient(90deg, #ff65a3, #ff118b);
+}
+
+/* ✅ Add-to-cart popup */
+.popup {
+  position: fixed;
+  bottom: 25px;
+  right: 20px;
+  background-color: #ff65a3;
+  color: white;
+  padding: 0.8rem 1.2rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(255, 101, 163, 0.3);
+  animation: slideUp 0.4s ease, fadeOut 2s ease forwards;
+  z-index: 2000;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  0%, 80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 768px) {
+  .girls-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .girls-card img {
+    height: 180px;
+  }
+
+  .girls-card h3 {
+    font-size: 1rem;
+  }
+
+  .girls-card button {
+    font-size: 0.85rem;
+    padding: 0.4rem 1rem;
+  }
+}
+
+@media (max-width: 450px) {
+  .girls-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.7rem;
+  }
+
+  .girls-card img {
+    height: 150px;
+  }
+}
