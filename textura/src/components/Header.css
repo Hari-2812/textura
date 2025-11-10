@@ -77,7 +77,7 @@
 }
 
 /* =========================
-   SEARCH BAR (Desktop)
+   SEARCH BAR + SUGGESTIONS
    ========================= */
 .navbar-center {
   flex: 1;
@@ -106,6 +106,10 @@
 
 .search-container input:focus {
   outline: 2px solid #06d6a0;
+}
+
+.search-container input::placeholder {
+  color: #777;
 }
 
 .search-icon {
@@ -205,7 +209,7 @@
   transform: translateY(-2px);
 }
 
-/* ✅ Styled Buttons (Wishlist, Cart, Filter) */
+/* ✅ Filter Button */
 .nav-item.filter-btn {
   background: #073b4c;
   color: white;
@@ -222,7 +226,9 @@
   transform: scale(1.05);
 }
 
-/* 🛒 CART ICON + BADGE */
+/* =========================
+   🛒 CART ICON + BADGE
+   ========================= */
 .cart-icon {
   position: relative;
   display: flex;
@@ -232,7 +238,13 @@
 
 .cart-icon svg {
   font-size: 1.7rem;
-  color: #fff;
+  color: #073b4c;
+  transition: transform 0.25s ease, color 0.25s ease;
+}
+
+.cart-icon:hover svg {
+  transform: scale(1.1);
+  color: #ef476f;
 }
 
 .cart-badge {
@@ -251,16 +263,166 @@
   justify-content: center;
   border: 2px solid white;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+  transition: transform 0.25s ease;
+}
+
+/* Pop Animation when updated */
+.cart-badge.updated {
+  animation: popBadge 0.25s ease-in-out;
+}
+
+@keyframes popBadge {
+  0% {
+    transform: scale(0.7);
+  }
+  50% {
+    transform: scale(1.3);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 /* =========================
-   PROFILE SECTION
+   SIDEBAR (Mobile Menu)
    ========================= */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -270px;
+  width: 250px;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  box-shadow: 3px 0 10px rgba(0, 0, 0, 0.15);
+  transition: left 0.35s ease;
+  z-index: 1300;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.2rem;
+}
+
+.sidebar.open {
+  left: 0;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sidebar-header img {
+  width: 36px;
+  height: 36px;
+}
+
+.sidebar-links {
+  list-style: none;
+  margin-top: 2rem;
+  padding: 0;
+}
+
+.sidebar-links li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0.8rem 0;
+  font-size: 1rem;
+  color: #073b4c;
+  cursor: pointer;
+  border-bottom: 1px solid #f3f3f3;
+  transition: all 0.3s ease;
+}
+
+.sidebar-links li:hover {
+  color: #06d6a0;
+  padding-left: 8px;
+}
+
+.sidebar-footer {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #073b4c;
+}
+
+/* Overlay */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 1200;
+}
+
+/* =========================
+   RESPONSIVE DESIGN
+   ========================= */
+@media (max-width: 1024px) {
+  .navbar {
+    padding: 8px 15px;
+  }
+
+  .navbar-center {
+    width: 100%;
+    order: 3;
+    margin-top: 10px;
+  }
+
+  .search-container {
+    width: 92%;
+  }
+}
+
+@media (max-width: 768px) {
+  .menu-icon {
+    display: block;
+  }
+
+  .navbar-left h1 {
+    font-size: 1.1rem;
+  }
+
+  .navbar-right .nav-item span {
+    display: none;
+  }
+
+  .navbar-right {
+    gap: 14px;
+  }
+
+  .search-container input {
+    font-size: 0.85rem;
+    padding: 9px 40px 9px 15px;
+  }
+
+  .search-icon {
+    right: 10px;
+  }
+
+  /* 🛒 Adjust badge for small screens */
+  .cart-badge {
+    top: -10px;
+    right: -6px;
+    width: 16px;
+    height: 16px;
+    font-size: 0.65rem;
+  }
+
+  .cart-icon svg {
+    font-size: 1.9rem;
+  }
+}/* =========================
+   PROFILE / ACCOUNT SECTION
+   ========================= */
+
 .profile-section {
   position: relative;
   display: flex;
   align-items: center;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .profile-display {
@@ -274,24 +436,42 @@
   transition: all 0.3s ease;
 }
 
+.profile-display:hover {
+  background: linear-gradient(90deg, #5bbcff15, #ef476f10);
+  transform: scale(1.03);
+}
+
 .profile-avatar {
   width: 34px;
   height: 34px;
   border-radius: 50%;
   border: 2px solid #06d6a0;
+  object-fit: cover;
+  background-color: #fff;
 }
 
+.profile-username {
+  color: #073b4c;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.profile-username:hover {
+  color: #ef476f;
+}
+
+/* Dropdown */
 .profile-dropdown {
   position: absolute;
   top: 115%;
   right: 0;
   width: 170px;
-  background: #fff;
+  background: #ffffff;
   border-radius: 12px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
   padding: 0.4rem 0;
-  animation: fadeDown 0.25s ease forwards;
   z-index: 2000;
+  animation: fadeDown 0.25s ease forwards;
 }
 
 @keyframes fadeDown {
@@ -306,8 +486,9 @@
 }
 
 .profile-dropdown p {
-  padding: 10px 16px;
   margin: 0;
+  padding: 10px 16px;
+  font-size: 0.9rem;
   color: #073b4c;
   font-weight: 500;
   transition: all 0.25s ease;
@@ -317,172 +498,13 @@
   background: linear-gradient(90deg, #5bbcff15, #ef476f15);
   color: #ef476f;
   padding-left: 20px;
-}
-
-/* =========================
-   MOBILE SEARCH ICON
-   ========================= */
-.search-toggle-icon {
-  display: none;
-  font-size: 1.5rem;
-  color: #073b4c;
   cursor: pointer;
 }
 
-/* =========================
-   FLIPKART-STYLE MOBILE SEARCH OVERLAY
-   ========================= */
-.mobile-search-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: #fff;
-  z-index: 2000;
-  display: flex;
-  flex-direction: column;
-  animation: slideDown 0.25s ease-in;
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.mobile-search-header {
-  display: flex;
-  align-items: center;
-  padding: 12px 16px;
-  background: #f8f8f8;
-  border-bottom: 1px solid #ddd;
-}
-
-.mobile-search-header input {
-  flex: 1;
-  border: none;
-  background: #fff;
-  padding: 10px 15px;
-  border-radius: 25px;
-  font-size: 0.9rem;
-  outline: none;
-  margin-left: 10px;
-}
-
-.mobile-search-header .back-icon {
-  font-size: 1.5rem;
-  color: #073b4c;
-  cursor: pointer;
-}
-
-.mobile-search-suggestions {
-  list-style: none;
-  margin: 0;
-  padding: 10px 15px;
-  overflow-y: auto;
-}
-
-.mobile-search-suggestions li {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 0.6rem 0;
-  border-bottom: 1px solid #eee;
-  cursor: pointer;
-}
-
-.mobile-search-suggestions li img {
-  width: 45px;
-  height: 45px;
-  border-radius: 8px;
-  object-fit: cover;
-}
-
-.mobile-search-suggestions li span {
-  font-size: 0.95rem;
-  color: #333;
-  font-weight: 500;
-}
-
-/* =========================
-   RESPONSIVE DESIGN (UPDATED MOBILE HEADER)
-   ========================= */
+/* 📱 Mobile tweaks */
 @media (max-width: 768px) {
-  .navbar {
-    flex-wrap: nowrap;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 10px;
-  }
-
-  .menu-icon {
-    display: block;
-    font-size: 1.6rem;
-  }
-
-  .navbar-left {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .logo h1 {
-    font-size: 1.1rem;
-  }
-
-  .logo img {
-    width: 32px;
-    height: 32px;
-  }
-
-  .desktop-search {
-    display: none;
-  }
-
-  .search-toggle-icon {
-    display: block;
-    font-size: 1.5rem;
-    color: #073b4c;
-    cursor: pointer;
-  }
-
-  .navbar-right {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 14px;
-  }
-
-  .navbar-right .nav-item span {
-    display: none;
-  }
-
-  .cart-icon svg,
-  .search-toggle-icon,
-  .profile-avatar,
-  .menu-icon {
-    font-size: 1.6rem;
-    color: #073b4c;
-  }
-
-  .cart-badge {
-    top: -6px;
-    right: -8px;
-    font-size: 0.65rem;
-    width: 16px;
-    height: 16px;
-  }
-
   .profile-display {
-    padding: 0;
-    box-shadow: none;
-    background: none;
+    padding: 5px 8px;
   }
 
   .profile-avatar {
@@ -491,19 +513,12 @@
   }
 
   .profile-username {
-    display: none;
+    display: none; /* hide username on mobile for clean look */
   }
 
-  .navbar-left,
-  .navbar-right {
-    flex: 1;
-  }
-
-  .navbar-left {
-    justify-content: flex-start;
-  }
-
-  .navbar-right {
-    justify-content: flex-end;
+  .profile-dropdown {
+    top: 120%;
+    right: 0;
+    width: 150px;
   }
 }
