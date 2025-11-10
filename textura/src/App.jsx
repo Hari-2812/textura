@@ -10,11 +10,11 @@ import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
 import Home from "./pages/Home";
 import BoysPage from "./pages/BoysPage";
-import GirlsPage from "./pages/GirlsPage";  // ✅ Fixed import path
+import GirlsPage from "./pages/GirlsPage"; // ✅ Fixed import path
 import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import LanguagePage from "./pages/LanguagePage";
-import ProfilePage from "./pages/ProfilePage";  // ✅ Profile page
+import ProfilePage from "./pages/ProfilePage"; // ✅ Profile page
 
 // ✅ Context Providers
 import { CartProvider } from "./context/CartContext";

@@ -83,6 +83,9 @@ html, body {
   max-width: 1200px;
   margin: 2rem auto;
   text-align: center;
+  overflow: hidden; /* ✅ Prevent internal scrollbars */
+  position: relative;
+  padding-bottom: 2.5rem; /* ✅ Give enough space for dots */
 }
 
 .slider-title {
@@ -94,6 +97,7 @@ html, body {
   padding-left: 0.5rem;
 }
 
+/* ✅ Product Cards */
 .product-card {
   background: #fff;
   border-radius: 12px;
@@ -145,7 +149,53 @@ html, body {
   background: #333;
 }
 
-/* Mobile Compact View */
+/* ✅ Fix Slick Slider alignment and scroll behavior */
+.slick-slider {
+  overflow: visible !important; /* Keeps dots visible */
+}
+
+.slick-list {
+  overflow-x: hidden !important; /* Prevent horizontal scrollbar */
+  overflow-y: hidden !important; /* Remove vertical scroll inside slider */
+}
+
+.slick-track {
+  display: flex !important;
+  align-items: stretch !important;
+}
+
+/* ✅ Dots styling */
+.slick-dots {
+  position: absolute;
+  bottom: -30px; /* ✅ Bring dots inside the section (no overlap) */
+  left: 0;
+  width: 100%;
+  text-align: center;
+}
+
+.slick-dots li {
+  margin: 0 4px;
+}
+
+.slick-dots li button:before {
+  font-size: 10px;
+  color: #bbb;
+  opacity: 0.6;
+  transition: color 0.3s ease, opacity 0.3s ease;
+}
+
+.slick-dots li.slick-active button:before {
+  color: #000;
+  opacity: 1;
+}
+
+/* ✅ Responsive adjustments */
+@media (max-width: 1024px) {
+  .product-card img {
+    height: 180px;
+  }
+}
+
 @media (max-width: 768px) {
   .product-card img {
     height: 160px;
@@ -153,7 +203,18 @@ html, body {
   .slider-title {
     font-size: 1.2rem;
   }
+  .product-card h3 {
+    font-size: 0.9rem;
+  }
+  .product-card p {
+    font-size: 0.85rem;
+  }
+  .product-slider {
+    padding-bottom: 2rem; /* Slightly less padding for mobile */
+  }
 }
+
+
 /* ======== CATEGORY SECTION (Flipkart-style Boys & Girls) ======== */
 .category-section {
   width: 95%;
