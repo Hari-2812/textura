@@ -411,26 +411,99 @@
 }
 
 /* =========================
-   RESPONSIVE DESIGN
+   RESPONSIVE DESIGN (UPDATED MOBILE HEADER)
    ========================= */
 @media (max-width: 768px) {
+  .navbar {
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 10px;
+  }
+
+  .menu-icon {
+    display: block;
+    font-size: 1.6rem;
+  }
+
+  .navbar-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .logo h1 {
+    font-size: 1.1rem;
+  }
+
+  .logo img {
+    width: 32px;
+    height: 32px;
+  }
+
   .desktop-search {
     display: none;
   }
 
   .search-toggle-icon {
     display: block;
+    font-size: 1.5rem;
+    color: #073b4c;
+    cursor: pointer;
+  }
+
+  .navbar-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 14px;
   }
 
   .navbar-right .nav-item span {
     display: none;
   }
 
-  .navbar-right {
-    gap: 12px;
+  .cart-icon svg,
+  .search-toggle-icon,
+  .profile-avatar,
+  .menu-icon {
+    font-size: 1.6rem;
+    color: #073b4c;
+  }
+
+  .cart-badge {
+    top: -6px;
+    right: -8px;
+    font-size: 0.65rem;
+    width: 16px;
+    height: 16px;
+  }
+
+  .profile-display {
+    padding: 0;
+    box-shadow: none;
+    background: none;
+  }
+
+  .profile-avatar {
+    width: 30px;
+    height: 30px;
   }
 
   .profile-username {
     display: none;
+  }
+
+  .navbar-left,
+  .navbar-right {
+    flex: 1;
+  }
+
+  .navbar-left {
+    justify-content: flex-start;
+  }
+
+  .navbar-right {
+    justify-content: flex-end;
   }
 }
