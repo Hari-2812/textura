@@ -175,3 +175,33 @@ button:hover {
     padding: 2rem;
   }
 }
+/* 👁️ Eye Toggle Button */
+.password-field {
+  position: relative;
+}
+
+.password-field input {
+  width: 100%;
+  padding-right: 2.8rem; /* space for eye icon */
+}
+
+.eye-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #777;
+  font-size: 1.1rem;
+  transition: 0.3s ease;
+}
+
+.eye-icon:hover {
+  color: #06d6a0;
+}
+
+/* 👦 Eye Animations */
+.kid-eyes.peek {
+  transform: rotate(-8deg) translateX(-10px);
+  opacity: 0.9;
+}

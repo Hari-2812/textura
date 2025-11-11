@@ -1,29 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useUser } from "../context/UserContext";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "../styles/Auth.css";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { login } = useUser();
+  const { login, user } = useUser();
 
-  const [form, setForm] = useState({ name: "", password: "" });
-  const [focusedInput, setFocusedInput] = useState(""); // track which field is active
+  const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
+  const [focusedInput, setFocusedInput] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
+  // 🔄 Redirect if already logged in
+  useEffect(() => {
+    if (user) navigate("/");
+  }, [user, navigate]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  const togglePassword = () => setShowPassword((prev) => !prev);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (form.name === "" || form.password === "") {
+    if (!form.email || !form.password) {
       setError("Please fill in both fields!");
       return;
     }
-    setError("");
-    login(form.name, form.password);
-    navigate("/");
+
+    const result = login(form.email, form.password);
+
+    if (result.success) {
+      setError("");
+      navigate("/"); // ✅ Redirect to home only after successful login
+    } else {
+      setError(result.message);
+    }
   };
 
   return (
@@ -35,15 +50,15 @@ const LoginPage = () => {
           <img
             src="/images/kid-eyes.png"
             alt="Eyes"
-            className={`kid-eyes ${focusedInput === "name" ? "look-name" : ""} ${
+            className={`kid-eyes ${focusedInput === "email" ? "look-name" : ""} ${
               focusedInput === "password" ? "hide" : ""
-            }`}
+            } ${showPassword ? "peek" : ""}`}
           />
           <img
             src="/images/kid-eyes-closed.png"
             alt="Closed Eyes"
             className={`kid-eyes-closed ${
-              focusedInput === "password" ? "show" : ""
+              focusedInput === "password" && !showPassword ? "show" : ""
             }`}
           />
         </div>
@@ -59,23 +74,34 @@ const LoginPage = () => {
 
           <form onSubmit={handleSubmit}>
             <input
-              type="text"
-              name="name"
-              placeholder="Enter your name"
-              value={form.name}
+              type="email"
+              name="email"
+              placeholder="Enter your email"
+              value={form.email}
               onChange={handleChange}
-              onFocus={() => setFocusedInput("name")}
+              onFocus={() => setFocusedInput("email")}
               onBlur={() => setFocusedInput("")}
             />
-            <input
-              type="password"
-              name="password"
-              placeholder="Enter your password"
-              value={form.password}
-              onChange={handleChange}
-              onFocus={() => setFocusedInput("password")}
-              onBlur={() => setFocusedInput("")}
-            />
+
+            <div className="password-field">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Enter your password"
+                value={form.password}
+                onChange={handleChange}
+                onFocus={() => setFocusedInput("password")}
+                onBlur={() => setFocusedInput("")}
+              />
+              <span className="eye-icon" onClick={togglePassword}>
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </span>
+            </div>
+
+            <div className="forgot-password-link">
+              <Link to="/forgot-password">Forgot Password?</Link>
+            </div>
+
             <button type="submit">Login</button>
           </form>
 
