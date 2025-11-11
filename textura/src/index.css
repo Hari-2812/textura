@@ -353,36 +353,7 @@ html, body {
   background-color: #333;
 }
 
-/* NEWSLETTER */
-.newsletter {
-  text-align: center;
-  padding: 3rem 1rem;
-  background: #f5f5f5;
-}
 
-.newsletter-input {
-  margin-top: 1rem;
-}
-
-.newsletter-input input {
-  padding: 0.6rem;
-  width: 250px;
-  margin-right: 0.5rem;
-
-}
-.subscribe-btn{
-  padding: 0.6rem 1.4rem;
-  border: none;
-  border-radius: 2px;
-  background-color: black;
-  color: white;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-.subscribe-btn:hover {
-  background-color: #333;
-}
 /* FOOTER */
 .footer {
   background: black;

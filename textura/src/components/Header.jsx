@@ -5,6 +5,8 @@ import { useTranslation } from "react-i18next";
 import { useCart } from "../context/CartContext";
 import { useUser } from "../context/UserContext";
 import { products } from "../data/products";
+import OfferBar from "../components/OfferBar";
+
 import {
   FiHome,
   FiGlobe,
@@ -95,13 +97,8 @@ const Header = ({ onFilterToggle }) => {
 
   return (
     <>
-      {/* 🌟 Offer Bar */}
-      <div className="offer-bar">
-        <p>
-          ✨ Festive Sale! Flat 50% Off on Kidswear | Free Shipping Above ₹999
-          ✨
-        </p>
-      </div>
+      {/* 🌟 Offer Bar Component */}
+      <OfferBar />
 
       {/* 🧭 Header - Desktop & Mobile */}
       <header className="header">

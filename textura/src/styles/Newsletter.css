@@ -1,0 +1,137 @@
+/* =========================
+   NEWSLETTER COMPONENT
+   ========================= */
+
+.newsletter {
+  text-align: center;
+  padding: 3rem 1rem;
+  background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+  border-top: 1px solid #ddd;
+  font-family: "Poppins", sans-serif;
+}
+
+/* 📰 Heading */
+.newsletter h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 0.5rem;
+}
+
+.newsletter p {
+  color: #555;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* =========================
+   INPUT + BUTTON INLINE
+   ========================= */
+.newsletter-input {
+  display: flex;
+  justify-content: center;
+  align-items: stretch; /* ensures equal height */
+  gap: 10px;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.newsletter-input input,
+.newsletter-input .subscribe-btn {
+  box-sizing: border-box;
+  font: inherit;
+  line-height: 1;
+  height: 46px; /* fixed height for both */
+}
+
+/* 📧 Input Field */
+.newsletter-input input {
+  flex: 1;
+  min-width: 260px;
+  padding: 0 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.newsletter-input input:focus {
+  border-color: #000;
+}
+
+/* 🔘 Subscribe Button */
+.subscribe-btn {
+  padding: 0 20px; /* no vertical padding, only horizontal */
+  border: none;
+  border-radius: 8px;
+  background-color: #000;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap; /* prevent wrapping */
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.subscribe-btn:hover {
+  background-color: #222;
+  transform: translateY(-2px);
+}
+
+/* =========================
+   FEEDBACK MESSAGES
+   ========================= */
+.success-msg {
+  color: #06d6a0;
+  font-weight: 500;
+  margin-top: 1rem;
+}
+
+.error-msg {
+  color: #ef476f;
+  font-weight: 500;
+  margin-top: 1rem;
+}
+
+/* =========================
+   RESPONSIVE DESIGN
+   ========================= */
+
+/* Tablets (≤1024px) */
+@media (max-width: 1024px) {
+  .newsletter h2 {
+    font-size: 1.8rem;
+  }
+
+  .newsletter-input {
+    max-width: 440px;
+  }
+}
+
+/* Mobiles (≤600px) */
+@media (max-width: 600px) {
+  .newsletter h2 {
+    font-size: 1.6rem;
+  }
+
+  .newsletter-input {
+    flex-direction: column; /* stack vertically */
+    gap: 0.8rem;
+    max-width: 90%;
+  }
+
+  .newsletter-input input,
+  .newsletter-input .subscribe-btn {
+    width: 100%;
+    height: 46px;
+  }
+
+  .subscribe-btn {
+    transform: none;
+  }
+}

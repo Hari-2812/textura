@@ -1,0 +1,37 @@
+/* =========================
+   🌟 OFFER BAR
+   ========================= */
+
+.offer-bar {
+  width: 100%;
+  background: linear-gradient(90deg, #ffd166, #ef476f);
+  color: #fff;
+  text-align: center;
+  padding: 8px 0;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.3px;
+  overflow: hidden;
+  position: relative;
+  z-index: 1200;
+}
+
+
+
+/* ✨ If you prefer rotating offers (fade-slide animation) instead of continuous scrolling */
+.fade-slide {
+  position: relative;
+  display: inline-block;
+  animation: fadeSlide 0.8s ease-in-out;
+} 
+
+@keyframes fadeSlide {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
