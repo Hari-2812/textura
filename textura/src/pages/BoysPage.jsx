@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { products } from "../data/products";
 import "../styles/BoysPage.css";
 import { useCart } from "../context/CartContext";
+import ProductCard from "../components/ProductCard";
 
 const BoysPage = ({ showFilters, setShowFilters }) => {
   const boysProducts = products.filter((p) => p.category === "boys");
@@ -51,7 +52,6 @@ const BoysPage = ({ showFilters, setShowFilters }) => {
   return (
     <section className="boys-page">
       <h2>Boys Collection</h2>
-
       {/* ✅ Filter Popup */}
       {showFilters && (
         <div className="filter-popup">
@@ -89,36 +89,28 @@ const BoysPage = ({ showFilters, setShowFilters }) => {
           </div>
         </div>
       )}
-
       {/* ✅ Overlay */}
       {showFilters && (
         <div className="overlay" onClick={() => setShowFilters(false)} />
       )}
-
       {/* ✅ Product Grid */}
       <div className="boys-container">
         {filteredProducts.length > 0 ? (
           filteredProducts.map((p) => (
-            <div key={p.id} className="boys-card">
-              <img src={p.img} alt={p.name} />
-              <h3>{p.name}</h3>
-              <p>{p.price}</p>
-              <button
-                onClick={() => {
-                  addToCart(p);
-                  showCartPopup();
-                }}
-              >
-                Add to Cart
-              </button>
-            </div>
+            <ProductCard
+              key={p.id}
+              product={p}
+              onAddToCart={(item) => {
+                addToCart(item);
+                showCartPopup();
+              }}
+            />
           ))
         ) : (
           <p>No products found</p>
         )}
       </div>
-
-      {/* ✅ Popup */}
+      Everything else —{/* ✅ Popup */}
       {popup && <div className="popup">🛒 Item added to cart!</div>}
     </section>
   );

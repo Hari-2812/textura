@@ -1,0 +1,247 @@
+/* =========================
+   PRODUCT CARD COMPONENT
+   ========================= */
+.product-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  cursor: pointer;
+  width: 240px;
+  text-align: center;
+  padding: 0.8rem;
+  position: relative;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+}
+
+/* =========================
+   PRODUCT IMAGE
+   ========================= */
+.product-image-container {
+  width: 100%;
+  height: 220px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.product-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.25s ease;
+}
+
+.product-image-container:hover .product-img {
+  transform: scale(1.05);
+}
+
+/* =========================
+   PRODUCT INFO
+   ========================= */
+.product-info {
+  margin-top: 0.6rem;
+}
+
+.product-name {
+  font-size: 1rem;
+  color: #073b4c;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.product-price {
+  font-size: 0.9rem;
+  color: #ef476f;
+  font-weight: 500;
+}
+
+/* =========================
+   ACTION BUTTONS
+   ========================= */
+.product-actions {
+  margin-top: 0.8rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+/* 🛒 Add to Cart Button */
+.add-cart-btn {
+  background-color: #000;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 40px;
+  min-width: 120px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.add-cart-btn:hover {
+  background-color: #06d6a0;
+  transform: translateY(-2px);
+}
+
+/* ❤️ Wishlist Button */
+.wishlist-btn {
+  background-color: #000;
+  border: 2px solid #000;
+  color: white;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  transition: all 0.5s ease-in-out;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.wishlist-btn:hover {
+
+  color: #fff;
+  transform: scale(1.1);
+}
+
+
+/* Responsiveness */
+/* 💻 Tablets (≤1024px) */
+@media (max-width: 1024px) {
+  .product-card {
+    width: 200px;
+    padding: 0.6rem;
+  }
+
+  .product-image-container {
+    height: 180px;
+    position: relative; /* Needed for wishlist positioning */
+    background-color: #f8f8f8;
+  }
+
+  /* ❤️ Wishlist button inside image */
+  .wishlist-btn {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.85);
+    border: none;
+    color: #fff;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease-in-out;
+  }
+
+  .wishlist-btn:hover {
+    background-color: #06d6a0;
+    transform: scale(1.1);
+  }
+
+  .add-cart-btn {
+    min-width: 110px;
+    height: 36px;
+    font-size: 0.8rem;
+  }
+
+  /* Center only add to cart */
+  .product-actions {
+    justify-content: center;
+  }
+}
+
+/* 📱 Mobiles (≤768px) */
+@media (max-width: 768px) {
+  .product-card {
+    width: 160px;
+    padding: 0.5rem;
+  }
+
+  .product-image-container {
+    height: 160px;
+    position: relative;
+    background-color: #f8f8f8;
+  }
+
+  .wishlist-btn {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    width: 34px;
+    height: 34px;
+    font-size: 0.95rem;
+    background-color: rgba(0, 0, 0, 0.85);
+    border: none;
+    color: #fff;
+  }
+
+  .add-cart-btn {
+    min-width: 110px;
+    height: 36px;
+    font-size: 0.8rem;
+    padding: 0.45rem 1rem;
+  }
+
+  .product-actions {
+    justify-content: center;
+    gap: 0; /* no space since only 1 button */
+  }
+}
+
+/* 📱 Small Phones (≤480px) */
+@media (max-width: 480px) {
+  .product-card {
+    width: 140px;
+    padding: 0.4rem;
+  }
+
+  .product-image-container {
+    height: 140px;
+    position: relative;
+    background-color: #f8f8f8;
+  }
+
+  .wishlist-btn {
+    position: absolute;
+    bottom: 6px;
+    right: 6px;
+    width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
+    background-color: rgba(0, 0, 0, 0.85);
+    border: none;
+    color: #be0606;
+  }
+
+  .add-cart-btn {
+    min-width: 100px;
+    height: 34px;
+    font-size: 0.75rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .product-actions {
+    justify-content: center;
+  }
+}
