@@ -1,30 +1,30 @@
+// src/pages/WishlistPage.jsx
 import React from "react";
 import { useWishlist } from "../context/WishlistContext";
+import { useCart } from "../context/CartContext";
+import ProductCard from "../components/ProductCard";
 import "../styles/WishlistPage.css";
 
 const WishlistPage = () => {
-  const { wishlist, removeFromWishlist } = useWishlist();
+  const { wishlist } = useWishlist();
+  const { addToCart } = useCart();
 
   return (
     <div className="wishlist-page">
       <h2>Your Wishlist ❤️</h2>
 
       {wishlist.length === 0 ? (
-        <p className="empty-wishlist">No items yet — add your favorites!</p>
+        <p className="empty-wishlist">
+          No items yet — start adding your favorites!
+        </p>
       ) : (
         <div className="wishlist-grid">
           {wishlist.map((item) => (
-            <div key={item.id} className="wishlist-card">
-              <img src={item.img} alt={item.name} />
-              <h3>{item.name}</h3>
-              <p>{item.price}</p>
-              <button
-                className="remove-btn"
-                onClick={() => removeFromWishlist(item.id)}
-              >
-                Remove
-              </button>
-            </div>
+            <ProductCard
+              key={item.id}
+              product={item}
+              onAddToCart={() => addToCart(item)}
+            />
           ))}
         </div>
       )}
