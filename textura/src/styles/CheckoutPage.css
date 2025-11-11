@@ -1,0 +1,215 @@
+/* 🌸 Checkout Page - Modern Design */
+.checkout-wrapper {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #f9fbfc 0%, #f3f4f7 100%);
+  padding: 2rem;
+  font-family: "Poppins", sans-serif;
+}
+
+.checkout-container {
+  width: 100%;
+  max-width: 500px;
+  background: #fff;
+  border-radius: 20px;
+  padding: 2.5rem 2rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  transition: 0.3s ease;
+}
+
+.checkout-container:hover {
+  transform: translateY(-3px);
+}
+
+.checkout-title {
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.8rem;
+  color: #333;
+  margin-bottom: 1.5rem;
+}
+
+.customer-info {
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid #e0e0e0;
+}
+
+.customer-info p {
+  color: #555;
+  font-size: 0.95rem;
+  margin: 0.3rem 0;
+}
+
+.update-btn {
+  margin-top: 0.8rem;
+  background: linear-gradient(135deg, #ffb347, #ffcc33);
+  color: #333;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 25px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.update-btn:hover {
+  background: linear-gradient(135deg, #ffc107, #ffdb4d);
+  transform: translateY(-2px);
+}
+
+/* 💳 Payment */
+.payment-method {
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  border: 1px solid #e0e0e0;
+  margin-bottom: 1.5rem;
+}
+
+.payment-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  margin-top: 0.6rem;
+}
+
+.radio-option {
+  font-size: 1rem;
+  color: #444;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.radio-option input {
+  transform: scale(1.2);
+}
+
+/* 🆔 UPI Input */
+.upi-input {
+  margin-top: 1rem;
+}
+
+.upi-input input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  transition: 0.3s ease;
+}
+
+.upi-input input:focus {
+  border-color: #4facfe;
+  box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.15);
+  outline: none;
+}
+
+/* 🚀 Place Order Button */
+.place-order-btn {
+  width: 100%;
+  padding: 0.9rem;
+  border: none;
+  border-radius: 30px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 5px 15px rgba(79, 172, 254, 0.3);
+}
+
+.place-order-btn:hover {
+  background: linear-gradient(135deg, #43e97b, #38f9d7);
+  transform: translateY(-2px);
+}
+
+/* ✏️ Edit Modal */
+.edit-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.edit-modal-content {
+  background: #fff;
+  border-radius: 15px;
+  padding: 2rem;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.edit-modal-content h3 {
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.edit-modal-content input,
+.edit-modal-content textarea {
+  width: 100%;
+  margin-bottom: 1rem;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.edit-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.save-btn,
+.cancel-btn {
+  padding: 0.6rem 1.4rem;
+  border: none;
+  border-radius: 25px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.save-btn {
+  background: linear-gradient(135deg, #43e97b, #38f9d7);
+  color: white;
+}
+
+.cancel-btn {
+  background: #eee;
+  color: #333;
+}
+
+.save-btn:hover {
+  transform: translateY(-2px);
+}
+
+.cancel-btn:hover {
+  background: #ddd;
+}
+
+@media (max-width: 600px) {
+  .checkout-container {
+    padding: 1.8rem 1.2rem;
+    border-radius: 15px;
+  }
+
+  .checkout-title {
+    font-size: 1.5rem;
+  }
+}

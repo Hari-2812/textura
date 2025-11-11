@@ -5,8 +5,12 @@ import "slick-carousel/slick/slick-theme.css";
 import img1 from "../assets/images/polo1.jpg";
 import img2 from "../assets/images/polo2.jpg";
 import img3 from "../assets/images/polo3.jpg";
+import { useCart } from "../context/CartContext"; // ✅ import Cart context
+import { FaShoppingCart } from "react-icons/fa"; // optional nice icon
 
 const NewArrival = () => {
+  const { addToCart } = useCart(); // ✅ get addToCart function
+
   const settings = {
     dots: true,
     infinite: true,
@@ -38,7 +42,15 @@ const NewArrival = () => {
             <img src={item.image} alt={item.name} />
             <h3>{item.name}</h3>
             <p>{item.price}</p>
-            <button>Add to Cart</button>
+            <button
+              onClick={() => {
+                addToCart(item); // ✅ adds product to cart
+                alert(`${item.name} added to cart 🛒`);
+              }}
+            >
+              <FaShoppingCart style={{ marginRight: "6px" }} />
+              Add to Cart
+            </button>
           </div>
         ))}
       </Slider>

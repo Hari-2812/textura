@@ -16,6 +16,8 @@ import WishlistPage from "./pages/WishlistPage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import ForgotPassword from "./pages/ForgotPassword";
+import OffersPage from "./pages/OffersPage";
+
 
 import { CartProvider } from "./context/CartContext";
 import { UserProvider, useUser } from "./context/UserContext";
@@ -118,6 +120,14 @@ const AppContent = () => {
             element={
               <ProtectedRoute>
                 <WishlistPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/offers"
+            element={
+              <ProtectedRoute>
+                <OffersPage />
               </ProtectedRoute>
             }
           />

@@ -1,0 +1,101 @@
+.offers-page {
+  padding: 2rem;
+  background: linear-gradient(135deg, #f9fbfc 0%, #f3f4f7 100%);
+  min-height: 100vh;
+  font-family: "Poppins", sans-serif;
+  text-align: center;
+}
+
+.offers-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 2rem;
+}
+
+/* 🧱 Offers Grid */
+.offers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  justify-items: center;
+}
+
+.offer-card {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  max-width: 350px;
+  text-align: left;
+}
+
+.offer-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.offer-card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.offer-content {
+  padding: 1.2rem;
+}
+
+.offer-content h3 {
+  font-size: 1.2rem;
+  color: #222;
+  margin-bottom: 0.5rem;
+}
+
+.offer-content p {
+  color: #555;
+  font-size: 0.95rem;
+  margin-bottom: 0.8rem;
+  line-height: 1.4;
+}
+
+.offer-valid {
+  display: block;
+  font-size: 0.85rem;
+  color: #777;
+  margin-bottom: 1rem;
+}
+
+/* 🛍️ Button */
+.shop-now-btn {
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+  border: none;
+  color: white;
+  padding: 0.7rem 1.4rem;
+  border-radius: 25px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.shop-now-btn:hover {
+  background: linear-gradient(135deg, #43e97b, #38f9d7);
+  transform: translateY(-2px);
+}
+
+/* 🕊️ No Offers */
+.no-offers {
+  color: #666;
+  font-size: 1.1rem;
+  margin-top: 2rem;
+}
+
+/* 📱 Mobile Responsive */
+@media (max-width: 600px) {
+  .offers-page {
+    padding: 1.5rem;
+  }
+  .offers-title {
+    font-size: 1.6rem;
+  }
+}
