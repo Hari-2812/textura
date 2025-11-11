@@ -4,10 +4,13 @@ import App from "./App";
 import { CartProvider } from "./context/CartContext";
 import "./index.css";
 import "./i18n";
+import { WishlistProvider } from "./context/WishlistContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
+  <WishlistProvider>
   <CartProvider>
     <App />
   </CartProvider>
+  </WishlistProvider>
 );

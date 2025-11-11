@@ -1,0 +1,120 @@
+/* 🌸 Wishlist Page - Elegant Modern Style */
+.wishlist-page {
+  padding: 3rem 2rem;
+  text-align: center;
+  background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+  min-height: 100vh;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* ❤️ Heading */
+.wishlist-page h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.5px;
+}
+
+/* 🧱 Grid Layout */
+.wishlist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+  justify-items: center;
+}
+
+/* 🛍️ Wishlist Card */
+.wishlist-card {
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  width: 100%;
+  max-width: 280px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease-in-out;
+  position: relative;
+}
+
+.wishlist-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* 👕 Product Image */
+.wishlist-card img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  transition: transform 0.3s ease-in-out;
+}
+
+.wishlist-card:hover img {
+  transform: scale(1.05);
+}
+
+/* 📋 Product Details */
+.wishlist-card h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #222;
+  margin: 0.8rem 0 0.4rem 0;
+}
+
+.wishlist-card p {
+  color: #777;
+  font-size: 0.95rem;
+  margin-bottom: 0.8rem;
+}
+
+/* ❌ Remove Button */
+.remove-btn {
+  background: linear-gradient(135deg, #ff5f6d, #ffc371);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  margin-bottom: 1rem;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 3px 10px rgba(255, 95, 109, 0.3);
+}
+
+.remove-btn:hover {
+  background: linear-gradient(135deg, #ff3b53, #ffb347);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 80, 100, 0.4);
+}
+
+/* 🕊️ Empty Wishlist */
+.empty-wishlist {
+  margin-top: 3rem;
+  font-size: 1.3rem;
+  color: #666;
+  background: #fff;
+  padding: 1.5rem 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  display: inline-block;
+}
+
+/* 📱 Mobile Friendly */
+@media (max-width: 768px) {
+  .wishlist-page {
+    padding: 2rem 1rem;
+  }
+
+  .wishlist-card {
+    max-width: 100%;
+  }
+
+  .wishlist-card img {
+    height: 200px;
+  }
+
+  .wishlist-page h2 {
+    font-size: 1.6rem;
+  }
+}

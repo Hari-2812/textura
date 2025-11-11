@@ -11,6 +11,7 @@ import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import ProfilePage from "./pages/ProfilePage";
 import LanguagePage from "./pages/LanguagePage";
+import WishlistPage from "./pages/WishlistPage";
 
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
@@ -19,6 +20,10 @@ import ForgotPassword from "./pages/ForgotPassword";
 import { CartProvider } from "./context/CartContext";
 import { UserProvider, useUser } from "./context/UserContext";
 import ProtectedRoute from "./components/ProtectedRoute";
+
+
+import AdminLayout from "./pages/admin/AdminLayout";
+
 
 const AppContent = () => {
   const [showFilters, setShowFilters] = useState(false);
@@ -35,6 +40,7 @@ const AppContent = () => {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/admin/*" element={<AdminLayout />} />
 
           {/* ✅ Protected Routes */}
           <Route
@@ -107,6 +113,15 @@ const AppContent = () => {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/wishlist"
+            element={
+              <ProtectedRoute>
+                <WishlistPage />
+              </ProtectedRoute>
+            }
+          />
+
           <Route
             path="/language"
             element={
