@@ -10,13 +10,13 @@ export const UserProvider = ({ children }) => {
     return saved ? JSON.parse(saved) : null;
   });
 
-  // ✅ Save user to localStorage whenever updated
+  // ✅ Sync user changes to localStorage
   useEffect(() => {
     if (user) localStorage.setItem("user", JSON.stringify(user));
     else localStorage.removeItem("user");
   }, [user]);
 
-  // ✅ Register new user
+  // ✅ Register a new user
   const register = (newUser) => {
     const registeredUsers = JSON.parse(localStorage.getItem("registeredUsers")) || [];
     const exists = registeredUsers.find((u) => u.email === newUser.email);
@@ -31,7 +31,7 @@ export const UserProvider = ({ children }) => {
     return { success: true };
   };
 
-  // ✅ Login existing user
+  // ✅ Login user
   const login = (email, password) => {
     const registeredUsers = JSON.parse(localStorage.getItem("registeredUsers")) || [];
     const found = registeredUsers.find(
@@ -46,17 +46,42 @@ export const UserProvider = ({ children }) => {
     return { success: false, message: "Invalid email or password." };
   };
 
-  // ✅ Logout
+  // ✅ Update user profile
+  const updateUser = (updatedData) => {
+    if (!user) return;
+
+    const registeredUsers = JSON.parse(localStorage.getItem("registeredUsers")) || [];
+    const updatedUsers = registeredUsers.map((u) =>
+      u.email === user.email ? { ...u, ...updatedData } : u
+    );
+
+    localStorage.setItem("registeredUsers", JSON.stringify(updatedUsers));
+    const updatedUser = { ...user, ...updatedData };
+    setUser(updatedUser);
+    localStorage.setItem("user", JSON.stringify(updatedUser));
+  };
+
+  // ✅ Logout user
   const logout = () => {
     setUser(null);
     localStorage.removeItem("user");
   };
 
   return (
-    <UserContext.Provider value={{ user, setUser, register, login, logout }}>
+    <UserContext.Provider
+      value={{
+        user,
+        setUser,
+        register,
+        login,
+        logout,
+        updateUser, // 👈 added support for editing profile
+      }}
+    >
       {children}
     </UserContext.Provider>
   );
 };
 
+// ✅ Custom hook
 export const useUser = () => useContext(UserContext);
