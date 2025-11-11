@@ -116,31 +116,38 @@
 .quantity-controls {
   display: flex;
   align-items: center;
+  justify-content: center; /* ✅ Center horizontally */
   gap: 0.8rem;
   margin-top: 0.6rem;
 }
 
 .quantity-controls button {
-  width: 30px;
-  height: 30px;
+  width: 35px;
+  height: 35px;
   background: #073b4c;
   color: #fff;
   border: none;
   border-radius: 6px;
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: 0.3s;
+  display: flex;
+  align-items: center;   /* ✅ Center symbol vertically */
+  justify-content: center; /* ✅ Center symbol horizontally */
+  transition: 0.3s ease;
 }
 
 .quantity-controls button:hover {
   background: #06d6a0;
+  transform: scale(1.05);
 }
 
 .quantity-controls span {
   font-size: 1rem;
   font-weight: 600;
   color: #333;
+  min-width: 30px;
+  text-align: center;
 }
 
 /* 💳 SUMMARY PANEL */
@@ -209,5 +216,11 @@
 
   .cart-summary {
     margin-top: 1.5rem;
+  }
+
+  .quantity-controls button {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
   }
 }
