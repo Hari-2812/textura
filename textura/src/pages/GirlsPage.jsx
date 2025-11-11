@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { girlsProducts } from "../data/girlsProducts";
 import "../styles/GirlsPage.css";
 import { useCart } from "../context/CartContext";
+import ProductCard from "../components/ProductCard";
 
 const GirlsPage = ({ showFilters, setShowFilters }) => {
   const [filteredProducts, setFilteredProducts] = useState(girlsProducts);
@@ -32,14 +33,14 @@ const GirlsPage = ({ showFilters, setShowFilters }) => {
     setShowFilters(false);
   };
 
-  // ✅ Reset when closed
+  // ✅ Reset when filters closed
   useEffect(() => {
     if (!showFilters && filteredProducts.length === 0) {
       setFilteredProducts(girlsProducts);
     }
   }, [showFilters]);
 
-  // ✅ Popup animation handler
+  // ✅ Add to Cart Popup
   const showCartPopup = () => {
     setPopup(true);
     setTimeout(() => setPopup(false), 2000);
@@ -73,10 +74,11 @@ const GirlsPage = ({ showFilters, setShowFilters }) => {
               <option value="all">All Styles</option>
               <option value="solid">Solid</option>
               <option value="printed">Printed</option>
-              <option value="floral">Floral</option>
+              <option value="striped">Striped</option>
+              <option value="checked">Checked</option>
               <option value="denim">Denim</option>
-              <option value="traditional">Traditional</option>
               <option value="hoodie">Hoodie</option>
+              <option value="track">Track</option>
             </select>
 
             <button className="apply-btn" onClick={handleFilter}>
@@ -86,27 +88,21 @@ const GirlsPage = ({ showFilters, setShowFilters }) => {
         </div>
       )}
 
-      {showFilters && (
-        <div className="overlay" onClick={() => setShowFilters(false)} />
-      )}
+      {/* ✅ Overlay */}
+      {showFilters && <div className="overlay" onClick={() => setShowFilters(false)} />}
 
       {/* ✅ Product Grid */}
       <div className="girls-container">
         {filteredProducts.length > 0 ? (
           filteredProducts.map((p) => (
-            <div key={p.id} className="girls-card">
-              <img src={p.img} alt={p.name} />
-              <h3>{p.name}</h3>
-              <p>{p.price}</p>
-              <button
-                onClick={() => {
-                  addToCart(p);
-                  showCartPopup();
-                }}
-              >
-                Add to Cart
-              </button>
-            </div>
+            <ProductCard
+              key={p.id}
+              product={p}
+              onAddToCart={(item) => {
+                addToCart(item);
+                showCartPopup();
+              }}
+            />
           ))
         ) : (
           <p>No products found</p>

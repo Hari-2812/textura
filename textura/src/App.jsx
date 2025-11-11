@@ -15,6 +15,8 @@ import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import LanguagePage from "./pages/LanguagePage";
 import ProfilePage from "./pages/ProfilePage"; // ✅ Profile page
+import ProductPage from "./pages/ProductPage"
+
 
 // ✅ Context Providers
 import { CartProvider } from "./context/CartContext";
@@ -47,6 +49,7 @@ const App = () => {
                 }
               />
 
+
               {/* 👧 Girls Collection */}
               <Route
                 path="/girls"
@@ -57,7 +60,7 @@ const App = () => {
                   />
                 }
               />
-
+              <Route path="/products/:id" element={<ProductPage />} />
               {/* 📄 General Pages */}
               <Route path="/about" element={<AboutPage />} />
               <Route path="/contact" element={<ContactPage />} />

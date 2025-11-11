@@ -22,17 +22,19 @@ const ProductPage = () => {
   }
 
   return (
+    
     <div className="product-page">
       {/* 🔙 Back Button */}
       <button className="back-btn" onClick={() => navigate(-1)}>
         <FaArrowLeft /> Back
       </button>
+      
 
       {/* 🧾 Product Section */}
       <div className="product-container">
         {/* Left: Image */}
         <div className="product-image">
-          <img src={product.image} alt={product.name} />
+          <img src={product.img} alt={product.name} />
         </div>
 
         {/* Right: Details */}
