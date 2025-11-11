@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import "../styles/ProductPage.css"; // ✅ Correct relative path
+import "../styles/ProductPage.css";
 import { products } from "../data/products";
 import { FaHeart, FaShoppingCart, FaArrowLeft } from "react-icons/fa";
 import { useCart } from "../context/CartContext";
@@ -10,8 +10,11 @@ const ProductPage = () => {
   const navigate = useNavigate();
   const { addToCart } = useCart();
 
+  // ✅ Find the product by ID
   const product = products.find((p) => p.id === parseInt(id));
 
+  // ❌ Don't render route here
+  // ✅ Show "not found" message if invalid product ID
   if (!product) {
     return (
       <div className="product-not-found">
@@ -22,13 +25,11 @@ const ProductPage = () => {
   }
 
   return (
-    
     <div className="product-page">
       {/* 🔙 Back Button */}
       <button className="back-btn" onClick={() => navigate(-1)}>
         <FaArrowLeft /> Back
       </button>
-      
 
       {/* 🧾 Product Section */}
       <div className="product-container">

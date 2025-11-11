@@ -1,80 +1,130 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
-// ✅ Shared Components
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-
-// ✅ Pages
-import AboutPage from "./pages/AboutPage";
-import ContactPage from "./pages/ContactPage";
 import Home from "./pages/Home";
 import BoysPage from "./pages/BoysPage";
-import GirlsPage from "./pages/GirlsPage"; // ✅ Fixed import path
+import GirlsPage from "./pages/GirlsPage";
+import AboutPage from "./pages/AboutPage";
+import ContactPage from "./pages/ContactPage";
 import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
+import ProfilePage from "./pages/ProfilePage";
 import LanguagePage from "./pages/LanguagePage";
-import ProfilePage from "./pages/ProfilePage"; // ✅ Profile page
-import ProductPage from "./pages/ProductPage"
-
-
-// ✅ Context Providers
+import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage";
 import { CartProvider } from "./context/CartContext";
-import { UserProvider } from "./context/UserContext";
+import { UserProvider, useUser } from "./context/UserContext";
+import ProtectedRoute from "./components/ProtectedRoute";
+
+const AppContent = () => {
+  const [showFilters, setShowFilters] = useState(false);
+  const { user } = useUser();
+
+  return (
+    <>
+      {/* ✅ Show Header & Footer only when logged in */}
+      {user && <Header onFilterToggle={() => setShowFilters((prev) => !prev)} />}
+
+      <main style={{ minHeight: "80vh" }}>
+        <Routes>
+          {/* ❌ Public Routes */}
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+
+          {/* ✅ Protected Routes */}
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/boys"
+            element={
+              <ProtectedRoute>
+                <BoysPage
+                  showFilters={showFilters}
+                  setShowFilters={setShowFilters}
+                />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/girls"
+            element={
+              <ProtectedRoute>
+                <GirlsPage
+                  showFilters={showFilters}
+                  setShowFilters={setShowFilters}
+                />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/about"
+            element={
+              <ProtectedRoute>
+                <AboutPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/contact"
+            element={
+              <ProtectedRoute>
+                <ContactPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/cart"
+            element={
+              <ProtectedRoute>
+                <CartPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/checkout"
+            element={
+              <ProtectedRoute>
+                <CheckoutPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/language"
+            element={
+              <ProtectedRoute>
+                <LanguagePage />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </main>
+
+      {user && <Footer />}
+    </>
+  );
+};
 
 const App = () => {
-  const [showFilters, setShowFilters] = useState(false);
-
   return (
     <Router>
       <UserProvider>
         <CartProvider>
-          {/* 🌟 Header with Filter Toggle */}
-          <Header onFilterToggle={() => setShowFilters((prev) => !prev)} />
-
-          {/* 🧭 Routing */}
-          <main style={{ minHeight: "80vh" }}>
-            <Routes>
-              {/* 🏠 Home */}
-              <Route path="/" element={<Home />} />
-
-              {/* 👦 Boys Collection */}
-              <Route
-                path="/boys"
-                element={
-                  <BoysPage
-                    showFilters={showFilters}
-                    setShowFilters={setShowFilters}
-                  />
-                }
-              />
-
-
-              {/* 👧 Girls Collection */}
-              <Route
-                path="/girls"
-                element={
-                  <GirlsPage
-                    showFilters={showFilters}
-                    setShowFilters={setShowFilters}
-                  />
-                }
-              />
-              <Route path="/products/:id" element={<ProductPage />} />
-              {/* 📄 General Pages */}
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="/contact" element={<ContactPage />} />
-              <Route path="/language" element={<LanguagePage />} />
-              <Route path="/profile" element={<ProfilePage />} />
-
-              {/* 🛒 Shopping */}
-              <Route path="/cart" element={<CartPage />} />
-              <Route path="/checkout" element={<CheckoutPage />} />
-            </Routes>
-          </main>
-
-          {/* 🌍 Footer */}
-          <Footer />
+          <AppContent />
         </CartProvider>
       </UserProvider>
     </Router>
