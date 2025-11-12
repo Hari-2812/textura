@@ -1,0 +1,131 @@
+/* =========================
+   Category Section Styles
+   ========================= */
+
+.category-section {
+  width: 95%;
+  max-width: 1200px;
+  margin: 3rem auto;
+  text-align: center;
+  font-family: "Poppins", sans-serif;
+}
+
+.category-title {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  color: #222;
+  position: relative;
+}
+
+.category-title::after {
+  content: "";
+  display: block;
+  width: 60px;
+  height: 3px;
+  background-color: #000;
+  margin: 0.6rem auto 0;
+  border-radius: 2px;
+}
+
+.category-container {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+/* Category Card */
+.category-card {
+  flex: 1 1 45%;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
+
+  /* ✅ Added for proper alignment */
+  display: flex;
+  flex-direction: column;
+}
+
+.category-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.category-image {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+}
+
+/* Category Info */
+.category-info {
+  padding: 1.2rem;
+
+  /* ✅ Allow content to expand and push the button down */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+}
+.category-info a {
+  margin-top: auto;
+}
+
+.category-info h3 {
+  font-size: 1.3rem;
+  margin-bottom: 0.4rem;
+  color: #111;
+}
+
+.category-info p {
+  font-size: 0.95rem;
+  color: #555;
+  margin-bottom: 0.8rem;
+  line-height: 1.5;
+}
+
+.buy-btn {
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.6rem 1.4rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.buy-btn:hover {
+  background: #333;
+  transform: scale(1.05);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .category-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .category-card {
+    flex: 1 1 48%;
+  }
+
+  .category-image {
+    height: 180px;
+  }
+
+  .category-info h3 {
+    font-size: 1.1rem;
+  }
+
+  .category-info p {
+    font-size: 0.85rem;
+  }
+}

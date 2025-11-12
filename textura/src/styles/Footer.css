@@ -1,127 +1,124 @@
+/* =========================
+   Minimalist Footer (Polished)
+   ========================= */
+
 .footer {
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  background: #000;
   color: #fff;
+  text-align: center;
   font-family: "Poppins", sans-serif;
-  padding: 2.5rem 2rem 1rem;
-  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
-  border-top: none;
+  padding: 3rem 1rem 1.5rem;
 }
 
-/* ✅ Single Row Layout */
+/* Footer Layout */
+.footer-content,
 .footer-row {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 2rem;
-  max-width: 1200px;
-  margin: auto;
   flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto 2rem;
+  gap: 3rem;
+  text-align: left;
 }
 
+/* Each Section */
 .footer-section {
   flex: 1;
   min-width: 220px;
 }
 
+/* Footer Logo or Title */
 .footer-logo {
   font-size: 1.8rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  cursor: pointer;
-  color: #fff;
-}
-
-.footer-desc {
-  color: #f1f1f1;
-  font-size: 0.95rem;
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
-}
-
-/* Titles and Links */
-.footer-section h3 {
-  font-size: 1.2rem;
-  margin-bottom: 1rem;
   font-weight: 600;
+  margin-bottom: 1rem;
+  color: #fff;
+  cursor: pointer;
 }
 
-.footer-section p {
-  margin: 0.5rem 0;
+/* Footer Description (if any) */
+.footer-desc {
   font-size: 0.95rem;
-  color: #e4e4e4;
+  color: #ccc;
+  line-height: 1.6;
+  margin-bottom: 1.2rem;
+}
+
+/* Footer Headings */
+.footer-section h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.8rem;
+  font-weight: 500;
+  color: #fff;
+  border-bottom: 1px solid #333;
+  padding-bottom: 0.4rem;
+}
+
+/* Footer Links or Paragraphs */
+.footer-section p {
+  font-size: 0.95rem;
+  color: #bbb;
+  margin: 0.5rem 0;
   cursor: pointer;
-  transition: 0.3s;
+  transition: color 0.3s, transform 0.3s;
 }
 
 .footer-section p:hover {
   color: #fff;
-  transform: translateX(5px);
+  transform: translateX(4px);
 }
 
-/* 🌐 Social Media Icons */
+/* Social Icons (Optional but Neat) */
 .footer-socials {
   display: flex;
   gap: 0.8rem;
-  margin-top: 0.5rem;
+  margin-top: 1rem;
 }
 
 .footer-socials a {
   color: #fff;
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
+  background: #111;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.2rem;
-  transition: 0.3s ease;
+  font-size: 1.1rem;
+  transition: background 0.3s, transform 0.3s;
 }
 
 .footer-socials a:hover {
+  background: #333;
   transform: scale(1.1);
 }
 
-/* Platform Hover Colors */
-.footer-socials a[title="Facebook"]:hover {
-  background: #1877f2;
-}
-.footer-socials a[title="Instagram"]:hover {
-  background: linear-gradient(45deg, #feda75, #d62976, #962fbf, #4f5bd5);
-}
-.footer-socials a[title="Twitter"]:hover {
-  background: #1da1f2;
-}
-.footer-socials a[title="YouTube"]:hover {
-  background: #ff0000;
-}
-.footer-socials a[title="LinkedIn"]:hover {
-  background: #0077b5;
-}
-
-/* 🧾 Bottom Bar */
+/* Footer Bottom */
 .footer-bottom {
-  text-align: center;
-  padding-top: 1.5rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.3);
-  margin-top: 2rem;
+  border-top: 1px solid #222;
+  padding-top: 1.2rem;
   font-size: 0.9rem;
-  color: #e6e6e6;
+  color: #aaa;
+  text-align: center;
 }
 
-/* 📱 Responsive (Mobile Friendly) */
+/* Responsive Design */
 @media (max-width: 900px) {
+  .footer-content,
   .footer-row {
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
-    justify-content: center;
+    gap: 2rem;
   }
 
-  .footer-section {
-    min-width: 250px;
+  .footer-section h3 {
+    border: none;
   }
 
-  .footer-socials {
-    justify-content: center;
+  .footer-section p:hover {
+    transform: none;
   }
 }
