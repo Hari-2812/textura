@@ -20,3 +20,4 @@ export const products = [
   { id: 19, category: "boys", name: "Boys Sneakers", price: "₹1,299", img: "/images/boy-shoes.jpg" },
   { id: 20, category: "boys", name: "Boys Pyjama Set", price: "₹749", img: "/images/boy-pyjama.jpg" },
 ];
+export default products;

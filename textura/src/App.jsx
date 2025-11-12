@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
+import ProductDetails from "./pages/ProductDetails";
 import BoysPage from "./pages/BoysPage";
 import GirlsPage from "./pages/GirlsPage";
 import AboutPage from "./pages/AboutPage";
@@ -28,17 +30,18 @@ const AppContent = () => {
   const { user } = useUser();
   const location = useLocation();
 
-  // ✅ Hide header/footer only on admin pages
+  // ✅ Hide Header/Footer for admin pages
   const isAdminPage = location.pathname.startsWith("/admin");
 
   return (
     <>
-      {/* ✅ Show Header/Footer for all public & user pages, but not admin */}
+      {/* ✅ Show Header/Footer only for user-facing pages */}
       {!isAdminPage && (
         <Header onFilterToggle={() => setShowFilters((prev) => !prev)} />
       )}
 
       <main style={{ minHeight: "80vh" }}>
+        {/* ✅ All routes must be inside <Routes> */}
         <Routes>
           {/* 🧭 Admin Routes */}
           <Route path="/admin-login" element={<AdminLogin />} />
@@ -138,10 +141,20 @@ const AppContent = () => {
               </ProtectedRoute>
             }
           />
+
+          {/* 🆕 Product details route (✅ Moved inside <Routes>) */}
+          <Route
+            path="/product/:id"
+            element={
+              <ProtectedRoute>
+                <ProductDetails />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </main>
 
-      {/* ✅ Footer also hidden on admin pages */}
+      {/* ✅ Footer hidden on admin pages */}
       {!isAdminPage && <Footer />}
     </>
   );

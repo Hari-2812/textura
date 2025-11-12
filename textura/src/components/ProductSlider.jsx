@@ -1,55 +1,59 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "../styles/ProductSlider.css";
-import img1 from "../assets/images/polo1.jpg";
-import img2 from "../assets/images/polo2.jpg";
-import img3 from "../assets/images/polo3.jpg";
 import { useCart } from "../context/CartContext";
 import { FaShoppingCart } from "react-icons/fa";
+import products from "../data/products"; // ✅ Use shared data file
 
 const NewArrival = () => {
   const { addToCart } = useCart();
+  const navigate = useNavigate();
 
   const settings = {
     dots: true,
     infinite: true,
     speed: 600,
-    slidesToShow: 3, // ✅ for desktop
+    slidesToShow: 3,
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 2500,
     responsive: [
-      { breakpoint: 1024, settings: { slidesToShow: 2 } }, // ✅ 2 cards for tablets
-      { breakpoint: 768, settings: { slidesToShow: 2 } }, // ✅ 2 cards for mobile
+      { breakpoint: 1024, settings: { slidesToShow: 2 } },
+      { breakpoint: 768, settings: { slidesToShow: 2 } },
+      { breakpoint: 480, settings: { slidesToShow: 1 } },
     ],
   };
 
-  const newArrivals = [
-    { id: 1, image: img1, name: "Benetton Polo 1", price: "$29" },
-    { id: 2, image: img2, name: "Benetton Polo 2", price: "$32" },
-    { id: 3, image: img3, name: "Benetton Polo 3", price: "$30" },
-    { id: 4, image: img1, name: "Benetton Polo 4", price: "$28" },
-    { id: 5, image: img2, name: "Benetton Polo 5", price: "$31" },
-  ];
+  const handleProductClick = (item) => {
+    navigate(`/product/${item.id}`);
+  };
 
   return (
     <section className="product-slider">
       <h2 className="slider-title">🆕 New Arrivals</h2>
       <Slider {...settings}>
-        {newArrivals.map((item) => (
+        {products.map((item) => (
           <div key={item.id} className="product-card">
-            <img src={item.image} alt={item.name} />
+            <img
+              src={item.image}
+              alt={item.name}
+              className="product-image"
+              onClick={() => handleProductClick(item)}
+              style={{ cursor: "pointer" }}
+            />
             <h3>{item.name}</h3>
             <p>{item.price}</p>
             <button
+              className="add-cart-btn"
               onClick={() => {
                 addToCart(item);
                 alert(`${item.name} added to cart 🛒`);
               }}
             >
-              <FaShoppingCart />
+              <FaShoppingCart style={{ marginRight: "6px" }} />
               Add to Cart
             </button>
           </div>
