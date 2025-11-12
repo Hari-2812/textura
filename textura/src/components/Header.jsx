@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./Header.css";
+import "../styles/Header.css";
 import { useNavigate, useLocation } from "react-router-dom"; // ✅ Corrected import
 import { useTranslation } from "react-i18next";
 import { useCart } from "../context/CartContext";
