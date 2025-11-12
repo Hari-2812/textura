@@ -1,0 +1,125 @@
+/* =========================
+   PRODUCT SLIDER (Minimal + Balanced Layout)
+   ========================= */
+.product-slider {
+  text-align: center;
+  padding: 3rem 4rem; /* ✅ side padding added for clean margins */
+  background: #f9fafb;
+  font-family: "Poppins", sans-serif;
+}
+
+.slider-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 2rem;
+}
+
+/* =========================
+   PRODUCT CARD
+   ========================= */
+.product-card {
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  padding: 1rem;
+  margin: 0 10px; /* ✅ tight spacing between cards */
+  transition: all 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.product-card img {
+  width: 100%;
+  height: 230px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.product-card h3 {
+  font-size: 1rem;
+  color: #333;
+  margin: 0.4rem 0 0.2rem;
+  font-weight: 500;
+}
+
+.product-card p {
+  color: #777;
+  font-size: 0.9rem;
+  margin-bottom: 0.8rem;
+}
+
+/* =========================
+   BUTTON
+   ========================= */
+.product-card button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: #222;
+  color: #fff;
+  padding: 0.5rem 1.2rem; /* ✅ smaller button size */
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: 0 auto; /* ✅ centers the button */
+  margin-top: 0.8rem;
+}
+
+.product-card button:hover {
+  background: #000;
+  transform: translateY(-2px);
+}
+.product-card {
+  text-align: center; /* ✅ ensures button and text align centrally */
+}
+
+/* =========================
+   SLICK DOTS
+   ========================= */
+.slick-dots li button:before {
+  color: #aaa;
+  opacity: 0.7;
+}
+
+.slick-dots li.slick-active button:before {
+  color: #000;
+  opacity: 1;
+}
+
+/* =========================
+   RESPONSIVE DESIGN
+   ========================= */
+
+/* ✅ For tablets (1024px and below) */
+@media (max-width: 1024px) {
+  .product-slider {
+    padding: 2.5rem 2rem; /* less side padding for medium screens */
+  }
+
+  .product-card img {
+    height: 220px;
+  }
+}
+
+/* ✅ For mobile (768px and below) */
+@media (max-width: 768px) {
+  .product-slider {
+    padding: 2rem 1.2rem; /* consistent side margins on small screens */
+  }
+
+  .product-card {
+    margin: 0 6px;
+  }
+
+  .product-card img {
+    height: 200px;
+  }
+}
