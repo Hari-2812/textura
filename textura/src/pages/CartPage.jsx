@@ -7,10 +7,24 @@ const CartPage = () => {
   const { cartItems, addToCart, removeFromCart, clearCart } = useCart();
   const navigate = useNavigate();
 
+  // 🧮 Calculate total price
   const totalPrice = cartItems.reduce((sum, item) => {
     const itemPrice = parseInt(item.price.replace(/[₹,]/g, "")) * item.quantity;
     return sum + itemPrice;
   }, 0);
+
+  // 🚀 Proceed to Checkout Handler
+  const handleProceedToCheckout = () => {
+    if (cartItems.length === 0) {
+      alert("🛒 Your cart is empty! Add some items before proceeding.");
+      return;
+    }
+
+    // Save cart in localStorage (so CheckoutPage can access it)
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+
+    navigate("/checkout");
+  };
 
   return (
     <section className="cart-page">
@@ -27,7 +41,7 @@ const CartPage = () => {
         </div>
       ) : (
         <div className="cart-container">
-          {/* Product List */}
+          {/* 🧺 Product List */}
           <div className="cart-items">
             {cartItems.map((item) => (
               <div className="cart-item" key={item.id}>
@@ -46,22 +60,26 @@ const CartPage = () => {
             ))}
           </div>
 
-          {/* Summary */}
+          {/* 📦 Summary Section */}
           <div className="cart-summary">
             <h3>Order Summary</h3>
             <p>
               Total Items: <strong>{cartItems.length}</strong>
             </p>
             <p>
-              Total Price: <strong>₹{totalPrice.toLocaleString()}</strong>
+              Total Price:{" "}
+              <strong>₹{totalPrice.toLocaleString("en-IN")}</strong>
             </p>
 
+            {/* ✅ Checkout Button */}
             <button
               className="checkout-btn"
-              onClick={() => navigate("/checkout")}
+              onClick={handleProceedToCheckout}
             >
               Proceed to Checkout
             </button>
+
+            {/* ❌ Clear Cart */}
             <button className="clear-btn" onClick={clearCart}>
               Clear Cart
             </button>

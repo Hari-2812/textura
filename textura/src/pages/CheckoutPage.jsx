@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import "../styles/CheckoutPage.css";
 import { useUser } from "../context/UserContext";
+import { useCart } from "../context/CartContext";
 
 const CheckoutPage = () => {
   const { user, setUser } = useUser();
+  const { cartItems, clearCart } = useCart();
+
   const [paymentMethod, setPaymentMethod] = useState("cod");
   const [upiId, setUpiId] = useState("");
   const [showEditModal, setShowEditModal] = useState(false);
@@ -12,7 +15,9 @@ const CheckoutPage = () => {
     address: user?.address || "",
   });
 
-  const handlePlaceOrder = (e) => {
+  const backendUrl = process.env.REACT_APP_API_URL || "http://localhost:5000";
+
+  const handlePlaceOrder = async (e) => {
     e.preventDefault();
 
     if (!user?.name || !user?.address) {
@@ -20,19 +25,55 @@ const CheckoutPage = () => {
       return;
     }
 
-    if (paymentMethod === "upi") {
-      if (!upiId) {
-        alert("Please enter your UPI ID.");
-        return;
-      }
+    if (cartItems.length === 0) {
+      alert("Your cart is empty! Add products before checkout.");
+      return;
+    }
 
-      const upiUrl = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(
-        user.name
-      )}&am=0&cu=INR`;
-      window.location.href = upiUrl;
-      alert("Redirecting to your default UPI payment app...");
-    } else {
-      alert("Order placed successfully! Payment on delivery.");
+    // Handle UPI validation
+    if (paymentMethod === "upi" && !upiId) {
+      alert("Please enter your UPI ID.");
+      return;
+    }
+
+    // Prepare order data to send to backend
+    const orderData = {
+      customer: user.name,
+      address: user.address,
+      paymentMethod,
+      upiId: paymentMethod === "upi" ? upiId : null,
+      items: cartItems.map((item) => ({
+        name: item.name,
+        price: parseInt(item.price.replace(/[₹,]/g, "")),
+        qty: item.quantity,
+      })),
+      total: cartItems.reduce(
+        (sum, item) =>
+          sum + parseInt(item.price.replace(/[₹,]/g, "")) * item.quantity,
+        0
+      ),
+      status: "Pending",
+      createdAt: new Date(),
+    };
+
+    try {
+      const response = await fetch(`${backendUrl}/api/admin/orders`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(orderData),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        alert("✅ Order placed successfully!");
+        clearCart();
+      } else {
+        alert("❌ Failed to place order. Please try again.");
+      }
+    } catch (error) {
+      console.error("Checkout error:", error);
+      alert("⚠️ Server error: Could not connect to backend.");
     }
   };
 
@@ -44,7 +85,7 @@ const CheckoutPage = () => {
     }
 
     setUser((prev) => ({ ...prev, name: editData.name, address: editData.address }));
-    localStorage.setItem("user", JSON.stringify({ ...user, ...editData })); // optional persistence
+    localStorage.setItem("user", JSON.stringify({ ...user, ...editData }));
     setShowEditModal(false);
     alert("Customer details updated successfully ✅");
   };
@@ -136,13 +177,18 @@ const CheckoutPage = () => {
             <textarea
               placeholder="Enter your delivery address"
               value={editData.address}
-              onChange={(e) => setEditData({ ...editData, address: e.target.value })}
+              onChange={(e) =>
+                setEditData({ ...editData, address: e.target.value })
+              }
             ></textarea>
             <div className="edit-actions">
               <button className="save-btn" onClick={handleSaveDetails}>
                 Save
               </button>
-              <button className="cancel-btn" onClick={() => setShowEditModal(false)}>
+              <button
+                className="cancel-btn"
+                onClick={() => setShowEditModal(false)}
+              >
                 Cancel
               </button>
             </div>

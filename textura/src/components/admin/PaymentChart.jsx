@@ -1,32 +1,60 @@
+// 📁 src/components/admin/PaymentChart.jsx
 import React from "react";
-import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
+import {
+  LineChart,
+  Line,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+  ResponsiveContainer,
+  Legend,
+} from "recharts";
 
-const PaymentChart = () => {
-  const data = [
-    { name: "Successful", value: 85 },
-    { name: "Pending", value: 10 },
-    { name: "Failed", value: 5 },
-  ];
-
-  const COLORS = ["#06d6a0", "#ffd166", "#ef476f"];
+const PaymentChart = ({ data }) => {
+  if (!data || data.length === 0) {
+    return (
+      <p style={{ textAlign: "center", color: "#555", marginTop: "20px" }}>
+        No sales data yet 📉
+      </p>
+    );
+  }
 
   return (
-    <div className="chart-container">
-      <h3>Payment Success Rate</h3>
-      <PieChart width={300} height={250}>
-        <Pie
+    <div style={{ width: "100%", height: 350 }}>
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart
           data={data}
-          dataKey="value"
-          outerRadius={90}
-          label
+          margin={{ top: 20, right: 30, left: 0, bottom: 10 }}
         >
-          {data.map((_, i) => (
-            <Cell key={i} fill={COLORS[i]} />
-          ))}
-        </Pie>
-        <Tooltip />
-        <Legend />
-      </PieChart>
+          <CartesianGrid strokeDasharray="3 3" stroke="#ccc" />
+          <XAxis dataKey="name" stroke="#555" />
+          <YAxis stroke="#555" />
+          <Tooltip
+            contentStyle={{
+              backgroundColor: "#1a1a2e",
+              border: "1px solid #444",
+              color: "#fff",
+            }}
+          />
+          <Legend />
+          <Bar
+            dataKey="sales"
+            fill="#00b4d8"
+            barSize={45}
+            radius={[6, 6, 0, 0]}
+          />
+          <Line
+            type="monotone"
+            dataKey="sales"
+            stroke="#90e0ef"
+            strokeWidth={2}
+            dot={{ r: 3 }}
+          />
+        </BarChart>
+      </ResponsiveContainer>
     </div>
   );
 };

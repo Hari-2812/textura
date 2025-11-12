@@ -16,24 +16,42 @@ export const UserProvider = ({ children }) => {
     else localStorage.removeItem("user");
   }, [user]);
 
-  // ✅ Register a new user
+  // ✅ Register a new customer
   const register = (newUser) => {
-    const registeredUsers = JSON.parse(localStorage.getItem("registeredUsers")) || [];
-    const exists = registeredUsers.find((u) => u.email === newUser.email);
+    const registeredUsers =
+      JSON.parse(localStorage.getItem("registeredUsers")) || [];
 
+    const exists = registeredUsers.find((u) => u.email === newUser.email);
     if (exists) {
       return { success: false, message: "Email already registered." };
     }
 
-    registeredUsers.push(newUser);
+    // default role = user
+    const userWithRole = { ...newUser, role: "user" };
+    registeredUsers.push(userWithRole);
+
     localStorage.setItem("registeredUsers", JSON.stringify(registeredUsers));
-    setUser(newUser); // Auto login after signup
+    setUser(userWithRole);
     return { success: true };
   };
 
-  // ✅ Login user
+  // ✅ Login user (with admin support)
   const login = (email, password) => {
-    const registeredUsers = JSON.parse(localStorage.getItem("registeredUsers")) || [];
+    // 🔐 Hardcoded admin login
+    if (email === "admin@textura.com" && password === "admin123") {
+      const adminUser = {
+        name: "Admin",
+        email,
+        role: "admin",
+      };
+      setUser(adminUser);
+      localStorage.setItem("user", JSON.stringify(adminUser));
+      return { success: true };
+    }
+
+    // normal users
+    const registeredUsers =
+      JSON.parse(localStorage.getItem("registeredUsers")) || [];
     const found = registeredUsers.find(
       (u) => u.email === email && u.password === password
     );
@@ -50,7 +68,8 @@ export const UserProvider = ({ children }) => {
   const updateUser = (updatedData) => {
     if (!user) return;
 
-    const registeredUsers = JSON.parse(localStorage.getItem("registeredUsers")) || [];
+    const registeredUsers =
+      JSON.parse(localStorage.getItem("registeredUsers")) || [];
     const updatedUsers = registeredUsers.map((u) =>
       u.email === user.email ? { ...u, ...updatedData } : u
     );
@@ -75,7 +94,7 @@ export const UserProvider = ({ children }) => {
         register,
         login,
         logout,
-        updateUser, // 👈 added support for editing profile
+        updateUser,
       }}
     >
       {children}

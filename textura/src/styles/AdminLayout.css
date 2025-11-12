@@ -1,0 +1,156 @@
+/* 🌐 Overall Layout */
+.admin-layout {
+  display: flex;
+  height: 100vh;
+  background: #eef2f7;
+  font-family: "Poppins", sans-serif;
+  overflow: hidden;
+}
+
+/* 🧭 Sidebar */
+.admin-sidebar {
+  width: 260px;
+  background: linear-gradient(180deg, #141e30, #243b55);
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 4px 0 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+/* 🧱 Sidebar Header */
+.sidebar-header {
+  text-align: center;
+  padding: 20px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+.sidebar-header h2 {
+  margin: 0;
+  font-size: 24px;
+  color: #00c6ff;
+  letter-spacing: 1px;
+}
+.sidebar-header p {
+  margin: 5px 0 0;
+  font-size: 13px;
+  color: #d3d3d3;
+}
+
+/* 📂 Sidebar Nav */
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+.sidebar-link {
+  color: #f1f1f1;
+  text-decoration: none;
+  font-size: 16px;
+  padding: 14px 25px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: 0.3s ease;
+  border-left: 4px solid transparent;
+}
+
+.sidebar-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-left: 4px solid #00c6ff;
+  color: #00c6ff;
+  transform: translateX(5px);
+}
+
+.sidebar-link.active {
+  background: rgba(255, 255, 255, 0.15);
+  border-left: 4px solid #00c6ff;
+  color: #00c6ff;
+}
+
+/* 🚪 Logout Button */
+.logout-btn {
+  background: linear-gradient(90deg, #ff4b2b, #ff416c);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  margin: 25px;
+  padding: 12px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.logout-btn:hover {
+  background: linear-gradient(90deg, #e63946, #f72585);
+  transform: translateY(-2px);
+}
+
+/* 📊 Main Content */
+.admin-main {
+  flex-grow: 1;
+  background: #f8faff;
+  padding: 40px;
+  overflow-y: auto;
+  position: relative;
+}
+
+.admin-main h2,
+.admin-main h3 {
+  color: #1a1a2e;
+}
+
+/* 🧊 Glass card style for admin pages */
+.admin-card {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  padding: 25px 30px;
+  margin-bottom: 30px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.admin-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* 📱 Responsive Sidebar */
+@media (max-width: 900px) {
+  .admin-sidebar {
+    width: 80px;
+  }
+
+  .sidebar-link {
+    justify-content: center;
+    font-size: 0;
+  }
+
+  .sidebar-link::before {
+    font-size: 20px;
+    content: attr(data-icon);
+  }
+
+  .sidebar-header h2,
+  .sidebar-header p {
+    display: none;
+  }
+
+  .logout-btn {
+    margin: 10px;
+    font-size: 13px;
+  }
+}
+
+/* 🔝 Scrollbar Style */
+.admin-main::-webkit-scrollbar {
+  width: 8px;
+}
+.admin-main::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+.admin-main::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}

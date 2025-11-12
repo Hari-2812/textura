@@ -12,20 +12,16 @@ import CheckoutPage from "./pages/CheckoutPage";
 import ProfilePage from "./pages/ProfilePage";
 import LanguagePage from "./pages/LanguagePage";
 import WishlistPage from "./pages/WishlistPage";
-
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import ForgotPassword from "./pages/ForgotPassword";
 import OffersPage from "./pages/OffersPage";
-
+import AdminLayout from "./pages/admin/AdminLayout";
+import AdminLogin from "./pages/AdminLogin"; // ✅ Added import
 
 import { CartProvider } from "./context/CartContext";
 import { UserProvider, useUser } from "./context/UserContext";
 import ProtectedRoute from "./components/ProtectedRoute";
-
-
-import AdminLayout from "./pages/admin/AdminLayout";
-
 
 const AppContent = () => {
   const [showFilters, setShowFilters] = useState(false);
@@ -33,18 +29,23 @@ const AppContent = () => {
 
   return (
     <>
-      {/* ✅ Show Header & Footer only when logged in */}
-      {user && <Header onFilterToggle={() => setShowFilters((prev) => !prev)} />}
+      {/* ✅ Show Header & Footer only for normal users */}
+      {user && user.role !== "admin" && (
+        <Header onFilterToggle={() => setShowFilters((prev) => !prev)} />
+      )}
 
       <main style={{ minHeight: "80vh" }}>
         <Routes>
-          {/* ❌ Public Routes */}
+          {/* 🧭 Admin Routes */}
+          <Route path="/admin-login" element={<AdminLogin />} /> {/* ✅ Added */}
+          <Route path="/admin/*" element={<AdminLayout />} />
+
+          {/* 🧭 Public Auth Routes */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/admin/*" element={<AdminLayout />} />
 
-          {/* ✅ Protected Routes */}
+          {/* 🧭 Protected User Routes */}
           <Route
             path="/"
             element={
@@ -57,10 +58,7 @@ const AppContent = () => {
             path="/boys"
             element={
               <ProtectedRoute>
-                <BoysPage
-                  showFilters={showFilters}
-                  setShowFilters={setShowFilters}
-                />
+                <BoysPage showFilters={showFilters} setShowFilters={setShowFilters} />
               </ProtectedRoute>
             }
           />
@@ -68,10 +66,7 @@ const AppContent = () => {
             path="/girls"
             element={
               <ProtectedRoute>
-                <GirlsPage
-                  showFilters={showFilters}
-                  setShowFilters={setShowFilters}
-                />
+                <GirlsPage showFilters={showFilters} setShowFilters={setShowFilters} />
               </ProtectedRoute>
             }
           />
@@ -131,7 +126,6 @@ const AppContent = () => {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/language"
             element={
@@ -143,7 +137,7 @@ const AppContent = () => {
         </Routes>
       </main>
 
-      {user && <Footer />}
+      {user && user.role !== "admin" && <Footer />}
     </>
   );
 };

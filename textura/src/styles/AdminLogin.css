@@ -1,0 +1,147 @@
+/* 🌌 Full-page background */
+.admin-login-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #141e30, #243b55);
+  background-size: cover;
+  font-family: "Poppins", sans-serif;
+  color: #fff;
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+/* 🧊 Glassmorphic Login Box */
+.admin-login-box {
+  width: 380px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  padding: 40px 50px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.6s ease;
+}
+
+/* ✨ Title */
+.admin-login-box h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 28px;
+  font-weight: 700;
+  background: linear-gradient(90deg, #00b4d8, #48cae4, #0077b6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 0.5px;
+}
+
+/* 🧾 Input Fields */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #e0e0e0;
+}
+
+.input-group input {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: none;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-size: 15px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.input-group input:focus {
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 6px #00b4d8;
+}
+
+/* 🔘 Login Button */
+.login-btn {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  background: linear-gradient(90deg, #0077b6, #00b4d8);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.3s;
+}
+
+.login-btn:hover {
+  background: linear-gradient(90deg, #0096c7, #48cae4);
+  transform: scale(1.04);
+}
+
+/* ⚠️ Error Message */
+.admin-login-box p {
+  text-align: center;
+  font-size: 14px;
+  margin-top: 10px;
+  color: #ff6b6b;
+  animation: shake 0.3s ease-in-out;
+}
+
+/* 📱 Responsive Design */
+@media (max-width: 480px) {
+  .admin-login-box {
+    width: 90%;
+    padding: 30px 20px;
+  }
+
+  .admin-login-box h2 {
+    font-size: 24px;
+  }
+}
+
+/* 🌈 Subtle Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+  75% {
+    transform: translateX(-5px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
