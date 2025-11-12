@@ -1,100 +1,121 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "../../styles/Admin.css";
+import io from "socket.io-client";
+import "../../styles/TrackOrders.css";
 
 const TrackOrdersPage = () => {
-  const [orderId, setOrderId] = useState("");
+  const [search, setSearch] = useState("");
   const [order, setOrder] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const backendUrl = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
-  const handleTrack = async (e) => {
-    e.preventDefault();
+  // ✅ Initialize socket connection once
+  useEffect(() => {
+    const socket = io(backendUrl, {
+      transports: ["websocket", "polling"],
+      reconnectionAttempts: 5,
+      reconnectionDelay: 2000,
+    });
+
+    socket.on("connect", () => {
+      console.log("🟢 Connected to tracking socket");
+    });
+
+    socket.on("orderStatusUpdated", (data) => {
+      console.log("📦 Order status updated:", data);
+      if (order && data.orderId === order._id) {
+        setOrder((prev) => ({ ...prev, status: data.newStatus }));
+      }
+    });
+
+    return () => {
+      socket.disconnect();
+      console.log("🔌 Socket disconnected (tracking)");
+    };
+  }, [backendUrl, order]);
+
+  const handleTrack = async () => {
+    if (!search.trim()) return setError("Please enter Order ID or Email");
     setError("");
+    setLoading(true);
     setOrder(null);
 
-    if (!orderId.trim()) {
-      setError("Please enter a valid Order ID.");
-      return;
-    }
-
-    setLoading(true);
     try {
-      const res = await axios.get(`${backendUrl}/api/admin/orders/${orderId}`);
-      if (res.data.success) {
-        setOrder(res.data.order);
+      let res;
+
+      if (search.includes("@")) {
+        res = await axios.get(`${backendUrl}/api/admin/orders/track/${search}`);
       } else {
-        setError("Order not found.");
+        res = await axios.get(`${backendUrl}/api/admin/orders/${search}`);
+      }
+
+      const data = res.data;
+      setOrder(data.order || (data.orders && data.orders[0]) || null);
+      if (!data.order && (!data.orders || data.orders.length === 0)) {
+        setError("No order found");
       }
     } catch (err) {
-      console.error("Track error:", err);
-      setError("Order not found or server error.");
+      console.error("Error tracking order:", err);
+      setError("No order found or invalid ID");
     } finally {
       setLoading(false);
     }
   };
 
-  const getProgressStep = (status) => {
-    switch (status) {
-      case "Pending":
-        return 0;
-      case "Processing":
-        return 1;
-      case "Shipped":
-        return 2;
-      case "Delivered":
-        return 3;
-      default:
-        return 0;
-    }
+  const getProgress = (status) => {
+    const steps = ["Pending", "Packed", "Shipped", "Delivered"];
+    const index = steps.indexOf(status);
+    return { steps, active: index };
   };
 
-  const trackingSteps = ["Pending", "Processing", "Shipped", "Delivered"];
-
   return (
-    <div className="admin-page">
-      <h2>🚚 Track Order</h2>
+    <div className="track-page">
+      <h2>📦 Track Your Order</h2>
 
-      <form onSubmit={handleTrack} className="track-form">
+      <div className="track-search">
         <input
           type="text"
-          placeholder="Enter Order ID"
-          value={orderId}
-          onChange={(e) => setOrderId(e.target.value)}
+          placeholder="Enter Order ID or Email"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
         />
-        <button type="submit">Track</button>
-      </form>
+        <button onClick={handleTrack} disabled={loading}>
+          {loading ? "Tracking..." : "Track Order"}
+        </button>
+      </div>
 
-      {loading && <p>Loading order details...</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p className="error">{error}</p>}
 
       {order && (
-        <div className="tracking-container">
-          <h3>Tracking #{order._id}</h3>
-          <p>
-            <strong>Customer:</strong> {order.customer}
-          </p>
-          <p>
-            <strong>Total:</strong> ₹{order.total}
-          </p>
-          <p>
-            <strong>Status:</strong> {order.status}
-          </p>
+        <div className="order-details">
+          <h3>Order Details</h3>
+          <p><strong>Order ID:</strong> {order._id || order.orderId}</p>
+          <p><strong>Customer:</strong> {order.customer || order.customerEmail}</p>
+          <p><strong>Total:</strong> ₹{order.total}</p>
+          <p><strong>Payment:</strong> {order.paymentMethod?.toUpperCase()}</p>
+          <p><strong>Date:</strong> {new Date(order.createdAt).toLocaleString()}</p>
 
-          {/* Progress Bar */}
-          <div className="progress-bar">
-            {trackingSteps.map((step, i) => (
+          <div className="timeline-container">
+            {getProgress(order.status).steps.map((step, index) => (
               <div
-                key={i}
-                className={`progress-step ${
-                  i <= getProgressStep(order.status) ? "active" : ""
+                key={index}
+                className={`timeline-step ${
+                  index <= getProgress(order.status).active ? "active" : ""
                 }`}
               >
+                <div className="circle">{index + 1}</div>
                 <span>{step}</span>
               </div>
             ))}
+          </div>
+
+          <div className="status-footer">
+            <p>
+              🕒 Current Status:{" "}
+              <strong style={{ color: "#007bff" }}>{order.status}</strong>
+            </p>
           </div>
         </div>
       )}

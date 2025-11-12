@@ -1,0 +1,139 @@
+.track-page {
+  max-width: 700px;
+  margin: 40px auto;
+  background: white;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.track-page h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #1a1a2e;
+}
+
+.track-search {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.track-search input {
+  width: 70%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.track-search button {
+  padding: 12px 20px;
+  background-color: #1a1a2e;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.track-search button:hover {
+  background-color: #007bff;
+}
+
+.error {
+  text-align: center;
+  color: red;
+  margin-bottom: 10px;
+}
+
+.order-details {
+  border-top: 2px solid #007bff;
+  padding-top: 20px;
+}
+
+.timeline-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 40px 0 20px;
+  position: relative;
+}
+
+.timeline-container::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50px;
+  right: 50px;
+  height: 4px;
+  background: #ddd;
+  z-index: 0;
+  transform: translateY(-50%);
+}
+
+.timeline-step {
+  text-align: center;
+  flex: 1;
+  z-index: 1;
+  position: relative;
+}
+
+.timeline-step .circle {
+  width: 30px;
+  height: 30px;
+  margin: 0 auto 10px;
+  background: #ccc;
+  border-radius: 50%;
+  color: white;
+  line-height: 30px;
+  font-size: 14px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.timeline-step.active .circle {
+  background: #007bff;
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+}
+
+.timeline-step span {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.status-footer {
+  text-align: center;
+  font-size: 16px;
+  color: #333;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .timeline-container {
+    flex-direction: column;
+  }
+  .timeline-container::before {
+    display: none;
+  }
+  .timeline-step {
+    margin-bottom: 20px;
+  }
+}
+.timeline-step.active .circle {
+  background: #007bff;
+  transform: scale(1.1);
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+}
+
+.status-footer strong {
+  animation: pulse 1s ease infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}

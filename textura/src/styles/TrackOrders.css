@@ -1,0 +1,88 @@
+.track-page {
+  padding: 40px;
+  max-width: 800px;
+  margin: 0 auto;
+  background: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.track-search {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.track-search input {
+  flex: 1;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.track-search button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.track-search button:hover {
+  background-color: #0056b3;
+}
+
+.order-details {
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.timeline-container {
+  display: flex;
+  justify-content: space-between;
+  margin: 25px 0;
+}
+
+.timeline-step {
+  text-align: center;
+  flex: 1;
+  position: relative;
+}
+
+.timeline-step .circle {
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
+  border-radius: 50%;
+  background: #ccc;
+  color: white;
+  margin: 0 auto 8px;
+  font-weight: 600;
+}
+
+.timeline-step.active .circle {
+  background: #007bff;
+  transform: scale(1.1);
+  transition: all 0.3s ease;
+}
+
+.timeline-step::after {
+  content: "";
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  height: 3px;
+  width: 100%;
+  background: #ddd;
+  z-index: -1;
+}
+
+.timeline-step:last-child::after {
+  display: none;
+}

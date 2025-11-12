@@ -1,29 +1,29 @@
 import express from "express";
+import mongoose from "mongoose";
 import Order from "../models/Order.js";
 
 const router = express.Router();
 
 /* ============================================================
-   🧾 1️⃣  Create a New Order (with real-time admin notification)
+   🧾 1️⃣  Create a New Order (Auto Generates a Custom orderId)
 ============================================================ */
 router.post("/", async (req, res) => {
   try {
-    const order = new Order(req.body);
-    await order.save();
+    const orderData = req.body;
 
-    // ✅ Notify all connected admins in real time
-    const io = req.app.get("io");
-    if (io) {
-      io.emit("newOrder", {
-        message: "🛒 New order received!",
-        order,
-      });
-      console.log("📢 Emitted newOrder event to admins");
-    }
+    // Generate a short, unique, human-readable ID
+    const shortId = "TXR" + Math.floor(100000 + Math.random() * 900000);
+
+    const order = new Order({
+      ...orderData,
+      orderId: shortId,
+    });
+
+    await order.save();
 
     res.status(201).json({
       success: true,
-      message: "Order created successfully",
+      message: "✅ Order created successfully",
       order,
     });
   } catch (err) {
@@ -37,12 +37,11 @@ router.post("/", async (req, res) => {
 });
 
 /* ============================================================
-   📋 2️⃣  Get All Orders
+   📋 2️⃣  Get All Orders (Admin Dashboard)
 ============================================================ */
 router.get("/", async (req, res) => {
   try {
-    const orders = await Order.find().sort({ date: -1 });
-
+    const orders = await Order.find().sort({ createdAt: -1 });
     res.status(200).json({
       success: true,
       count: orders.length,
@@ -59,53 +58,33 @@ router.get("/", async (req, res) => {
 });
 
 /* ============================================================
-   🔎 2️⃣.5️⃣  Track Orders by Email (Customer Side)
-============================================================ */
-router.get("/track/:email", async (req, res) => {
-  try {
-    const orders = await Order.find({ customerEmail: req.params.email }).sort({
-      date: -1,
-    });
-
-    if (!orders || orders.length === 0) {
-      return res.status(404).json({
-        success: false,
-        message: "No orders found for this email",
-      });
-    }
-
-    res.status(200).json({
-      success: true,
-      count: orders.length,
-      orders,
-    });
-  } catch (err) {
-    console.error("❌ Error fetching orders by email:", err.message);
-    res.status(500).json({
-      success: false,
-      message: "Server error while tracking orders by email",
-      error: err.message,
-    });
-  }
-});
-
-/* ============================================================
-   🔍 3️⃣  Track a Specific Order by ID
+   🔍 3️⃣  Track Order (By MongoDB _id OR Custom orderId)
 ============================================================ */
 router.get("/:id", async (req, res) => {
   try {
-    const order = await Order.findById(req.params.id);
+    const { id } = req.params;
+    let order = null;
+
+    // 🔹 Check if it's a valid MongoDB ObjectId
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      order = await Order.findById(id);
+    }
+
+    // 🔹 If not found, try searching by custom orderId
+    if (!order) {
+      order = await Order.findOne({ orderId: id });
+    }
 
     if (!order) {
       return res.status(404).json({
         success: false,
-        message: "Order not found",
+        message: "⚠️ Order not found. Please verify your Order ID.",
       });
     }
 
     res.status(200).json({
       success: true,
-      message: "Order fetched successfully",
+      message: "✅ Order fetched successfully",
       order,
     });
   } catch (err) {
@@ -119,39 +98,42 @@ router.get("/:id", async (req, res) => {
 });
 
 /* ============================================================
-   ✅ 4️⃣  Update Order Status (Mark as Delivered, etc.)
+   🟡 4️⃣  Update Order Status (Admin can update e.g., Shipped/Delivered)
 ============================================================ */
 router.patch("/:id", async (req, res) => {
   try {
+    const { id } = req.params;
     const { status } = req.body;
 
     if (!status) {
       return res.status(400).json({
         success: false,
-        message: "Status field is required",
+        message: "⚠️ Status field is required",
       });
     }
 
-    const order = await Order.findByIdAndUpdate(
-      req.params.id,
-      { status },
-      { new: true }
-    );
+    // 🔹 Try updating by both _id and orderId
+    let order;
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      order = await Order.findByIdAndUpdate(id, { status }, { new: true });
+    } else {
+      order = await Order.findOneAndUpdate({ orderId: id }, { status }, { new: true });
+    }
 
     if (!order) {
       return res.status(404).json({
         success: false,
-        message: "Order not found",
+        message: "Order not found or invalid ID",
       });
     }
 
     res.status(200).json({
       success: true,
-      message: "Order status updated successfully",
+      message: `✅ Order status updated to '${status}'`,
       order,
     });
   } catch (err) {
-    console.error("❌ Error updating order status:", err.message);
+    console.error("❌ Error updating order:", err.message);
     res.status(500).json({
       success: false,
       message: "Server error while updating order",
@@ -161,22 +143,29 @@ router.patch("/:id", async (req, res) => {
 });
 
 /* ============================================================
-   🗑️ 5️⃣  Delete Order (Optional - For Admin Control)
+   🗑️ 5️⃣  Delete an Order (Admin Only)
 ============================================================ */
 router.delete("/:id", async (req, res) => {
   try {
-    const deleted = await Order.findByIdAndDelete(req.params.id);
+    const { id } = req.params;
+
+    let deleted;
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      deleted = await Order.findByIdAndDelete(id);
+    } else {
+      deleted = await Order.findOneAndDelete({ orderId: id });
+    }
 
     if (!deleted) {
       return res.status(404).json({
         success: false,
-        message: "Order not found",
+        message: "Order not found or already deleted",
       });
     }
 
     res.status(200).json({
       success: true,
-      message: "Order deleted successfully",
+      message: "🗑️ Order deleted successfully",
     });
   } catch (err) {
     console.error("❌ Error deleting order:", err.message);

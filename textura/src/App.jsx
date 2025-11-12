@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
@@ -17,7 +17,7 @@ import SignupPage from "./pages/SignupPage";
 import ForgotPassword from "./pages/ForgotPassword";
 import OffersPage from "./pages/OffersPage";
 import AdminLayout from "./pages/admin/AdminLayout";
-import AdminLogin from "./pages/AdminLogin"; // ✅ Added import
+import AdminLogin from "./pages/AdminLogin";
 
 import { CartProvider } from "./context/CartContext";
 import { UserProvider, useUser } from "./context/UserContext";
@@ -26,18 +26,22 @@ import ProtectedRoute from "./components/ProtectedRoute";
 const AppContent = () => {
   const [showFilters, setShowFilters] = useState(false);
   const { user } = useUser();
+  const location = useLocation();
+
+  // ✅ Hide header/footer only on admin pages
+  const isAdminPage = location.pathname.startsWith("/admin");
 
   return (
     <>
-      {/* ✅ Show Header & Footer only for normal users */}
-      {user && user.role !== "admin" && (
+      {/* ✅ Show Header/Footer for all public & user pages, but not admin */}
+      {!isAdminPage && (
         <Header onFilterToggle={() => setShowFilters((prev) => !prev)} />
       )}
 
       <main style={{ minHeight: "80vh" }}>
         <Routes>
           {/* 🧭 Admin Routes */}
-          <Route path="/admin-login" element={<AdminLogin />} /> {/* ✅ Added */}
+          <Route path="/admin-login" element={<AdminLogin />} />
           <Route path="/admin/*" element={<AdminLayout />} />
 
           {/* 🧭 Public Auth Routes */}
@@ -137,7 +141,8 @@ const AppContent = () => {
         </Routes>
       </main>
 
-      {user && user.role !== "admin" && <Footer />}
+      {/* ✅ Footer also hidden on admin pages */}
+      {!isAdminPage && <Footer />}
     </>
   );
 };

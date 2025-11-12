@@ -1,21 +1,36 @@
-// backend/models/Order.js
 import mongoose from "mongoose";
 
-const itemSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  qty: { type: Number, required: true },
-  price: { type: Number, required: true },
+const orderSchema = new mongoose.Schema(
+  {
+    customerName: String,
+    customerEmail: String,
+    address: String,
+    items: [
+      {
+        name: String,
+        quantity: Number,
+        price: Number,
+      },
+    ],
+    total: Number,
+    status: { type: String, default: "Pending" },
+    // 👇 Add this
+    orderId: {
+      type: String,
+      unique: true,
+      required: true,
+    },
+  },
+  { timestamps: true }
+);
+
+// ✅ Automatically generate readable short orderId (e.g., 1CFC21)
+orderSchema.pre("save", function (next) {
+  if (!this.orderId) {
+    this.orderId = Math.random().toString(36).substring(2, 8).toUpperCase();
+  }
+  next();
 });
 
-const orderSchema = new mongoose.Schema({
-  customer: { type: String, required: true },
-  address: { type: String, required: true },
-  paymentMethod: { type: String, default: "cod" }, // cod or upi
-  upiId: { type: String, default: null },
-  items: [itemSchema],
-  total: { type: Number, required: true },
-  status: { type: String, default: "Pending" },
-  createdAt: { type: Date, default: Date.now },
-});
-
-export default mongoose.model("Order", orderSchema);
+const Order = mongoose.model("Order", orderSchema);
+export default Order;

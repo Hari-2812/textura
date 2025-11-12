@@ -1,96 +1,145 @@
+/* 🌐 Dashboard Container */
 .admin-dashboard-page {
-  padding: 10px 20px;
+  padding: 20px 30px;
+  background: #f8fafc;
+  min-height: 100vh;
+  font-family: "Poppins", sans-serif;
+  transition: all 0.3s ease;
 }
 
+/* 🏷️ Title */
 .admin-dashboard-page h2 {
-  font-size: 24px;
-  font-weight: 600;
-  margin-bottom: 25px;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 30px;
   color: #1a1a2e;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
 }
 
+.admin-dashboard-page h2::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #06d6a0, #118ab2);
+  border-radius: 5px;
+}
+
+/* 📊 Stats Grid Layout */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 25px;
 }
 
+/* 💳 Stat Card */
 .stat-card {
   background: white;
-  border-radius: 16px;
-  padding: 25px 20px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-  transition: 0.3s ease;
+  border-radius: 18px;
+  padding: 28px 24px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  transition: all 0.35s ease;
   text-align: center;
   position: relative;
   overflow: hidden;
+  cursor: pointer;
+  animation: fadeIn 0.6s ease;
 }
 
 .stat-card h3 {
   font-size: 16px;
-  color: #666;
+  color: #5f5f5f;
   margin-bottom: 10px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
 }
 
 .stat-card p {
-  font-size: 28px;
+  font-size: 30px;
   font-weight: 700;
   color: #1a1a2e;
   margin: 0;
+  animation: popIn 0.5s ease;
 }
 
-/* 🎨 Color Variants */
-.stat-card.total::before {
+/* 🎨 Top Accent Bar Variants */
+.stat-card::before {
   content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 5px;
+  height: 6px;
+  border-radius: 16px 16px 0 0;
   background: #06d6a0;
 }
 
+.stat-card.total::before {
+  background: linear-gradient(90deg, #06d6a0, #00b894);
+}
+
 .stat-card.revenue::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 5px;
-  background: #118ab2;
+  background: linear-gradient(90deg, #118ab2, #00b4d8);
 }
 
 .stat-card.delivered::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 5px;
-  background: #073b4c;
+  background: linear-gradient(90deg, #073b4c, #118ab2);
 }
 
 .stat-card.pending::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 5px;
-  background: #ef476f;
+  background: linear-gradient(90deg, #ef476f, #ff6b6b);
 }
 
+/* ✨ Hover Effects */
 .stat-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.18);
 }
 
-/* Responsive */
+.stat-card:hover p {
+  color: #0077b6;
+}
+
+/* 📱 Responsive */
 @media (max-width: 768px) {
-  .stat-card p {
+  .admin-dashboard-page {
+    padding: 15px;
+  }
+  .admin-dashboard-page h2 {
     font-size: 22px;
+  }
+  .stat-card p {
+    font-size: 24px;
   }
   .stat-card h3 {
     font-size: 14px;
+  }
+}
+
+/* 🎬 Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
   }
 }
