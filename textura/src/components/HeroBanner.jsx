@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
+import "../styles/HeroBanner.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
@@ -24,7 +25,12 @@ const HeroBanner = () => {
   };
 
   const slides = [
-    { id: 1, image: img1, text: "Flat 50% Off on New Collection", link: "/offers" },
+    {
+      id: 1,
+      image: img1,
+      text: "Flat 50% Off on New Collection",
+      link: "/offers",
+    },
     { id: 2, image: img2, text: "Fresh Styles for Boys", link: "/boys" },
     { id: 3, image: img3, text: "Comfort Meets Fashion", link: "/girls" },
   ];
@@ -37,9 +43,7 @@ const HeroBanner = () => {
             <img src={slide.image} alt={slide.text} />
             <div className="hero-text">
               <h2>{slide.text}</h2>
-              <button onClick={() => navigate(slide.link)}>
-                Explore Now
-              </button>
+              <button onClick={() => navigate(slide.link)}>Explore Now</button>
             </div>
           </div>
         ))}
