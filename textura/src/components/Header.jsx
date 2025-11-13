@@ -178,36 +178,35 @@ const Header = ({ onFilterToggle }) => {
               }`}
               onClick={() => setShowProfile(!showProfile)}
             >
-              <div className="profile-display">
-                <img
-                  src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-                  alt="User Avatar"
-                  className="profile-avatar"
-                />
-                <span className="profile-username">
-                  {user?.name || "Guest"}
-                </span>
-              </div>
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+                alt="User Avatar"
+                className="profile-avatar"
+              />
+              <span className="profile-username">{user?.name || "Guest"}</span>
 
-              <div className="profile-dropdown">
-                <p
-                  onClick={() => {
-                    navigate("/profile");
-                    setShowProfile(false);
-                  }}
-                >
-                  My Profile
-                </p>
-                <p
-                  onClick={() => {
-                    navigate("/orders");
-                    setShowProfile(false);
-                  }}
-                >
-                  My Orders
-                </p>
-                <p onClick={handleLogout}>Logout</p>
-              </div>
+              {/* Dropdown Menu */}
+              {showProfile && (
+                <div className="profile-dropdown">
+                  <p
+                    onClick={() => {
+                      navigate("/profile");
+                      setShowProfile(false);
+                    }}
+                  >
+                    My Profile
+                  </p>
+                  <p
+                    onClick={() => {
+                      navigate("/orders");
+                      setShowProfile(false);
+                    }}
+                  >
+                    My Orders
+                  </p>
+                  <p onClick={handleLogout}>Logout</p>
+                </div>
+              )}
             </div>
           </div>
         </nav>
