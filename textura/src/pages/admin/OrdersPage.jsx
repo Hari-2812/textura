@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import "../../styles/Admin.css";
 
 const OrdersPage = () => {
@@ -7,17 +8,12 @@ const OrdersPage = () => {
   const [loading, setLoading] = useState(true);
   const backendUrl = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
-  // ✅ Fetch all orders
+  const navigate = useNavigate();
+
   const fetchOrders = async () => {
     try {
       const res = await axios.get(`${backendUrl}/api/admin/orders`);
-
-      // Support both: array OR {orders:[]}
-      const data = Array.isArray(res.data)
-        ? res.data
-        : res.data.orders || [];
-
-      setOrders(data);
+      setOrders(res.data.orders || []);
     } catch (error) {
       console.error("❌ Error fetching orders:", error);
     } finally {
@@ -44,33 +40,22 @@ const OrdersPage = () => {
               <tr>
                 <th>Order ID</th>
                 <th>Customer</th>
-                {/* <th>Email</th> */}
                 <th>Total</th>
                 <th>Payment</th>
                 <th>Status</th>
                 <th>Date</th>
+                <th>Action</th>
               </tr>
             </thead>
 
             <tbody>
               {orders.map((o) => (
                 <tr key={o._id}>
-                  {/* 🔹 Order ID */}
                   <td>{o.orderId}</td>
-
-                  {/* 🔹 Customer Name */}
                   <td>{o.customerName}</td>
-
-                  {/* 🔹 Customer Email */}
-                  {/* <td>{o.customerEmail}</td> */}
-
-                  {/* 🔹 Total Amount */}
                   <td>₹{o.total}</td>
-
-                  {/* 🔹 Payment Method */}
                   <td>{o.paymentMethod || "COD"}</td>
 
-                  {/* 🔹 Order Status */}
                   <td
                     className={
                       o.status === "Delivered"
@@ -81,8 +66,16 @@ const OrdersPage = () => {
                     {o.status}
                   </td>
 
-                  {/* 🔹 Order Date */}
                   <td>{new Date(o.createdAt).toLocaleString()}</td>
+
+                  <td>
+                    <button
+                      className="btn primary"
+                      onClick={() => navigate(`/admin/track-order/${o.orderId}`)}
+                    >
+                      Track Order
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>

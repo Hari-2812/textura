@@ -1,0 +1,336 @@
+/* ===============================
+   admin-theme.css — A1: Dark header + Light cards
+   Clean, single-file modern admin UI
+   =============================== */
+
+/* -------- Design tokens -------- */
+:root{
+  --page-max-width: 1200px;
+
+  /* color system */
+  --header-bg: #0f1724;      /* dark admin header */
+  --card-bg: #ffffff;        /* light cards */
+  --surface-2: #f7fbff;
+  --muted: #7b8696;
+  --text: #071124;
+  --text-soft: #374151;
+  --accent: #06d6a0;         /* teal */
+  --accent-2: #118ab2;       /* blue */
+  --danger: #ff3b3b;
+  --success: #16a34a;
+  --warning: #f59e0b;
+
+  --radius-lg: 14px;
+  --radius-md: 10px;
+  --soft-shadow: 0 8px 24px rgba(12,20,30,0.08);
+  --elev-shadow: 0 18px 48px rgba(12,20,30,0.12);
+
+  --glass: rgba(255,255,255,0.06);
+  --max-width: var(--page-max-width);
+  --ui-gap: 18px;
+  --ui-padding: 20px;
+  --transition-fast: 180ms;
+}
+
+/* -------- Global reset / layout -------- */
+* { box-sizing: border-box; }
+html,body,#root { height:100%; }
+body {
+  margin:0;
+  font-family: "Inter", "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: linear-gradient(180deg,#f6fbff 0%, #f3f7fb 60%);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  line-height:1.45;
+  font-size:14px;
+}
+
+/* container used across pages */
+.app-container {
+  max-width: var(--max-width);
+  margin: 28px auto;
+  padding: 0 20px;
+}
+
+/* simple loading text */
+.loading-text {
+  text-align:center;
+  color: var(--muted);
+  padding: 36px 0;
+  font-weight:600;
+}
+
+/* -------- Top connection banner (dark header feel) -------- */
+.connection-status {
+  position: fixed;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg,var(--accent),var(--accent-2));
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-weight:600;
+  font-size:13px;
+  box-shadow: var(--elev-shadow);
+  z-index: 60;
+  transition: transform var(--transition-fast) ease;
+}
+.connection-status.error {
+  background: linear-gradient(90deg,#ff6b6b,#ef476f);
+}
+
+/* header stripe to give dark admin feel (optional element) */
+.admin-header {
+  background: var(--header-bg);
+  padding: 10px 0;
+  box-shadow: 0 4px 18px rgba(2,6,23,0.12);
+}
+
+/* -------- Page titles -------- */
+.page-title, .dashboard-title {
+  font-size:20px;
+  font-weight:700;
+  margin: 8px 0 16px;
+  color: var(--text);
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+/* -------- Stats grid & card -------- */
+.stats-grid {
+  display:grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 18px;
+}
+@media (max-width:1100px){ .stats-grid { grid-template-columns: repeat(2,1fr); } }
+@media (max-width:640px){ .stats-grid { grid-template-columns: 1fr; } }
+
+.stat-card {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  box-shadow: var(--soft-shadow);
+  position: relative;
+  overflow: hidden;
+  transition: transform .22s ease, box-shadow .22s ease;
+}
+.stat-card:hover { transform: translateY(-6px); box-shadow: var(--elev-shadow); }
+.stat-card .stat-icon {
+  width:48px; height:48px; border-radius:10px;
+  display:flex; align-items:center; justify-content:center;
+  background: linear-gradient(135deg, rgba(6,214,160,0.12), rgba(17,138,178,0.12));
+  color: var(--accent);
+  font-size:18px;
+  margin-bottom:10px;
+}
+.stat-card h3 { margin:0; font-size:13px; color:var(--muted); font-weight:700; }
+.stat-card p { margin:6px 0 0; font-size:24px; font-weight:800; color:var(--text); }
+
+/* thin accent bar on top of card */
+.stat-card::before {
+  content: "";
+  position:absolute;
+  top:0; left:0; width:100%; height:6px;
+  border-top-left-radius: var(--radius-lg);
+  border-top-right-radius: var(--radius-lg);
+  background: linear-gradient(90deg,var(--accent),var(--accent-2));
+}
+
+/* optional small label under card */
+.stat-sub { font-size:12px; color:var(--muted); margin-top:8px; }
+
+/* -------- Charts container -------- */
+.charts-section {
+  margin-top: 16px;
+  background: var(--card-bg);
+  padding: 16px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--soft-shadow);
+}
+
+/* -------- Table styles (orders/delivery) -------- */
+.admin-table-container {
+  margin-top: 12px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.table-wrapper { overflow-x:auto; border-radius: 12px; }
+
+/* main table */
+.admin-table {
+  width:100%;
+  border-collapse: collapse;
+  min-width: 720px;
+  background: var(--card-bg);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--soft-shadow);
+  font-size:14px;
+}
+
+.admin-table thead {
+  background: linear-gradient(90deg, rgba(6,214,160,0.04), rgba(17,138,178,0.03));
+}
+.admin-table th, .admin-table td {
+  padding: 14px 16px;
+  text-align: left;
+  border-bottom: 1px solid rgba(10,20,34,0.04);
+  color: var(--text);
+}
+.admin-table th { font-weight:700; color:var(--muted); font-size:13px; letter-spacing:0.2px; }
+.admin-table tbody tr:hover { background: rgba(6,214,160,0.02); }
+
+/* order id badge */
+.order-id {
+  font-family: "Inter", monospace;
+  font-size: 13px;
+  color: #234b52;
+  background: rgba(6,214,160,0.06);
+  padding:6px 10px; border-radius:8px;
+  display:inline-block;
+}
+
+/* status badges */
+.badge {
+  display:inline-block; padding:6px 10px; border-radius:999px; font-weight:700; font-size:12px;
+}
+.badge.pending { background: rgba(255,176,32,0.12); color:var(--warning); }
+.badge.accepted { background: rgba(6,214,160,0.08); color:var(--accent); }
+.badge.picked { background: rgba(17,138,178,0.08); color:var(--accent-2); }
+.badge.intransit { background: rgba(15,23,36,0.06); color:#0f1724; }
+.badge.delivered { background: rgba(34,197,94,0.12); color:var(--success); }
+
+/* table small text */
+.kv { font-size:13px; color:var(--muted); }
+
+/* action buttons */
+.btn {
+  display:inline-flex; align-items:center; gap:8px;
+  border: none; cursor:pointer; padding:8px 12px; border-radius:10px;
+  font-weight:700; font-size:13px;
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.btn:active { transform: translateY(1px); }
+.btn.primary { background: linear-gradient(90deg,var(--accent),var(--accent-2)); color:white; box-shadow: 0 8px 20px rgba(6,138,160,0.08); }
+.btn.ghost { background: transparent; border: 1px solid rgba(10,20,34,0.06); color:var(--text); }
+.btn.warn { background: var(--warning); color:#10232b; }
+.btn.danger { background: var(--danger); color:white; }
+
+/* -------- Persistent Alert (urgent) -------- */
+.alert-box {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  width: 360px;
+  display:flex; flex-direction:column; gap:10px;
+  z-index:9999;
+}
+.alert-item {
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  background: linear-gradient(90deg,#ff6b6b,#ff3b3b);
+  color:white; padding:12px 14px; border-radius:12px; box-shadow: var(--elev-shadow);
+}
+.alert-item p { margin:0; font-weight:800; font-size:14px; line-height:1.1; }
+.alert-item button {
+  background: white; color: #ff3b3b; padding:8px 10px; border-radius:8px; border:none; cursor:pointer; font-weight:700;
+}
+
+/* -------- Toast (temporary) -------- */
+.toast-container {
+  position: fixed; right: 22px; bottom: 22px; display:flex; flex-direction:column; gap:12px; z-index:9998;
+}
+.toast {
+  background: #071124; color:white; padding:12px 16px; border-radius:10px; box-shadow: 0 8px 26px rgba(6,12,34,0.28);
+  font-weight:700; animation: toastIn .36s ease forwards, toastOut .36s ease 5s forwards; opacity:0;
+}
+@keyframes toastIn { 0% { transform: translateY(20px) scale(.98); opacity:0 } 100% { transform: translateY(0) scale(1); opacity:1 } }
+@keyframes toastOut { from { opacity:1 } to { opacity:0; transform: translateY(20px); } }
+
+/* -------- Order details popup (used in track page) -------- */
+.order-details-popup {
+  width:100%;
+  max-width:720px;
+  padding:18px; border-radius:12px; background:var(--card-bg); box-shadow:var(--elev-shadow);
+}
+.order-details-popup h4 { margin:0 0 8px; font-size:16px; color:var(--text); }
+.order-details-popup .items { font-size:14px; color:var(--text-soft); margin-top:10px; }
+
+/* -------- Track Order Page & Timeline -------- */
+.track-page {
+  max-width: 820px;
+  margin: 28px auto;
+  padding: 18px;
+}
+.track-search { display:flex; gap:10px; margin-bottom:14px; }
+.track-search input {
+  flex:1; padding:10px 12px; border-radius:10px; border:1px solid rgba(10,20,34,0.06);
+  font-size:14px;
+}
+.track-search button { padding:10px 14px; border-radius:10px; border:none; background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#fff; font-weight:700; cursor:pointer; }
+
+.timeline-container {
+  display:flex; justify-content:space-between; gap:8px; margin:24px 0; position:relative; align-items:center;
+}
+.timeline-container::before {
+  content:""; position:absolute; left:40px; right:40px; height:4px; top:50%; transform:translateY(-50%); background:#e6eef6; border-radius:4px; z-index:0;
+}
+.timeline-step { flex:1; text-align:center; position:relative; z-index:1; }
+.timeline-step .circle {
+  width:34px; height:34px; margin:0 auto 8px; border-radius:50%; background:#cbd5e1; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800;
+}
+.timeline-step.active .circle { background: linear-gradient(90deg,var(--accent),var(--accent-2)); box-shadow: 0 8px 20px rgba(6,138,160,0.14); transform:scale(1.05); }
+.timeline-step span { display:block; font-weight:700; color:var(--text-soft); font-size:13px; }
+
+/* small footer status */
+.status-footer { text-align:center; color:var(--text-soft); font-weight:700; margin-top:8px; }
+
+/* -------- Map / Tracking container -------- */
+.map-container {
+  height: 460px;
+  border-radius: 12px;
+  overflow:hidden;
+  box-shadow: var(--soft-shadow);
+  margin-top:12px;
+}
+
+/* tracking sidebar */
+.tracking-sidebar { background:var(--card-bg); border-radius:12px; padding:12px; box-shadow:var(--soft-shadow); }
+
+/* -------- Delivery partner page -------- */
+.delivery-panel { display:flex; flex-direction:column; gap:14px; }
+.delivery-table { width:100%; border-collapse:collapse; background:var(--card-bg); border-radius:12px; overflow:hidden; box-shadow:var(--soft-shadow); }
+.delivery-table th, .delivery-table td { padding:12px 14px; font-size:14px; border-bottom:1px solid rgba(10,20,34,0.04); }
+
+/* mobile friendly delivery cards */
+.delivery-card { display:none; background:var(--card-bg); border-radius:12px; padding:12px; box-shadow:var(--soft-shadow); }
+@media (max-width:760px) { .delivery-table{ display:none; } .delivery-card { display:block; } }
+
+/* -------- Login / Auth -------- */
+.auth-card { max-width:420px; margin: 40px auto; padding:24px; border-radius:12px; background:var(--card-bg); box-shadow:var(--elev-shadow); }
+.auth-card h2 { margin:0 0 12px; font-size:20px; color:var(--text); }
+.form-row { display:flex; flex-direction:column; gap:8px; margin-bottom:12px; }
+.input { padding:10px 12px; border-radius:8px; border:1px solid rgba(10,20,34,0.06); font-size:14px; }
+.input:focus { outline:none; box-shadow: 0 10px 26px rgba(6,214,160,0.06); border-color: rgba(6,214,160,0.12); }
+
+/* -------- Utilities -------- */
+.row { display:flex; gap:12px; align-items:center; }
+.column { display:flex; flex-direction:column; gap:8px; }
+.small { font-size:12px; color:var(--muted); }
+.text-muted { color:var(--muted); }
+
+/* animations */
+@keyframes fadeIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:none; } }
+@keyframes popIn { from { transform:scale(.96); opacity:0; } to { transform:scale(1); opacity:1; } }
+
+/* responsive tweaks */
+@media (max-width:980px) {
+  .connection-status { left: 14px; transform:none; }
+  .app-container { padding: 14px; }
+  .stats-grid { gap:12px; }
+  .admin-table { font-size:13px; }
+}

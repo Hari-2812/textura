@@ -21,6 +21,10 @@ import OffersPage from "./pages/OffersPage";
 import AdminLayout from "./pages/admin/AdminLayout";
 import AdminLogin from "./pages/AdminLogin";
 import DeliveryOrders from "./pages/delivery/DeliveryOrders";
+import DeliveryPartner from "./pages/admin/DeliveryPartner";
+import TrackOrder from "./pages/admin/TrackOrdersPage";
+
+
 
 
 import { CartProvider } from "./context/CartContext";
@@ -50,11 +54,15 @@ const AppContent = () => {
           <Route path="/admin/*" element={<AdminLayout />} />
 
           <Route path="/delivery" element={<DeliveryOrders />} />
+          <Route path="/delivery" element={<DeliveryPartner />} />
+
 
           {/* 🧭 Public Auth Routes */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/admin/track-order/:id" element={<TrackOrder />} />
+
 
           {/* 🧭 Protected User Routes */}
           <Route

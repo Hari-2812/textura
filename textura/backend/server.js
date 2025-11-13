@@ -36,7 +36,7 @@ connectDB();
 // ROUTES
 // -------------------------
 import orderRoutes from "./routes/orders.js";
-import adminStatsRoutes from "../routes/adminStats.js";
+import adminStatsRoutes from "./routes/adminStats.js";
 
 // Order CRUD + status routes
 app.use("/api/admin/orders", orderRoutes);

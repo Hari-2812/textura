@@ -67,6 +67,44 @@
   animation: popIn 0.5s ease;
 }
 
+
+/* ==========================
+   🔔 Toast Notification
+========================== */
+.toast-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 9999;
+}
+
+.toast {
+  background: #222;
+  color: #fff;
+  padding: 14px 18px;
+  font-size: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  animation: slideUp 0.5s ease forwards, fadeOut 0.5s ease 5s forwards;
+  opacity: 0;
+}
+
+/* 🔥 Slide up from bottom */
+@keyframes slideUp {
+  0% { transform: translateY(30px); opacity: 0; }
+  100% { transform: translateY(0px); opacity: 1; }
+}
+
+/* 🔥 Auto fade-out */
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; transform: translateY(20px); }
+}
+
+
 /* 🎨 Top Accent Bar Variants */
 .stat-card::before {
   content: "";
