@@ -13,14 +13,14 @@ const ProductFilters = ({ onFilterChange }) => {
     const { name, value } = e.target;
     const updated = { ...filters, [name]: value };
     setFilters(updated);
-    onFilterChange(updated); // ✅ Safe call, no infinite render
+    onFilterChange(updated);
   };
 
   return (
     <div className="filter-bar">
       <input
         type="text"
-        placeholder="Search by name..."
+        placeholder="Search products..."
         name="search"
         value={filters.search}
         onChange={handleChange}

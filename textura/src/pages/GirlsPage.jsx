@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { girlsProducts } from "../data/girlsProducts";
 import "../styles/GirlsPage.css";
+import "../styles/ProductFilters.css";
 import { useCart } from "../context/CartContext";
 import ProductCard from "../components/ProductCard";
 
@@ -89,7 +90,9 @@ const GirlsPage = ({ showFilters, setShowFilters }) => {
       )}
 
       {/* ✅ Overlay */}
-      {showFilters && <div className="overlay" onClick={() => setShowFilters(false)} />}
+      {showFilters && (
+        <div className="overlay" onClick={() => setShowFilters(false)} />
+      )}
 
       {/* ✅ Product Grid */}
       <div className="girls-container">
