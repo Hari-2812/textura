@@ -7,43 +7,21 @@ const OrdersPage = () => {
   const [loading, setLoading] = useState(true);
   const backendUrl = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
-  // ✅ Fetch orders
+  // ✅ Fetch all orders
   const fetchOrders = async () => {
     try {
       const res = await axios.get(`${backendUrl}/api/admin/orders`);
-      // supports both formats (array or {orders: []})
+
+      // Support both: array OR {orders:[]}
       const data = Array.isArray(res.data)
         ? res.data
         : res.data.orders || [];
+
       setOrders(data);
     } catch (error) {
       console.error("❌ Error fetching orders:", error);
     } finally {
       setLoading(false);
-    }
-  };
-
-  // ✅ Update order status
-  const handleMarkDelivered = async (id) => {
-    try {
-      const res = await axios.patch(`${backendUrl}/api/admin/orders/${id}`, {
-        status: "Delivered",
-      });
-
-      if (res.data.success) {
-        alert("✅ Order marked as Delivered!");
-        // Update locally for better UX
-        setOrders((prev) =>
-          prev.map((o) =>
-            o._id === id ? { ...o, status: "Delivered" } : o
-          )
-        );
-      } else {
-        alert("❌ Failed to update order.");
-      }
-    } catch (err) {
-      console.error("Error updating order:", err);
-      alert("⚠️ Could not connect to backend.");
     }
   };
 
@@ -66,21 +44,33 @@ const OrdersPage = () => {
               <tr>
                 <th>Order ID</th>
                 <th>Customer</th>
+                {/* <th>Email</th> */}
                 <th>Total</th>
                 <th>Payment</th>
                 <th>Status</th>
                 <th>Date</th>
-                <th>Action</th>
               </tr>
             </thead>
 
             <tbody>
               {orders.map((o) => (
                 <tr key={o._id}>
-                  <td>{o._id.slice(-6).toUpperCase()}</td>
-                  <td>{o.customer}</td>
-                  <td>₹{o.total || o.totalAmount}</td>
-                  <td>{o.paymentMethod === "upi" ? "UPI" : "COD"}</td>
+                  {/* 🔹 Order ID */}
+                  <td>{o.orderId}</td>
+
+                  {/* 🔹 Customer Name */}
+                  <td>{o.customerName}</td>
+
+                  {/* 🔹 Customer Email */}
+                  {/* <td>{o.customerEmail}</td> */}
+
+                  {/* 🔹 Total Amount */}
+                  <td>₹{o.total}</td>
+
+                  {/* 🔹 Payment Method */}
+                  <td>{o.paymentMethod || "COD"}</td>
+
+                  {/* 🔹 Order Status */}
                   <td
                     className={
                       o.status === "Delivered"
@@ -90,19 +80,9 @@ const OrdersPage = () => {
                   >
                     {o.status}
                   </td>
-                  <td>{new Date(o.createdAt || o.date).toLocaleString()}</td>
-                  <td>
-                    {o.status !== "Delivered" ? (
-                      <button
-                        className="mark-btn"
-                        onClick={() => handleMarkDelivered(o._id)}
-                      >
-                        Mark as Delivered
-                      </button>
-                    ) : (
-                      <span className="delivered-label">✅ Delivered</span>
-                    )}
-                  </td>
+
+                  {/* 🔹 Order Date */}
+                  <td>{new Date(o.createdAt).toLocaleString()}</td>
                 </tr>
               ))}
             </tbody>

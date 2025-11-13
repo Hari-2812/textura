@@ -5,6 +5,8 @@ const orderSchema = new mongoose.Schema(
     customerName: String,
     customerEmail: String,
     address: String,
+    paymentMethod: String,
+
     items: [
       {
         name: String,
@@ -12,9 +14,21 @@ const orderSchema = new mongoose.Schema(
         price: Number,
       },
     ],
+
     total: Number,
-    status: { type: String, default: "Pending" },
-    // 👇 Add this
+
+    status: {
+      type: String,
+      enum: [
+        "Pending",
+        "Accepted",
+        "Picked Up",
+        "In Transit",
+        "Delivered"
+      ],
+      default: "Pending",
+    },
+
     orderId: {
       type: String,
       unique: true,
@@ -24,7 +38,6 @@ const orderSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// ✅ Automatically generate readable short orderId (e.g., 1CFC21)
 orderSchema.pre("save", function (next) {
   if (!this.orderId) {
     this.orderId = Math.random().toString(36).substring(2, 8).toUpperCase();
@@ -32,5 +45,4 @@ orderSchema.pre("save", function (next) {
   next();
 });
 
-const Order = mongoose.model("Order", orderSchema);
-export default Order;
+export default mongoose.model("Order", orderSchema);

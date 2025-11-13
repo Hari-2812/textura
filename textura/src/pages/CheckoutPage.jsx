@@ -38,23 +38,30 @@ const CheckoutPage = () => {
 
     // Prepare order data to send to backend
     const orderData = {
-      customer: user.name,
-      address: user.address,
-      paymentMethod,
-      upiId: paymentMethod === "upi" ? upiId : null,
-      items: cartItems.map((item) => ({
-        name: item.name,
-        price: parseInt(item.price.replace(/[₹,]/g, "")),
-        qty: item.quantity,
-      })),
-      total: cartItems.reduce(
-        (sum, item) =>
-          sum + parseInt(item.price.replace(/[₹,]/g, "")) * item.quantity,
-        0
-      ),
-      status: "Pending",
-      createdAt: new Date(),
-    };
+  customerName: user.name,
+  customerEmail: user.email,
+  address: user.address,
+  paymentMethod,
+  upiId: paymentMethod === "upi" ? upiId : null,
+
+  items: cartItems.map((item) => ({
+    name: item.name,
+    price: parseInt(item.price.replace(/[₹,]/g, "")),
+    quantity: item.quantity, // FIX: use "quantity" not "qty"
+  })),
+
+  total: cartItems.reduce(
+    (sum, item) =>
+      sum +
+      parseInt(item.price.replace(/[₹,]/g, "")) * item.quantity,
+    0
+  ),
+
+  status: "Pending",
+  createdAt: new Date(),
+};
+
+
 
     try {
       const response = await fetch(`${backendUrl}/api/admin/orders`, {

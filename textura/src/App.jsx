@@ -20,6 +20,8 @@ import ForgotPassword from "./pages/ForgotPassword";
 import OffersPage from "./pages/OffersPage";
 import AdminLayout from "./pages/admin/AdminLayout";
 import AdminLogin from "./pages/AdminLogin";
+import DeliveryOrders from "./pages/delivery/DeliveryOrders";
+
 
 import { CartProvider } from "./context/CartContext";
 import { UserProvider, useUser } from "./context/UserContext";
@@ -46,6 +48,8 @@ const AppContent = () => {
           {/* 🧭 Admin Routes */}
           <Route path="/admin-login" element={<AdminLogin />} />
           <Route path="/admin/*" element={<AdminLayout />} />
+
+          <Route path="/delivery" element={<DeliveryOrders />} />
 
           {/* 🧭 Public Auth Routes */}
           <Route path="/login" element={<LoginPage />} />
@@ -152,6 +156,8 @@ const AppContent = () => {
             }
           />
         </Routes>
+        
+
       </main>
 
       {/* ✅ Footer hidden on admin pages */}

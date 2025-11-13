@@ -4,7 +4,6 @@ import { Server } from "socket.io";
 import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./config/db.js";
-import orderRoutes from "./routes/orders.js";
 
 dotenv.config();
 
@@ -14,12 +13,12 @@ const server = http.createServer(app);
 // ✅ Configure Socket.io
 const io = new Server(server, {
   cors: {
-    origin: "*", // or "http://localhost:3000" if you want specific frontend
+    origin: "*", // set frontend URL if needed
     methods: ["GET", "POST", "PATCH", "DELETE"],
   },
-  pingInterval: 25000, // Heartbeat every 25s
-  pingTimeout: 60000, // Disconnect after 60s
-  transports: ["websocket", "polling"], // For better reliability
+  pingInterval: 25000,
+  pingTimeout: 60000,
+  transports: ["websocket", "polling"],
 });
 
 // ✅ Middleware
@@ -31,6 +30,7 @@ app.set("io", io);
 connectDB();
 
 // ✅ Routes
+import orderRoutes from "./routes/orders.js";
 app.use("/api/admin/orders", orderRoutes);
 
 // ✅ Default Route
@@ -43,7 +43,7 @@ const PORT = process.env.PORT || 5000;
 // ✅ Start Server
 server.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
 
-// ✅ Socket.io Events
+// ✅ Socket Events
 io.on("connection", (socket) => {
   console.log("🟢 Admin connected:", socket.id);
 
