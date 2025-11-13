@@ -5,7 +5,7 @@ import StatsCard from "../../components/admin/StatsCard";
 import PaymentChart from "../../components/admin/PaymentChart";
 import { FaBox, FaRupeeSign, FaTruck, FaClock } from "react-icons/fa";
 import "../../styles/Admin.css";
-import "../../styles/AdminDashboard.css"; // 👈 for toast + animation
+import "../../styles/AdminDashboard.css";
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState({
@@ -14,6 +14,7 @@ const AdminDashboard = () => {
     deliveredOrders: 0,
     pendingOrders: 0,
   });
+
   const [graphData, setGraphData] = useState([]);
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -21,19 +22,17 @@ const AdminDashboard = () => {
 
   const backendUrl = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
-  /* ============================================================
-     🔄 Fetch initial dashboard stats + graph
-  ============================================================ */
   const fetchData = async () => {
     try {
       const [statsRes, graphRes] = await Promise.all([
         axios.get(`${backendUrl}/api/admin/stats`),
         axios.get(`${backendUrl}/api/admin/sales-graph`),
       ]);
+
       setStats(statsRes.data);
       setGraphData(graphRes.data);
     } catch (err) {
-      console.error("❌ Error fetching admin dashboard data:", err);
+      console.error("❌ Dashboard fetch error:", err);
     } finally {
       setLoading(false);
     }
@@ -43,70 +42,37 @@ const AdminDashboard = () => {
     fetchData();
   }, [backendUrl]);
 
-  /* ============================================================
-     🔔 Real-time socket notifications
-  ============================================================ */
   useEffect(() => {
     const socket = io(backendUrl, {
       transports: ["websocket", "polling"],
-      reconnection: true,
-      reconnectionAttempts: Infinity,
-      reconnectionDelay: 3000,
-      timeout: 20000,
     });
 
     socket.on("connect", () => {
-      console.log("🟢 Connected to Socket.io server");
+      console.log("🟢 Socket connected");
       setConnectionStatus("🟢 Connected");
     });
 
-    socket.on("disconnect", (reason) => {
-      console.warn("🔴 Disconnected from Socket.io server:", reason);
-      setConnectionStatus("🔴 Disconnected — attempting reconnect...");
+    socket.on("disconnect", () => {
+      setConnectionStatus("🔴 Disconnected - reconnecting...");
     });
 
-    socket.on("reconnect_attempt", () => {
-      setConnectionStatus("🟡 Reconnecting...");
-    });
-
-    socket.on("reconnect", (attempt) => {
-      console.log("🔁 Reconnected after", attempt, "attempts");
-      setConnectionStatus("🟢 Reconnected");
-    });
-
-    // 🛒 Notify new orders
     socket.on("newOrder", (data) => {
-      console.log("🛒 New order received:", data);
+      console.log("🛒 New order:", data);
       setNotifications((prev) => [...prev, data.message]);
-
-      // 🔊 Optional notification sound (place /public/notification.mp3)
-      const audio = new Audio("/notification.mp3");
-      audio.volume = 0.4;
-      audio.play().catch(() => {});
-
-      // 🧹 Remove notification after 6s
-      setTimeout(() => {
-        setNotifications((prev) => prev.slice(1));
-      }, 6000);
-
-      // 🔄 Refresh stats automatically
       fetchData();
     });
 
-    return () => {
-      socket.disconnect();
-      console.log("🔌 Socket.io disconnected cleanly");
-    };
-  }, [backendUrl]);
+    socket.on("orderUpdated", (data) => {
+      console.log("🔁 Order updated:", data);
+      setNotifications((prev) => [...prev, data.message]);
+      fetchData();
+    });
 
-  /* ============================================================
-     🕐 Loading State
-  ============================================================ */
+    return () => socket.disconnect();
+  }, []);
+
   if (loading) return <p className="loading-text">Loading Dashboard...</p>;
 
-  /* ============================================================
-     📊 Stats Cards
-  ============================================================ */
   const statsArray = [
     { title: "Total Orders", value: stats.totalOrders, icon: <FaBox />, color: "#06d6a0" },
     { title: "Total Revenue", value: `₹${stats.totalRevenue}`, icon: <FaRupeeSign />, color: "#118ab2" },
@@ -114,34 +80,25 @@ const AdminDashboard = () => {
     { title: "Pending Orders", value: stats.pendingOrders, icon: <FaClock />, color: "#ef476f" },
   ];
 
-  /* ============================================================
-     💅 Render Dashboard
-  ============================================================ */
   return (
     <div className="admin-dashboard">
-      {/* 🔌 Connection Status Banner */}
-      <div
-        className={`connection-status ${
-          connectionStatus.includes("Disconnected") ? "error" : ""
-        }`}
-      >
+      <div className={`connection-status ${
+        connectionStatus.includes("Disconnected") ? "error" : ""
+      }`}>
         {connectionStatus}
       </div>
 
-      {/* 🔔 Toast Notifications */}
       <div className="toast-container">
         {notifications.map((msg, i) => (
-          <div key={i} className="toast">
-            {msg}
-          </div>
+          <div key={i} className="toast">{msg}</div>
         ))}
       </div>
 
       <h2 className="dashboard-title">📊 Dashboard Overview</h2>
 
       <div className="stats-grid">
-        {statsArray.map((item) => (
-          <StatsCard key={item.title} {...item} />
+        {statsArray.map((s) => (
+          <StatsCard key={s.title} {...s} />
         ))}
       </div>
 
