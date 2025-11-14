@@ -84,8 +84,7 @@
   gap: 1rem;
 }
 
-.add-to-cart,
-.wishlist-btn {
+.add-to-cart{
   display: flex;
   align-items: center;
   justify-content: center;
@@ -109,18 +108,9 @@
   transform: scale(1.05);
 }
 
-/* Wishlist Button */
-.wishlist-btn {
-  background-color: #f9f9f9;
-  color: #ef476f;
-  border: 1px solid #ef476f;
-}
 
-.wishlist-btn:hover {
-  background-color: #ef476f;
-  color: #fff;
-  transform: scale(1.05);
-}
+
+
 
 /* ========================
    RESPONSIVE DESIGN
@@ -136,8 +126,7 @@
     margin-top: 1rem;
   }
 
-  .add-to-cart,
-  .wishlist-btn {
+  .add-to-cart {
     width: 100%;
   }
 }

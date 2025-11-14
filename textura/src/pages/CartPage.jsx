@@ -7,10 +7,14 @@ const CartPage = () => {
   const { cartItems, addToCart, removeFromCart, clearCart } = useCart();
   const navigate = useNavigate();
 
-  // 🧮 Calculate total price
+  // 🧮 Calculate total price safely for number or string prices
   const totalPrice = cartItems.reduce((sum, item) => {
-    const itemPrice = parseInt(item.price.replace(/[₹,]/g, "")) * item.quantity;
-    return sum + itemPrice;
+    const numericPrice =
+      typeof item.price === "string"
+        ? parseInt(item.price.replace(/[₹,]/g, ""))
+        : Number(item.price);
+
+    return sum + numericPrice * item.quantity;
   }, 0);
 
   // 🚀 Proceed to Checkout Handler
@@ -72,10 +76,7 @@ const CartPage = () => {
             </p>
 
             {/* ✅ Checkout Button */}
-            <button
-              className="checkout-btn"
-              onClick={handleProceedToCheckout}
-            >
+            <button className="checkout-btn" onClick={handleProceedToCheckout}>
               Proceed to Checkout
             </button>
 

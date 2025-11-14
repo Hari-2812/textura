@@ -19,7 +19,6 @@ const ProductCard = ({ product, onAddToCart }) => {
 
   return (
     <div className="product-card">
-      
       {/* 🖼️ Product Image */}
       <div
         className="product-image-container"
@@ -30,12 +29,14 @@ const ProductCard = ({ product, onAddToCart }) => {
           alt={product.name}
           className="product-img"
         />
-
-        <button className="wishlist-btn" onClick={toggleWishlist}>
-          <FaHeart
-            color={isInWishlist(product._id) ? "red" : "gray"}
-            size={18}
-          />
+        {/* wishlist button */}
+        <button
+          className={`wishlist-btn ${
+            isInWishlist(product._id) ? "active" : ""
+          }`}
+          onClick={toggleWishlist}
+        >
+          <FaHeart className="heart-icon" />
         </button>
       </div>
 
@@ -52,7 +53,6 @@ const ProductCard = ({ product, onAddToCart }) => {
           Add to Cart
         </button>
       </div>
-      
     </div>
   );
 };

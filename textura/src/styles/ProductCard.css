@@ -27,7 +27,7 @@
   height: 220px;
   border-radius: 10px;
   overflow: hidden;
-  position: relative; /* Needed for wishlist button positioning */
+  position: relative;
 }
 
 .product-img {
@@ -42,38 +42,57 @@
 }
 
 /* =========================
-   ❤️ Wishlist Button (Inside Image)
+   ❤️ Wishlist Button
    ========================= */
 .wishlist-btn {
   position: absolute;
   bottom: 10px;
   right: 10px;
-  background-color:#000;
-  border: none;
-  color: #fff;
-  border-radius: 50%;
   width: 38px;
   height: 38px;
+  background-color: #ffffff !important;
+  border: 2px solid #ef476f !important;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.1rem;
-  transition: all 0.3s ease;
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transition: all 0.25s ease !important;
+  z-index: 10;
 }
 
+/* Heart Icon Default */
+.heart-icon {
+  color: #ef476f !important;
+  fill: #ef476f !important;
+  stroke: #ef476f !important;
+  font-size: 1.2rem !important;
+  pointer-events: none;
+}
+
+/* Hover → Pink background + white heart */
 .wishlist-btn:hover {
-  background-color: #ef476f;
+  background-color: #ef476f !important;
+  border-color: #ef476f !important;
   transform: scale(1.1);
-  box-shadow: 0 4px 10px rgba(239, 71, 111, 0.4);
 }
 
-/* Active / Liked State */
+.wishlist-btn:hover .heart-icon {
+  color: #fff !important;
+  fill: #fff !important;
+  stroke: #fff !important;
+}
+
+/* Active → Pink background + white heart */
 .wishlist-btn.active {
-  background-color: #ef476f;
-  color: #fff;
-  box-shadow: 0 4px 10px rgba(239, 71, 111, 0.4);
+  background-color: #ef476f !important;
+  border-color: #ef476f !important;
+}
+
+.wishlist-btn.active .heart-icon {
+  color: #fff !important;
+  fill: #fff !important;
+  stroke: #fff !important;
 }
 
 /* =========================
@@ -136,90 +155,58 @@
    RESPONSIVENESS
    ========================= */
 
-/* 💻 Tablets (≤1024px) */
+/* Tablets */
 @media (max-width: 1024px) {
   .product-card {
     width: 200px;
     padding: 0.6rem;
   }
-
   .product-image-container {
     height: 180px;
   }
-
   .wishlist-btn {
     width: 34px;
     height: 34px;
     bottom: 8px;
     right: 8px;
-    font-size: 1.1rem;
   }
-
-  .add-cart-btn {
-    min-width: 110px;
-    height: 36px;
-    font-size: 0.8rem;
+  .heart-icon {
+    font-size: 1.1rem !important;
   }
 }
 
-/* 📱 Mobiles (≤768px) */
+/* Mobile */
 @media (max-width: 768px) {
   .product-card {
     width: 160px;
     padding: 0.5rem;
   }
-
   .product-image-container {
     height: 160px;
   }
-
   .wishlist-btn {
     width: 36px;
     height: 36px;
-    bottom: 8px;
-    right: 8px;
-    font-size: 1.2rem;
   }
-    .wishlist-btn svg, .wishlist-btn i {
-    font-size: 1.3rem; /* Increase slightly */
-  }
-
-  .add-cart-btn {
-    min-width: 100px;
-    height: 34px;
-    font-size: 0.75rem;
-  }
-
-  .product-actions {
-    gap: 0;
+  .heart-icon {
+    font-size: 1.2rem !important;
   }
 }
 
-/* 📱 Small Phones (≤480px) */
+/* Small phones */
 @media (max-width: 480px) {
   .product-card {
     width: 140px;
     padding: 0.4rem;
   }
-
   .product-image-container {
     height: 140px;
   }
-
   .wishlist-btn {
     width: 34px;
     height: 34px;
-    bottom: 6px;
-    right: 6px;
-    font-size: 0.9rem;
   }
-   .wishlist-btn svg, .wishlist-btn i {
-    font-size: 1.2rem;
-  }
-
-  .add-cart-btn {
-    min-width: 90px;
-    height: 32px;
-    font-size: 0.75rem;
+  .heart-icon {
+    font-size: 1.1rem !important;
   }
 }
