@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { products } from "../data/products";
 import "../styles/BoysPage.css";
 import "../styles/ProductFilters.css";
 import { useCart } from "../context/CartContext";
+import axios from "axios";
 import ProductCard from "../components/ProductCard";
 
 const BoysPage = ({ showFilters, setShowFilters }) => {
-  const boysProducts = products.filter((p) => p.category === "boys");
-  const [filteredProducts, setFilteredProducts] = useState(boysProducts);
+  const [boysProducts, setBoysProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
 
   const [price, setPrice] = useState("all");
   const [style, setStyle] = useState("all");
@@ -15,21 +15,45 @@ const BoysPage = ({ showFilters, setShowFilters }) => {
   const { addToCart } = useCart();
   const [popup, setPopup] = useState(false);
 
-  // ✅ Filter Logic
+  // ⭐ Fetch products from backend
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/products");
+        const allProducts = res.data.products || [];
+
+        // ⭐ FIXED: Show category "1" OR "boys"
+        const boys = allProducts.filter(
+          (p) =>
+            p.category === "1" ||
+            p.category.toLowerCase() === "boys"
+        );
+
+        setBoysProducts(boys);
+        setFilteredProducts(boys);
+      } catch (error) {
+        console.log("Error fetching products:", error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  // ⭐ Filter Logic
   const handleFilter = () => {
     let filtered = [...boysProducts];
 
     if (price !== "all") {
       const [min, max] = price.split("-");
       filtered = filtered.filter((p) => {
-        const pr = parseInt(p.price.replace(/[₹,]/g, ""));
+        const pr = parseInt(p.price);
         return pr >= parseInt(min) && pr <= parseInt(max);
       });
     }
 
     if (style !== "all") {
       filtered = filtered.filter((p) =>
-        p.style?.toLowerCase().includes(style.toLowerCase())
+        p.description?.toLowerCase().includes(style.toLowerCase())
       );
     }
 
@@ -37,14 +61,14 @@ const BoysPage = ({ showFilters, setShowFilters }) => {
     setShowFilters(false);
   };
 
-  // ✅ Reset when no filters active
+  // ⭐ Reset when no filters active
   useEffect(() => {
     if (!showFilters && filteredProducts.length === 0) {
       setFilteredProducts(boysProducts);
     }
-  }, [showFilters]);
+  }, [showFilters, boysProducts, filteredProducts.length]);
 
-  // ✅ Popup animation handler
+  // ⭐ Popup animation handler
   const showCartPopup = () => {
     setPopup(true);
     setTimeout(() => setPopup(false), 2000);
@@ -53,7 +77,8 @@ const BoysPage = ({ showFilters, setShowFilters }) => {
   return (
     <section className="boys-page">
       <h2>Boys Collection</h2>
-      {/* ✅ Filter Popup */}
+
+      {/* ⭐ Filter Popup */}
       {showFilters && (
         <div className="filter-popup">
           <div className="filter-header">
@@ -90,16 +115,18 @@ const BoysPage = ({ showFilters, setShowFilters }) => {
           </div>
         </div>
       )}
-      {/* ✅ Overlay */}
+
+      {/* ⭐ Overlay */}
       {showFilters && (
         <div className="overlay" onClick={() => setShowFilters(false)} />
       )}
-      {/* ✅ Product Grid */}
+
+      {/* ⭐ Product Grid */}
       <div className="boys-container">
         {filteredProducts.length > 0 ? (
           filteredProducts.map((p) => (
             <ProductCard
-              key={p.id}
+              key={p._id}
               product={p}
               onAddToCart={(item) => {
                 addToCart(item);
@@ -111,7 +138,8 @@ const BoysPage = ({ showFilters, setShowFilters }) => {
           <p>No products found</p>
         )}
       </div>
-      Everything else —{/* ✅ Popup */}
+
+      {/* ⭐ Popup */}
       {popup && <div className="popup">🛒 Item added to cart!</div>}
     </section>
   );

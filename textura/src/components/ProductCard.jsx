@@ -2,7 +2,6 @@ import React from "react";
 import "../styles/ProductCard.css";
 import { FaHeart, FaShoppingCart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
 
 const ProductCard = ({ product, onAddToCart }) => {
@@ -11,8 +10,8 @@ const ProductCard = ({ product, onAddToCart }) => {
 
   const toggleWishlist = (e) => {
     e.stopPropagation();
-    if (isInWishlist(product.id)) {
-      removeFromWishlist(product.id);
+    if (isInWishlist(product._id)) {
+      removeFromWishlist(product._id);
     } else {
       addToWishlist(product);
     }
@@ -20,16 +19,21 @@ const ProductCard = ({ product, onAddToCart }) => {
 
   return (
     <div className="product-card">
+      
       {/* 🖼️ Product Image */}
       <div
         className="product-image-container"
-        onClick={() => navigate(`/product/${product.id}`)}
+        onClick={() => navigate(`/product/${product._id}`)}
       >
-        <img src={product.img} alt={product.name} className="product-img" />
+        <img
+          src={product.images?.[0]?.url}
+          alt={product.name}
+          className="product-img"
+        />
 
         <button className="wishlist-btn" onClick={toggleWishlist}>
           <FaHeart
-            color={isInWishlist(product.id) ? "red" : "gray"}
+            color={isInWishlist(product._id) ? "red" : "gray"}
             size={18}
           />
         </button>
@@ -38,7 +42,7 @@ const ProductCard = ({ product, onAddToCart }) => {
       {/* 📋 Product Info */}
       <div className="product-info">
         <h3 className="product-name">{product.name}</h3>
-        <p className="product-price">{product.price}</p>
+        <p className="product-price">₹{product.price}</p>
       </div>
 
       {/* 🛒 Actions */}
@@ -48,6 +52,7 @@ const ProductCard = ({ product, onAddToCart }) => {
           Add to Cart
         </button>
       </div>
+      
     </div>
   );
 };
