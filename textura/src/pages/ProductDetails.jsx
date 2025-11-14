@@ -104,7 +104,7 @@ const ProductDetails = () => {
                   onClick={() => addToCart(item)}
                   className="small-cart-btn"
                 >
-                  <FaShoppingCart /> Add to cart
+                  <FaShoppingCart /> Add to cartcd 
                 </button>
               </div>
             ))}

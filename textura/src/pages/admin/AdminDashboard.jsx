@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import io from "socket.io-client";
-import StatsCard from "../../components/admin/StatsCard";
-import PaymentChart from "../../components/admin/PaymentChart";
+
 import { FaBox, FaRupeeSign, FaTruck, FaClock } from "react-icons/fa";
-import "../../styles/Admin.css";
+
 import "../../styles/AdminDashboard.css";
 import "../../styles/admin-theme.css";
+import "../../styles/Admin.css";
+
+import PaymentChart from "../../components/admin/PaymentChart";
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState({
@@ -18,16 +20,16 @@ const AdminDashboard = () => {
 
   const [graphData, setGraphData] = useState([]);
   const [notifications, setNotifications] = useState([]);
-  const [activeAlerts, setActiveAlerts] = useState([]);
+  const [alerts, setAlerts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [connectionStatus, setConnectionStatus] = useState("🟢 Connected");
 
   const backendUrl = "http://localhost:5000";
 
   /* ============================================================
-     Fetch Stats + Graph
+     📌 Fetch Dashboard Stats + Graph
   ============================================================ */
-  const fetchData = async () => {
+  const loadDashboard = async () => {
     try {
       const [statsRes, graphRes] = await Promise.all([
         axios.get(`${backendUrl}/api/admin/stats`),
@@ -44,86 +46,94 @@ const AdminDashboard = () => {
   };
 
   useEffect(() => {
-    fetchData();
+    loadDashboard();
   }, []);
 
   /* ============================================================
-     Socket.io Real-Time Events
+     🔴 Socket.io for Real-Time Notifications
   ============================================================ */
   useEffect(() => {
-    const socket = io("http://localhost:5000", {
+    const socket = io(backendUrl, {
       transports: ["websocket", "polling"],
     });
 
     socket.on("connect", () => {
-      console.log("🟢 Socket connected");
       setConnectionStatus("🟢 Connected");
     });
 
     socket.on("disconnect", () => {
-      console.log("🔴 Socket disconnected");
       setConnectionStatus("🔴 Disconnected - reconnecting...");
     });
 
-    // 🔔 NEW ORDER
+    // 🛒 New Order
     socket.on("newOrder", (data) => {
-      console.log("🛒 NEW ORDER:", data);
-
       setNotifications((prev) => [...prev, data.message]);
-
-      // Persistent alert for admin until they dismiss it
-      setActiveAlerts((prev) => [
+      setAlerts((prev) => [
         ...prev,
         { id: data.order.orderId, message: data.message },
       ]);
-
-      fetchData();
+      loadDashboard();
     });
 
-    // 🔁 ORDER STATUS UPDATED
+    // 🔁 Order Updated
     socket.on("orderUpdated", (data) => {
-      console.log("🔁 ORDER UPDATED:", data);
-
       setNotifications((prev) => [...prev, data.message]);
-      fetchData();
+      loadDashboard();
     });
 
     return () => socket.disconnect();
   }, []);
 
-  if (loading) return <p className="loading-text">Loading Dashboard...</p>;
+  if (loading)
+    return <p className="loading-text admin-dashboard-page">Loading Dashboard…</p>;
 
-  /* Stats Card List */
+  /* ============================================================
+     📌 Stats Cards Data
+  ============================================================ */
   const statsArray = [
-    { title: "Total Orders", value: stats.totalOrders, icon: <FaBox />, color: "#06d6a0" },
-    { title: "Total Revenue", value: `₹${stats.totalRevenue}`, icon: <FaRupeeSign />, color: "#118ab2" },
-    { title: "Delivered Orders", value: stats.deliveredOrders, icon: <FaTruck />, color: "#073b4c" },
-    { title: "Pending Orders", value: stats.pendingOrders, icon: <FaClock />, color: "#ef476f" },
+    {
+      title: "Total Orders",
+      value: stats.totalOrders,
+      icon: <FaBox />,
+      className: "total",
+    },
+    {
+      title: "Total Revenue",
+      value: `₹${stats.totalRevenue}`,
+      icon: <FaRupeeSign />,
+      className: "revenue",
+    },
+    {
+      title: "Orders Delivered",
+      value: stats.deliveredOrders,
+      icon: <FaTruck />,
+      className: "delivered",
+    },
+    {
+      title: "Pending Orders",
+      value: stats.pendingOrders,
+      icon: <FaClock />,
+      className: "pending",
+    },
   ];
 
   return (
-    <div className="admin-dashboard">
+    <div className="admin-dashboard-page">
 
-      {/* Connection Status */}
+      {/* 🟢 Connection Status */}
       <div
-        className={`connection-status ${
-          connectionStatus.includes("Disconnected") ? "error" : ""
-        }`}
+        className={`connection-status ${connectionStatus.includes("Disconnected") ? "error" : ""}`}
       >
         {connectionStatus}
       </div>
 
-      {/* Persistent Alerts */}
-      {activeAlerts.length > 0 && (
+      {/* 🚨 Persistent Alerts */}
+      {alerts.length > 0 && (
         <div className="alert-box">
-          {activeAlerts.map((a, i) => (
-            <div key={i} className="alert-item">
+          {alerts.map((a) => (
+            <div key={a.id} className="alert-item">
               <p>{a.message}</p>
-              <button
-                onClick={() =>
-                  setActiveAlerts(activeAlerts.filter((x) => x.id !== a.id))
-                }
-              >
+              <button onClick={() => setAlerts(alerts.filter((x) => x.id !== a.id))}>
                 Mark as Seen
               </button>
             </div>
@@ -131,7 +141,7 @@ const AdminDashboard = () => {
         </div>
       )}
 
-      {/* Temporary Toasts */}
+      {/* 🔔 Auto Toast Notifications */}
       <div className="toast-container">
         {notifications.map((msg, i) => (
           <div key={i} className="toast">
@@ -140,16 +150,28 @@ const AdminDashboard = () => {
         ))}
       </div>
 
-      {/* Dashboard */}
-      <h2 className="dashboard-title">📊 Dashboard Overview</h2>
+      {/* ================================ */}
+      {/*           PAGE TITLE            */}
+      {/* ================================ */}
+      <h2>📊 Dashboard Overview</h2>
 
+      {/* ================================ */}
+      {/*            STAT CARDS           */}
+      {/* ================================ */}
       <div className="stats-grid">
-        {statsArray.map((item) => (
-          <StatsCard key={item.title} {...item} />
+        {statsArray.map((item, index) => (
+          <div className={`stat-card ${item.className}`} key={index}>
+            <h3>{item.title}</h3>
+            <p>{item.value}</p>
+            <div className="stat-icon">{item.icon}</div>
+          </div>
         ))}
       </div>
 
-      <div className="charts-section">
+      {/* ================================ */}
+      {/*           SALES CHART           */}
+      {/* ================================ */}
+      <div className="admin-card" style={{ marginTop: "35px" }}>
         <h3>📈 Sales Analytics</h3>
         <PaymentChart data={graphData} />
       </div>

@@ -3,6 +3,7 @@ import http from "http";
 import { Server } from "socket.io";
 import dotenv from "dotenv";
 import cors from "cors";
+import productRoutes from "./routes/productRoutes.js";
 import connectDB from "./config/db.js";
 
 // Load environment variables
@@ -25,6 +26,7 @@ const io = new Server(server, {
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use("/api/products", productRoutes);
 
 // Attach socket instance to Express app
 app.set("io", io);

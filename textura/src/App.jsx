@@ -18,14 +18,13 @@ import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import ForgotPassword from "./pages/ForgotPassword";
 import OffersPage from "./pages/OffersPage";
+
 import AdminLayout from "./pages/admin/AdminLayout";
 import AdminLogin from "./pages/AdminLogin";
+
 import DeliveryOrders from "./pages/delivery/DeliveryOrders";
 import DeliveryPartner from "./pages/admin/DeliveryPartner";
 import TrackOrder from "./pages/admin/TrackOrdersPage";
-
-
-
 
 import { CartProvider } from "./context/CartContext";
 import { UserProvider, useUser } from "./context/UserContext";
@@ -36,35 +35,31 @@ const AppContent = () => {
   const { user } = useUser();
   const location = useLocation();
 
-  // ✅ Hide Header/Footer for admin pages
+  // Hide header/footer for admin pages
   const isAdminPage = location.pathname.startsWith("/admin");
 
   return (
     <>
-      {/* ✅ Show Header/Footer only for user-facing pages */}
-      {!isAdminPage && (
-        <Header onFilterToggle={() => setShowFilters((prev) => !prev)} />
-      )}
+      {!isAdminPage && <Header onFilterToggle={() => setShowFilters(prev => !prev)} />}
 
       <main style={{ minHeight: "80vh" }}>
-        {/* ✅ All routes must be inside <Routes> */}
         <Routes>
-          {/* 🧭 Admin Routes */}
+          
+          {/* Admin Area */}
           <Route path="/admin-login" element={<AdminLogin />} />
           <Route path="/admin/*" element={<AdminLayout />} />
 
+          {/* Delivery */}
           <Route path="/delivery" element={<DeliveryOrders />} />
-          <Route path="/delivery" element={<DeliveryPartner />} />
+          <Route path="/delivery-partner" element={<DeliveryPartner />} />
 
-
-          {/* 🧭 Public Auth Routes */}
+          {/* Public Auth */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/admin/track-order/:id" element={<TrackOrder />} />
 
-
-          {/* 🧭 Protected User Routes */}
+          {/* Protected User Pages */}
           <Route
             path="/"
             element={
@@ -154,7 +149,7 @@ const AppContent = () => {
             }
           />
 
-          {/* 🆕 Product details route (✅ Moved inside <Routes>) */}
+          {/* Product Details */}
           <Route
             path="/product/:id"
             element={
@@ -163,12 +158,10 @@ const AppContent = () => {
               </ProtectedRoute>
             }
           />
-        </Routes>
-        
 
+        </Routes>
       </main>
 
-      {/* ✅ Footer hidden on admin pages */}
       {!isAdminPage && <Footer />}
     </>
   );

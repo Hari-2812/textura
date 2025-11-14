@@ -1,0 +1,60 @@
+.edit-product {
+  padding: 20px;
+}
+
+.edit-grid {
+  display: flex;
+  gap: 20px;
+}
+
+.edit-left,
+.edit-right {
+  flex: 1;
+}
+
+.edit-left label,
+.edit-right label {
+  display: block;
+  margin-top: 10px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.edit-left input,
+.edit-left textarea,
+.edit-right input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+.image-preview-box {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.image-preview-item {
+  position: relative;
+}
+
+.image-preview-item img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.remove-btn {
+  margin-top: 6px;
+  padding: 5px;
+  font-size: 12px;
+  border: none;
+  background: #ff3d00;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}

@@ -1,0 +1,49 @@
+.products-container {
+  padding: 20px;
+}
+
+.products-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  background: #fff;
+}
+
+.products-table th,
+.products-table td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+  font-size: 14px;
+}
+
+.products-table th {
+  background: #f8f8f8;
+  font-weight: 600;
+}
+
+.product-img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.action-btn {
+  padding: 6px 10px;
+  border: none;
+  margin-right: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  border-radius: 4px;
+}
+
+.edit-btn {
+  background: #4caf50;
+  color: #fff;
+}
+
+.delete-btn {
+  background: #e53935;
+  color: white;
+}

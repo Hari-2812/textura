@@ -1,4 +1,4 @@
-/* 🌐 Overall Layout */
+/* 🌐 Layout Wrapper */
 .admin-layout {
   display: flex;
   height: 100vh;
@@ -7,7 +7,9 @@
   overflow: hidden;
 }
 
-/* 🧭 Sidebar */
+/* ================================
+   🧭 SIDEBAR
+=================================== */
 .admin-sidebar {
   width: 260px;
   background: linear-gradient(180deg, #141e30, #243b55);
@@ -15,121 +17,138 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  box-shadow: 4px 0 12px rgba(0, 0, 0, 0.15);
-  transition: all 0.3s ease;
+  box-shadow: 4px 0 16px rgba(0, 0, 0, 0.25);
+  padding-bottom: 20px;
+  transition: all 0.3s ease-in-out;
 }
 
-/* 🧱 Sidebar Header */
+/* Sidebar Header */
 .sidebar-header {
   text-align: center;
-  padding: 20px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 30px 0 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 .sidebar-header h2 {
   margin: 0;
   font-size: 24px;
   color: #00c6ff;
+  font-weight: 700;
   letter-spacing: 1px;
 }
 .sidebar-header p {
-  margin: 5px 0 0;
+  margin-top: 5px;
   font-size: 13px;
   color: #d3d3d3;
 }
 
-/* 📂 Sidebar Nav */
+/* Sidebar Navigation */
 .sidebar-nav {
   display: flex;
   flex-direction: column;
-  margin-top: 20px;
+  margin-top: 25px;
 }
 
 .sidebar-link {
-  color: #f1f1f1;
+  color: #e5e5e5;
   text-decoration: none;
   font-size: 16px;
   padding: 14px 25px;
   display: flex;
   align-items: center;
-  gap: 10px;
-  transition: 0.3s ease;
+  gap: 14px;
   border-left: 4px solid transparent;
+  transition: all 0.25s ease;
 }
 
 .sidebar-link:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.12);
   border-left: 4px solid #00c6ff;
   color: #00c6ff;
-  transform: translateX(5px);
+  transform: translateX(6px);
 }
 
 .sidebar-link.active {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.18);
   border-left: 4px solid #00c6ff;
   color: #00c6ff;
 }
 
-/* 🚪 Logout Button */
+/* Sections Title */
+.sidebar-title {
+  margin-left: 25px;
+  margin-top: 20px;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  font-size: 12px;
+  color: #9ca3af;
+  letter-spacing: 1px;
+}
+
+/* Logout Button */
 .logout-btn {
   background: linear-gradient(90deg, #ff4b2b, #ff416c);
   color: white;
   border: none;
   border-radius: 10px;
-  margin: 25px;
+  margin: 20px;
   padding: 12px;
   font-size: 15px;
   cursor: pointer;
   transition: 0.3s ease;
 }
-
 .logout-btn:hover {
   background: linear-gradient(90deg, #e63946, #f72585);
-  transform: translateY(-2px);
+  transform: translateY(-3px);
 }
 
-/* 📊 Main Content */
+/* ================================
+   📌 MAIN CONTENT AREA
+=================================== */
 .admin-main {
   flex-grow: 1;
   background: #f8faff;
-  padding: 40px;
+  padding: 45px;
   overflow-y: auto;
   position: relative;
+  animation: fadeIn 0.4s ease;
 }
 
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Main headings */
 .admin-main h2,
 .admin-main h3 {
   color: #1a1a2e;
+  margin-bottom: 20px;
 }
 
-/* 🧊 Glass card style for admin pages */
+/* ================================
+   🧊 Modern Glass Cards
+=================================== */
 .admin-card {
   background: rgba(255, 255, 255, 0.9);
-  border-radius: 15px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
   padding: 25px 30px;
   margin-bottom: 30px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .admin-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
 }
 
-/* 📱 Responsive Sidebar */
+/* ================================
+   👍 RESPONSIVE SIDEBAR
+=================================== */
 @media (max-width: 900px) {
   .admin-sidebar {
-    width: 80px;
-  }
-
-  .sidebar-link {
-    justify-content: center;
-    font-size: 0;
-  }
-
-  .sidebar-link::before {
-    font-size: 20px;
-    content: attr(data-icon);
+    width: 75px;
   }
 
   .sidebar-header h2,
@@ -137,13 +156,31 @@
     display: none;
   }
 
+  .sidebar-link {
+    justify-content: center;
+    font-size: 0;
+    padding: 18px 0;
+  }
+
+  .sidebar-link::after {
+    font-size: 20px;
+    content: attr(data-icon);
+    color: #e0e0e0;
+  }
+
+  .sidebar-link:hover::after {
+    color: #00c6ff;
+  }
+
   .logout-btn {
+    font-size: 12px;
     margin: 10px;
-    font-size: 13px;
   }
 }
 
-/* 🔝 Scrollbar Style */
+/* ================================
+   🔝 Scrollbar Style
+=================================== */
 .admin-main::-webkit-scrollbar {
   width: 8px;
 }
