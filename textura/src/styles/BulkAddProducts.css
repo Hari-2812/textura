@@ -1,54 +1,173 @@
+/* Minimalistic black & white styling for bulk add form */
+
 .bulk-container {
   padding: 20px;
+  background: #fff;
+  color: #000;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 }
 
+/* Heading */
+.bulk-heading {
+  margin: 0 0 12px 0;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+/* Table */
 .bulk-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 15px;
-  background: white;
+  margin-top: 12px;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.03);
 }
 
 .bulk-table th,
 .bulk-table td {
   padding: 10px;
   border-bottom: 1px solid #eee;
-  font-size: 14px;
+  font-size: 13px;
+  vertical-align: top;
 }
 
 .bulk-table th {
-  background: #f4f4f4;
-  font-weight: 600;
+  background: #fafafa;
+  font-weight: 700;
+  color: #111;
+  text-align: left;
+  font-size: 13px;
 }
 
+/* Inputs */
+.text-input {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #e6e6e6;
+  border-radius: 6px;
+  background: #fff;
+  font-size: 13px;
+  color: #111;
+  outline: none;
+}
+
+.text-input:focus {
+  box-shadow: 0 0 0 3px rgba(0,0,0,0.03);
+}
+
+/* Sizes cell */
+.sizes-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.no-sizes-note {
+  font-size: 12px;
+  color: #666;
+  padding: 6px 0;
+}
+
+/* Each size row inside the cell */
+.size-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.size-select {
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid #e6e6e6;
+  background: #fff;
+  font-size: 13px;
+}
+
+.stock-input {
+  width: 80px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid #e6e6e6;
+  font-size: 13px;
+}
+
+.small-icon-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 6px;
+  line-height: 1;
+  color: #222;
+  border-radius: 6px;
+}
+
+.small-icon-btn:hover {
+  background: rgba(0,0,0,0.04);
+}
+
+/* Add size button inside cell */
+.add-size-btn {
+  margin-top: 4px;
+  padding: 6px 8px;
+  font-size: 13px;
+  border-radius: 6px;
+  border: 1px dashed #ddd;
+  background: transparent;
+  cursor: pointer;
+  color: #111;
+  align-self: flex-start;
+}
+
+/* Selected images small note */
+.selected-count {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: #666;
+}
+
+/* Actions */
 .bulk-actions {
-  margin-top: 15px;
+  margin-top: 16px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
 }
 
-.add-row-btn {
-  padding: 8px 12px;
-  border: none;
-  background: #1976d2;
-  color: white;
-  border-radius: 4px;
+.primary-btn {
+  padding: 9px 14px;
+  border-radius: 8px;
+  border: 1px solid #111;
+  background: #fff;
+  color: #111;
   cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
 }
 
+.primary-btn:hover {
+  background: #111;
+  color: #fff;
+}
+
+/* Upload button variant */
 .upload-btn {
-  padding: 8px 12px;
-  margin-left: 10px;
-  border: none;
-  background: #43a047;
-  color: white;
-  border-radius: 4px;
-  cursor: pointer;
+  border-color: #111;
 }
 
-.remove-row-btn {
-  padding: 6px 10px;
-  border: none;
-  background: #e53935;
-  color: white;
-  border-radius: 4px;
-  cursor: pointer;
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .size-row {
+    flex-wrap: wrap;
+  }
+
+  .stock-input {
+    width: 100%;
+  }
+
+  .size-select {
+    width: 100%;
+  }
 }

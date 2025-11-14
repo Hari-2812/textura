@@ -39,7 +39,7 @@ router.post("/bulk", upload.any(), async (req, res) => {
       });
     }
 
-    // Group files by dynamic field: images_0, images_1...
+    // Group files by images_0, images_1 etc.
     const groupedImages = {};
     req.files.forEach((file) => {
       if (!groupedImages[file.fieldname]) {
@@ -51,7 +51,7 @@ router.post("/bulk", upload.any(), async (req, res) => {
       });
     });
 
-    // Create all products
+    // Create products
     for (let i = 0; i < products.length; i++) {
       const p = products[i];
 
@@ -60,13 +60,17 @@ router.post("/bulk", upload.any(), async (req, res) => {
         price: p.price,
         discountPrice: p.discountPrice || null,
         category: p.category,
-        sizes:
-          typeof p.sizes === "string"
-            ? p.sizes.split(",").map((s) => s.trim())
-            : [],
-        stock: p.stock || 0,
+
+        // ⭐ Correct Size Structure
+        sizes: Array.isArray(p.sizes)
+          ? p.sizes.map((s) => ({
+              label: s.label,
+              stock: Number(s.stock) || 0,
+            }))
+          : [],
+
         description: p.description,
-        isFeatured: p.isFeatured || false,
+        isFeatured: Boolean(p.isFeatured),
         productCode: p.productCode || "",
         images: groupedImages[`images_${i}`] || [],
       });
@@ -83,7 +87,7 @@ router.post("/bulk", upload.any(), async (req, res) => {
 });
 
 /* ============================================================
-   3️⃣ Get Single Product by ID  (must be BELOW /bulk)
+   3️⃣ Get Single Product by ID
 ============================================================ */
 router.get("/:id", async (req, res) => {
   try {
@@ -107,7 +111,7 @@ router.get("/:id", async (req, res) => {
 });
 
 /* ============================================================
-   4️⃣ Update Product (add/remove images)
+   4️⃣ Update Product (Fully Updated for Age-Based Sizes)
 ============================================================ */
 router.put("/:id", upload.any(), async (req, res) => {
   try {
@@ -120,7 +124,9 @@ router.put("/:id", upload.any(), async (req, res) => {
       });
     }
 
-    // Remove selected images
+    /* --------------------------------------------
+       ⭐ Remove selected images
+    -------------------------------------------- */
     let removeImages = [];
     if (req.body.removeImages) {
       try {
@@ -148,7 +154,9 @@ router.put("/:id", upload.any(), async (req, res) => {
       });
     }
 
-    // Add new uploaded images
+    /* --------------------------------------------
+       ⭐ Add new uploaded images
+    -------------------------------------------- */
     if (req.files && req.files.length > 0) {
       const newImgs = req.files.map((file) => ({
         url: file.path,
@@ -157,14 +165,15 @@ router.put("/:id", upload.any(), async (req, res) => {
       product.images.push(...newImgs);
     }
 
-    // Update product fields
+    /* --------------------------------------------
+       ⭐ Update simple fields
+    -------------------------------------------- */
     const {
       name,
       price,
       discountPrice,
       category,
       sizes,
-      stock,
       description,
       isFeatured,
       productCode,
@@ -174,12 +183,31 @@ router.put("/:id", upload.any(), async (req, res) => {
     if (price) product.price = price;
     if (discountPrice !== undefined) product.discountPrice = discountPrice;
     if (category) product.category = category;
-    if (sizes) product.sizes = sizes.split(",").map((s) => s.trim());
-    if (stock) product.stock = stock;
     if (description) product.description = description;
+    if (productCode) product.productCode = productCode;
 
     product.isFeatured = isFeatured === "true";
-    product.productCode = productCode || "";
+
+    /* --------------------------------------------
+       ⭐ Update Sizes (Age-Based)
+       Expecting JSON string from frontend
+       Example:
+       sizes: '[{"label":"5-6Y","stock":8}]'
+    -------------------------------------------- */
+    if (sizes) {
+      try {
+        const parsed = JSON.parse(sizes);
+
+        if (Array.isArray(parsed)) {
+          product.sizes = parsed.map((s) => ({
+            label: s.label,
+            stock: Number(s.stock) || 0,
+          }));
+        }
+      } catch (err) {
+        console.log("❌ Size JSON parse error:", err);
+      }
+    }
 
     await product.save();
 
@@ -214,10 +242,12 @@ router.delete("/:id", async (req, res) => {
         message: "Product not found",
       });
 
+    // Remove from Cloudinary
     for (const img of product.images) {
-      let publicId = typeof img === "string"
-        ? img.split("/").pop().split(".")[0]
-        : img.public_id;
+      let publicId =
+        typeof img === "string"
+          ? img.split("/").pop().split(".")[0]
+          : img.public_id;
 
       if (publicId) {
         try {

@@ -62,7 +62,53 @@
   margin-bottom: 1rem;
 }
 
-/* ✅ Size Selection */
+/* ============================================= */
+/*           ⭐ AGE-BASED SIZE SELECTOR           */
+/* ============================================= */
+
+.size-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.size-box {
+  background: #f1f1f1;
+  border: 2px solid #dcdcdc;
+  border-radius: 10px;
+  padding: 10px 0;
+  text-align: center;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+/* Hover */
+.size-box:hover:not(.disabled) {
+  border-color: #06d6a0;
+  background: #eafff8;
+}
+
+
+/* Active size */
+.size-box.active {
+  background: #cbfff0;
+  border-color: #06d6a0;
+  color: #0c735d;
+}
+
+/* Disabled (out-of-stock) */
+.size-box.disabled {
+  background: #e7e7e7 !important;
+  border-color: #ccc !important;
+  color: #999;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
 .size-selector {
   margin-bottom: 1.5rem;
 }
@@ -75,6 +121,7 @@
 
 .sizes {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.7rem;
 }
 
@@ -89,14 +136,30 @@
   transition: all 0.3s ease;
 }
 
-.size-btn:hover,
-.size-btn.active {
+.size-btn.active,
+.size-btn:hover:not(.disabled) {
   background: #198754;
   color: #fff;
   border-color: #198754;
 }
 
-/* ✅ Description */
+/* ❌ Disabled out-of-stock sizes */
+.size-btn.disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  background: #e8e8e8;
+  border-color: #ccc;
+}
+
+/* ⭐ Height Guide */
+.height-guide {
+  margin-top: 0.7rem;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+/* ============================================= */
+/* Description */
 .desc {
   font-size: 1rem;
   line-height: 1.6;
@@ -105,7 +168,8 @@
   max-width: 500px;
 }
 
-/* ✅ Buttons */
+/* ============================================= */
+/* Buttons */
 .button-group {
   display: flex;
   gap: 1rem;
@@ -127,31 +191,30 @@
   gap: 8px;
 }
 
-/* ✅ Add to Cart (matches your site’s green theme) */
+/* Add to Cart */
 .add-btn {
   background-color: #198754;
   color: white;
   box-shadow: 0 3px 10px rgba(25, 135, 84, 0.3);
 }
-
 .add-btn:hover {
   background-color: #157347;
   transform: translateY(-2px);
 }
 
-/* ✅ Try Now Button (modern gradient) */
+/* Try Now */
 .try-btn {
   background: linear-gradient(90deg, #ffb703, #ff8800);
   color: white;
   box-shadow: 0 3px 10px rgba(255, 136, 0, 0.3);
 }
-
 .try-btn:hover {
   background: linear-gradient(90deg, #ff9500, #ff6f00);
   transform: translateY(-2px);
 }
 
-/* ✅ Recommended Section */
+/* ============================================= */
+/* Recommended Section */
 .recommended-section {
   text-align: left;
   margin-top: 3rem;
@@ -167,7 +230,7 @@
   padding-left: 0.5rem;
 }
 
-/* ✅ Grid (4 per row) */
+/* Grid */
 .recommended-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -183,7 +246,6 @@
   transition: all 0.3s ease;
   text-align: center;
 }
-
 .recommended-card:hover {
   transform: translateY(-5px);
 }
@@ -207,7 +269,7 @@
   font-weight: 600;
 }
 
-/* ✅ Small Add to Cart Button */
+/* Small add to cart */
 .small-cart-btn {
   background-color: #198754;
   color: white;
@@ -222,13 +284,13 @@
   gap: 6px;
   transition: all 0.3s ease;
 }
-
 .small-cart-btn:hover {
   background-color: #157347;
   transform: translateY(-2px);
 }
 
-/* ✅ Responsive */
+/* ============================================= */
+/* Responsive */
 @media (max-width: 1024px) {
   .recommended-grid {
     grid-template-columns: repeat(3, 1fr);
