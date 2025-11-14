@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from "react-route
 
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+
 import Home from "./pages/Home";
 import ProductDetails from "./pages/ProductDetails";
 import BoysPage from "./pages/BoysPage";
@@ -27,39 +28,43 @@ import DeliveryPartner from "./pages/admin/DeliveryPartner";
 import TrackOrder from "./pages/admin/TrackOrdersPage";
 
 import { CartProvider } from "./context/CartContext";
-import { UserProvider, useUser } from "./context/UserContext";
+import { UserProvider } from "./context/UserContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 const AppContent = () => {
   const [showFilters, setShowFilters] = useState(false);
-  const { user } = useUser();
   const location = useLocation();
 
-  // Hide header/footer for admin pages
-  const isAdminPage = location.pathname.startsWith("/admin");
+  // Hide header/footer on these pages:
+  const hideHeaderFooter =
+    location.pathname === "/login" ||
+    location.pathname === "/signup" ||
+    location.pathname === "/forgot-password" ||
+    location.pathname.startsWith("/admin");
 
   return (
     <>
-      {!isAdminPage && <Header onFilterToggle={() => setShowFilters(prev => !prev)} />}
+      {!hideHeaderFooter && (
+        <Header onFilterToggle={() => setShowFilters((prev) => !prev)} />
+      )}
 
       <main style={{ minHeight: "80vh" }}>
         <Routes>
-          
-          {/* Admin Area */}
+          {/* Public Routes */}
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+
+          {/* Admin */}
           <Route path="/admin-login" element={<AdminLogin />} />
           <Route path="/admin/*" element={<AdminLayout />} />
 
           {/* Delivery */}
           <Route path="/delivery" element={<DeliveryOrders />} />
           <Route path="/delivery-partner" element={<DeliveryPartner />} />
-
-          {/* Public Auth */}
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/admin/track-order/:id" element={<TrackOrder />} />
 
-          {/* Protected User Pages */}
+          {/* Protected User Routes */}
           <Route
             path="/"
             element={
@@ -68,6 +73,7 @@ const AppContent = () => {
               </ProtectedRoute>
             }
           />
+
           <Route
             path="/boys"
             element={
@@ -76,6 +82,7 @@ const AppContent = () => {
               </ProtectedRoute>
             }
           />
+
           <Route
             path="/girls"
             element={
@@ -84,6 +91,7 @@ const AppContent = () => {
               </ProtectedRoute>
             }
           />
+
           <Route
             path="/about"
             element={
@@ -92,6 +100,7 @@ const AppContent = () => {
               </ProtectedRoute>
             }
           />
+
           <Route
             path="/contact"
             element={
@@ -100,6 +109,7 @@ const AppContent = () => {
               </ProtectedRoute>
             }
           />
+
           <Route
             path="/cart"
             element={
@@ -108,6 +118,7 @@ const AppContent = () => {
               </ProtectedRoute>
             }
           />
+
           <Route
             path="/checkout"
             element={
@@ -116,6 +127,7 @@ const AppContent = () => {
               </ProtectedRoute>
             }
           />
+
           <Route
             path="/profile"
             element={
@@ -124,6 +136,7 @@ const AppContent = () => {
               </ProtectedRoute>
             }
           />
+
           <Route
             path="/wishlist"
             element={
@@ -132,6 +145,7 @@ const AppContent = () => {
               </ProtectedRoute>
             }
           />
+
           <Route
             path="/offers"
             element={
@@ -140,6 +154,7 @@ const AppContent = () => {
               </ProtectedRoute>
             }
           />
+
           <Route
             path="/language"
             element={
@@ -149,7 +164,6 @@ const AppContent = () => {
             }
           />
 
-          {/* Product Details */}
           <Route
             path="/product/:id"
             element={
@@ -158,11 +172,10 @@ const AppContent = () => {
               </ProtectedRoute>
             }
           />
-
         </Routes>
       </main>
 
-      {!isAdminPage && <Footer />}
+      {!hideHeaderFooter && <Footer />}
     </>
   );
 };

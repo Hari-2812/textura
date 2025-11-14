@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import "../styles/SignupPage.css";
+import "./register.css"; // Your separated CSS
 
-const SignupPage = () => {
+const Register = () => {
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
@@ -16,7 +16,7 @@ const SignupPage = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSignup = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
 
     try {
@@ -29,21 +29,21 @@ const SignupPage = () => {
       localStorage.setItem("userToken", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
 
-      alert("Account created successfully!");
-      navigate("/");
+      alert("Registration successful!");
+      navigate("/profile");
     } catch (err) {
-      alert(err.response?.data?.message || "Signup failed");
+      alert(err.response?.data?.message || "Registration failed");
     }
   };
 
   return (
-    <div className="signup-container">
-      <div className="signup-box">
+    <div className="register-container">
+      <div className="register-box">
 
         <h2>Create Account</h2>
-        <p className="subtitle">Join Textura — Style starts here!</p>
+        <p className="subtitle">Join Textura and enjoy the best styles!</p>
 
-        <form onSubmit={handleSignup} className="signup-form">
+        <form onSubmit={handleRegister}>
           <input
             type="text"
             name="name"
@@ -55,7 +55,7 @@ const SignupPage = () => {
           <input
             type="email"
             name="email"
-            placeholder="Email Address"
+            placeholder="Email"
             required
             onChange={handleChange}
           />
@@ -68,8 +68,8 @@ const SignupPage = () => {
             onChange={handleChange}
           />
 
-          <button type="submit" className="signup-btn">
-            Sign Up
+          <button type="submit" className="register-btn">
+            Register
           </button>
         </form>
 
@@ -82,4 +82,4 @@ const SignupPage = () => {
   );
 };
 
-export default SignupPage;
+export default Register;

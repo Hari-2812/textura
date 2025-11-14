@@ -1,0 +1,77 @@
+.forgot-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #fdfbfb, #ebedee);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+.forgot-box {
+  background: #fff;
+  padding: 2.8rem;
+  width: 100%;
+  max-width: 380px;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+  animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.forgot-box h2 {
+  font-size: 2rem;
+  color: #073b4c;
+  margin-bottom: 0.3rem;
+}
+
+.subtitle {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+.forgot-box input {
+  width: 100%;
+  padding: 0.9rem;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.forgot-btn {
+  width: 100%;
+  padding: 0.9rem;
+  background: #073b4c;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.forgot-btn:hover {
+  background: #06d6a0;
+  transform: translateY(-2px);
+}
+
+.redirect-text {
+  margin-top: 1.2rem;
+  font-size: 0.95rem;
+}
+
+.redirect-text span {
+  color: #ef476f;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.redirect-text span:hover {
+  text-decoration: underline;
+}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../styles/Header.css";
-import { useNavigate, useLocation } from "react-router-dom"; // ✅ Corrected import
+import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useCart } from "../context/CartContext";
 import { useUser } from "../context/UserContext";
@@ -15,6 +15,7 @@ import {
   FiHelpCircle,
   FiInfo,
 } from "react-icons/fi";
+
 import {
   FaBars,
   FaShoppingCart,
@@ -31,12 +32,20 @@ const Header = ({ onFilterToggle }) => {
   const [showProfile, setShowProfile] = useState(false);
 
   const navigate = useNavigate();
-  const location = useLocation(); // ✅ Detect current page
+  const location = useLocation();
   const { t } = useTranslation();
   const { cartCount } = useCart();
   const { user, setUser } = useUser();
 
-  // ✅ Identify if we’re on a product page
+  // ⭐ When user refreshes → load saved user from localStorage
+  useEffect(() => {
+    const savedUser = localStorage.getItem("user");
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
+    }
+  }, []);
+
+  // ⭐ Detect if we are on Boys/Girls/Products page
   const isProductPage =
     location.pathname.includes("/boys") ||
     location.pathname.includes("/girls") ||
@@ -45,8 +54,9 @@ const Header = ({ onFilterToggle }) => {
   const toggleMenu = () => setMenuOpen(!menuOpen);
   const closeMenu = () => setMenuOpen(false);
 
+  // Close when clicking outside
   useEffect(() => {
-    const handleOutsideClick = (e) => {
+    const handleClick = (e) => {
       if (
         menuOpen &&
         !e.target.closest(".sidebar") &&
@@ -62,52 +72,62 @@ const Header = ({ onFilterToggle }) => {
         setShowProfile(false);
       }
     };
-    document.addEventListener("click", handleOutsideClick);
-    return () => document.removeEventListener("click", handleOutsideClick);
+
+    document.addEventListener("click", handleClick);
+    return () => document.removeEventListener("click", handleClick);
   }, [menuOpen, showProfile]);
 
-  // ✅ Search Logic
+  // ⭐ Search Logic
   const handleSearchChange = (e) => {
     const value = e.target.value.toLowerCase();
     setSearch(value);
+
     if (value.trim() === "") {
       setSuggestions([]);
       return;
     }
+
     const filtered = products.filter((p) =>
       p.name.toLowerCase().includes(value)
     );
+
     setSuggestions(filtered.slice(0, 5));
   };
 
   const handleSuggestionClick = (product) => {
     setSearch(product.name);
     setSuggestions([]);
+
     if (product.category === "boys") navigate("/boys");
     if (product.category === "girls") navigate("/girls");
   };
 
+  // ⭐ Corrected Logout → clears token & user
   const handleLogout = () => {
+    localStorage.removeItem("userToken");
     localStorage.removeItem("user");
+
     setUser(null);
     setShowProfile(false);
-    alert("Logged out successfully!");
-    navigate("/");
+
+    navigate("/login");
   };
 
   return (
     <>
-      {/* 🌟 Offer Bar Component */}
+      {/* ⭐ Offer Bar */}
       <OfferBar />
 
-      {/* 🧭 Header - Desktop & Mobile */}
+      {/* ⭐ Header */}
       <header className="header">
         <nav className="navbar">
-          {/* Left Section - Menu + Logo */}
+
+          {/* Left: Menu + Logo */}
           <div className="navbar-left">
             <div className="menu-icon" onClick={toggleMenu}>
               <FaBars />
             </div>
+
             <div className="logo" onClick={() => navigate("/")}>
               <img
                 src="https://cdn-icons-png.flaticon.com/512/2769/2769346.png"
@@ -126,6 +146,8 @@ const Header = ({ onFilterToggle }) => {
                 onChange={handleSearchChange}
               />
               <FaSearch className="search-icon" />
+
+              {/* Search suggestions */}
               {suggestions.length > 0 && (
                 <ul className="search-suggestions">
                   {suggestions.map((item) => (
@@ -142,7 +164,7 @@ const Header = ({ onFilterToggle }) => {
             </div>
           </div>
 
-          {/* Right Section - Desktop Only */}
+          {/* Right section */}
           <div className="navbar-right">
             <div className="nav-item" onClick={() => navigate("/wishlist")}>
               <FaHeart />
@@ -152,14 +174,13 @@ const Header = ({ onFilterToggle }) => {
             <div className="nav-item" onClick={() => navigate("/cart")}>
               <FaShoppingCart />
               {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
-              <span>{t("cart") || "Cart"}</span>
+              <span>{t("cart")}</span>
             </div>
 
-            {/* ✅ Show Filter on product pages, Offers otherwise */}
             {isProductPage ? (
               <div className="nav-item filter-btn" onClick={onFilterToggle}>
                 <FaFilter />
-                <span>{t("filter") || "Filter"}</span>
+                <span>{t("filter")}</span>
               </div>
             ) : (
               <div
@@ -167,11 +188,11 @@ const Header = ({ onFilterToggle }) => {
                 onClick={() => navigate("/offers")}
               >
                 <FaCompass />
-                <span>{t("offers") || "Offers"}</span>
+                <span>{t("offers")}</span>
               </div>
             )}
 
-            {/* Profile Section - Desktop */}
+            {/* ⭐ Profile */}
             <div
               className={`nav-item profile-section ${
                 showProfile ? "active" : ""
@@ -183,9 +204,11 @@ const Header = ({ onFilterToggle }) => {
                 alt="User Avatar"
                 className="profile-avatar"
               />
-              <span className="profile-username">{user?.name || "Guest"}</span>
 
-              {/* Dropdown Menu */}
+              <span className="profile-username">
+                {user?.name || "Guest"}
+              </span>
+
               {showProfile && (
                 <div className="profile-dropdown">
                   <p
@@ -204,6 +227,8 @@ const Header = ({ onFilterToggle }) => {
                   >
                     My Orders
                   </p>
+
+                  {/* ⭐ LOGOUT BUTTON */}
                   <p onClick={handleLogout}>Logout</p>
                 </div>
               )}
@@ -212,9 +237,8 @@ const Header = ({ onFilterToggle }) => {
         </nav>
       </header>
 
-      {/* 📱 Bottom Navigation - Mobile Only */}
+      {/* ⭐ Mobile Bottom Navigation */}
       <div className="bottom-nav">
-        {/* Wishlist */}
         <div
           className={`bottom-nav-item ${
             location.pathname === "/wishlist" ? "active" : ""
@@ -225,7 +249,6 @@ const Header = ({ onFilterToggle }) => {
           <span>Wishlist</span>
         </div>
 
-        {/* Cart */}
         <div
           className={`bottom-nav-item ${
             location.pathname === "/cart" ? "active" : ""
@@ -239,7 +262,6 @@ const Header = ({ onFilterToggle }) => {
           <span>Cart</span>
         </div>
 
-        {/* Dynamic Filter / Explore */}
         {isProductPage ? (
           <div className="bottom-nav-item" onClick={onFilterToggle}>
             <FaFilter />
@@ -257,7 +279,6 @@ const Header = ({ onFilterToggle }) => {
           </div>
         )}
 
-        {/* Profile */}
         <div
           className={`bottom-nav-item ${
             location.pathname === "/profile" ? "active" : ""
@@ -273,7 +294,7 @@ const Header = ({ onFilterToggle }) => {
         </div>
       </div>
 
-      {/* 📂 Sidebar */}
+      {/* ⭐ Sidebar */}
       <div className={`sidebar ${menuOpen ? "open" : ""}`}>
         <div className="sidebar-header">
           <div className="sidebar-logo">
@@ -283,58 +304,34 @@ const Header = ({ onFilterToggle }) => {
             />
             <h2>Menu</h2>
           </div>
+
           <span className="close-btn" onClick={closeMenu}>
             &times;
           </span>
         </div>
 
         <ul className="sidebar-links">
-          <li
-            onClick={() => {
-              navigate("/");
-              closeMenu();
-            }}
-          >
+          <li onClick={() => { navigate("/"); closeMenu(); }}>
             <FiHome className="icon" /> {t("home")}
           </li>
-          <li
-            onClick={() => {
-              navigate("/language");
-              closeMenu();
-            }}
-          >
+
+          <li onClick={() => { navigate("/language"); closeMenu(); }}>
             <FiGlobe className="icon" /> {t("chooseLanguage")}
           </li>
-          <li
-            onClick={() => {
-              navigate("/orders");
-              closeMenu();
-            }}
-          >
+
+          <li onClick={() => { navigate("/orders"); closeMenu(); }}>
             <FiPackage className="icon" /> {t("orders")}
           </li>
-          <li
-            onClick={() => {
-              navigate("/profile");
-              closeMenu();
-            }}
-          >
+
+          <li onClick={() => { navigate("/profile"); closeMenu(); }}>
             <FiUser className="icon" /> {t("account")}
           </li>
-          <li
-            onClick={() => {
-              navigate("/help");
-              closeMenu();
-            }}
-          >
+
+          <li onClick={() => { navigate("/help"); closeMenu(); }}>
             <FiHelpCircle className="icon" /> {t("help")}
           </li>
-          <li
-            onClick={() => {
-              navigate("/about");
-              closeMenu();
-            }}
-          >
+
+          <li onClick={() => { navigate("/about"); closeMenu(); }}>
             <FiInfo className="icon" /> {t("about")}
           </li>
         </ul>

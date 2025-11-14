@@ -1,117 +1,68 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { useUser } from "../context/UserContext";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
-import "../styles/Auth.css";
+import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import "../styles/LoginPage.css";   // ✅ Correct path
 
-const LoginPage = () => {
+const Login = () => {
   const navigate = useNavigate();
-  const { login, user } = useUser();
-
   const [form, setForm] = useState({ email: "", password: "" });
-  const [error, setError] = useState("");
-  const [focusedInput, setFocusedInput] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-
-  // 🔄 Redirect if already logged in
-  useEffect(() => {
-    if (user) navigate("/");
-  }, [user, navigate]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const togglePassword = () => setShowPassword((prev) => !prev);
-
-  const handleSubmit = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (!form.email || !form.password) {
-      setError("Please fill in both fields!");
-      return;
-    }
 
-    const result = login(form.email, form.password);
+    try {
+      const res = await axios.post(
+        "http://localhost:5000/api/users/login",
+        form
+      );
 
-    if (result.success) {
-      setError("");
-      navigate("/"); // ✅ Redirect to home only after successful login
-    } else {
-      setError(result.message);
+      localStorage.setItem("userToken", res.data.token);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+
+      alert("Login successful!");
+      navigate("/");
+    } catch (err) {
+      alert(err.response?.data?.message || "Invalid login");
     }
   };
 
   return (
-    <div className="auth-wrapper">
-      {/* 👦 Animated Kid Section */}
-      <div className="kid-section">
-        <div className="kid-container">
-          <img src="/images/kid-base.png" alt="Kid" className="kid-base" />
-          <img
-            src="/images/kid-eyes.png"
-            alt="Eyes"
-            className={`kid-eyes ${focusedInput === "email" ? "look-name" : ""} ${
-              focusedInput === "password" ? "hide" : ""
-            } ${showPassword ? "peek" : ""}`}
+    <div className="login-container">
+      <div className="login-box">
+        <h2>Welcome Back</h2>
+        <p className="subtitle">Login to continue shopping</p>
+
+        <form onSubmit={handleLogin} className="login-form">
+          <input
+            type="email"
+            name="email"
+            placeholder="Email Address"
+            required
+            onChange={handleChange}
           />
-          <img
-            src="/images/kid-eyes-closed.png"
-            alt="Closed Eyes"
-            className={`kid-eyes-closed ${
-              focusedInput === "password" && !showPassword ? "show" : ""
-            }`}
+
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            required
+            onChange={handleChange}
           />
-        </div>
-      </div>
 
-      {/* 🔐 Login Form Section */}
-      <div className="login-section">
-        <div className="login-box">
-          <h2>Welcome Back!</h2>
-          <p className="subtitle">Please log in to continue</p>
+          <button type="submit" className="login-btn">Login</button>
+        </form>
 
-          {error && <p className="error">{error}</p>}
-
-          <form onSubmit={handleSubmit}>
-            <input
-              type="email"
-              name="email"
-              placeholder="Enter your email"
-              value={form.email}
-              onChange={handleChange}
-              onFocus={() => setFocusedInput("email")}
-              onBlur={() => setFocusedInput("")}
-            />
-
-            <div className="password-field">
-              <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                placeholder="Enter your password"
-                value={form.password}
-                onChange={handleChange}
-                onFocus={() => setFocusedInput("password")}
-                onBlur={() => setFocusedInput("")}
-              />
-              <span className="eye-icon" onClick={togglePassword}>
-                {showPassword ? <FaEyeSlash /> : <FaEye />}
-              </span>
-            </div>
-
-            <div className="forgot-password-link">
-              <Link to="/forgot-password">Forgot Password?</Link>
-            </div>
-
-            <button type="submit">Login</button>
-          </form>
-
-          <p className="redirect-text">
-            Don’t have an account? <Link to="/signup">Sign up</Link>
-          </p>
-        </div>
+        <p className="redirect-text">
+          Don't have an account?
+          <span onClick={() => navigate("/signup")}> Register</span>
+        </p>
       </div>
     </div>
   );
 };
 
-export default LoginPage;
+export default Login;

@@ -1,100 +1,96 @@
-/* 🌸 Shared Login / Signup Styles (Pastel Theme) */
-.auth-container {
+/* Background */
+.signup-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #fdfbfb, #ebedee);
   display: flex;
-  align-items: center;
   justify-content: center;
-  height: 100vh;
-  background: linear-gradient(120deg, #e0f7fa, #fce4ec);
+  align-items: center;
   padding: 1rem;
 }
 
-.auth-card {
-  background: #ffffff;
-  border-radius: 14px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+/* Signup Card */
+.signup-box {
+  background: white;
+  padding: 2.8rem;
   width: 100%;
-  max-width: 380px;
-  padding: 2rem;
+  max-width: 400px;
+  border-radius: 16px;
+  box-shadow: 0 14px 35px rgba(0,0,0,0.1);
   text-align: center;
-  animation: fadeIn 0.4s ease-in;
+  animation: slideUp 0.4s ease-out;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
 
-.auth-card h2 {
+/* Title */
+.signup-box h2 {
   color: #073b4c;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
+  font-size: 2rem;
+  margin-bottom: 0.4rem;
 }
 
-.subtitle {
+/* Subtitle */
+.signup-box p {
   color: #555;
-  font-size: 0.9rem;
   margin-bottom: 1.5rem;
 }
 
-form input {
+/* Inputs */
+.signup-box input {
   width: 100%;
-  margin-bottom: 1rem;
-  padding: 0.8rem;
-  border-radius: 8px;
+  padding: 0.95rem;
+  border-radius: 10px;
   border: 1px solid #ccc;
-  outline: none;
-  font-size: 0.95rem;
-  transition: 0.3s ease;
+  margin-bottom: 1rem;
+  font-size: 1rem;
 }
 
-form input:focus {
+.signup-box input:focus {
   border-color: #06d6a0;
-  box-shadow: 0 0 5px rgba(6, 214, 160, 0.3);
+  box-shadow: 0px 0px 6px rgba(6,214,160,0.4);
 }
 
-.auth-btn {
+/* Button */
+.signup-btn {
+  width: 100%;
+  padding: 0.95rem;
   background: #073b4c;
   color: white;
   border: none;
-  border-radius: 8px;
-  width: 100%;
-  padding: 0.8rem;
+  border-radius: 10px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: 0.3s;
 }
 
-.auth-btn:hover {
+.signup-btn:hover {
   background: #06d6a0;
   transform: translateY(-2px);
 }
 
-.redirect-text {
+/* Login Link */
+.signup-redirect {
   margin-top: 1rem;
-  font-size: 0.9rem;
 }
 
-.redirect-text a {
+.signup-redirect span {
   color: #ef476f;
+  cursor: pointer;
   font-weight: 600;
-  text-decoration: none;
 }
 
-.redirect-text a:hover {
+.signup-redirect span:hover {
   text-decoration: underline;
 }
 
-.error-msg {
-  color: #ef476f;
-  background: #ffe9ec;
-  padding: 0.5rem;
-  border-radius: 6px;
+/* Error */
+.signup-error {
+  background: #ffe5e5;
+  color: #d90429;
+  padding: 0.7rem;
+  border-radius: 8px;
   margin-bottom: 1rem;
-  font-size: 0.9rem;
 }

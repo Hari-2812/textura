@@ -1,32 +1,59 @@
 import React, { useState, useEffect } from "react";
-import { girlsProducts } from "../data/girlsProducts";
 import "../styles/GirlsPage.css";
 import "../styles/ProductFilters.css";
 import { useCart } from "../context/CartContext";
+import axios from "axios";
 import ProductCard from "../components/ProductCard";
 
 const GirlsPage = ({ showFilters, setShowFilters }) => {
-  const [filteredProducts, setFilteredProducts] = useState(girlsProducts);
+  const [girlsProducts, setGirlsProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+
   const [price, setPrice] = useState("all");
   const [style, setStyle] = useState("all");
+
   const { addToCart } = useCart();
   const [popup, setPopup] = useState(false);
 
-  // ✅ Filter Logic
+  // ⭐ Fetch products from backend
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/products");
+        const allProducts = res.data.products || [];
+
+        // ⭐ Category "2" or "girls"
+        const girls = allProducts.filter(
+          (p) =>
+            p.category === "2" ||
+            p.category.toLowerCase() === "girls"
+        );
+
+        setGirlsProducts(girls);
+        setFilteredProducts(girls);
+      } catch (error) {
+        console.log("Error fetching products:", error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  // ⭐ Filter Logic
   const handleFilter = () => {
     let filtered = [...girlsProducts];
 
     if (price !== "all") {
       const [min, max] = price.split("-");
       filtered = filtered.filter((p) => {
-        const pr = parseInt(p.price.replace(/[₹,]/g, ""));
+        const pr = parseInt(p.price);
         return pr >= parseInt(min) && pr <= parseInt(max);
       });
     }
 
     if (style !== "all") {
       filtered = filtered.filter((p) =>
-        p.style?.toLowerCase().includes(style.toLowerCase())
+        p.description?.toLowerCase().includes(style.toLowerCase())
       );
     }
 
@@ -34,14 +61,14 @@ const GirlsPage = ({ showFilters, setShowFilters }) => {
     setShowFilters(false);
   };
 
-  // ✅ Reset when filters closed
+  // ⭐ Reset when filters are closed
   useEffect(() => {
     if (!showFilters && filteredProducts.length === 0) {
       setFilteredProducts(girlsProducts);
     }
-  }, [showFilters]);
+  }, [showFilters, girlsProducts, filteredProducts.length]);
 
-  // ✅ Add to Cart Popup
+  // ⭐ Add-to-cart popup
   const showCartPopup = () => {
     setPopup(true);
     setTimeout(() => setPopup(false), 2000);
@@ -51,7 +78,7 @@ const GirlsPage = ({ showFilters, setShowFilters }) => {
     <section className="girls-page">
       <h2>Girls Collection</h2>
 
-      {/* ✅ Filter Popup */}
+      {/* ⭐ Filter Popup */}
       {showFilters && (
         <div className="filter-popup">
           <div className="filter-header">
@@ -89,17 +116,17 @@ const GirlsPage = ({ showFilters, setShowFilters }) => {
         </div>
       )}
 
-      {/* ✅ Overlay */}
+      {/* ⭐ Overlay */}
       {showFilters && (
         <div className="overlay" onClick={() => setShowFilters(false)} />
       )}
 
-      {/* ✅ Product Grid */}
+      {/* ⭐ Product Grid */}
       <div className="girls-container">
         {filteredProducts.length > 0 ? (
           filteredProducts.map((p) => (
             <ProductCard
-              key={p.id}
+              key={p._id}
               product={p}
               onAddToCart={(item) => {
                 addToCart(item);
@@ -112,7 +139,7 @@ const GirlsPage = ({ showFilters, setShowFilters }) => {
         )}
       </div>
 
-      {/* ✅ Popup */}
+      {/* ⭐ Popup */}
       {popup && <div className="popup">🛒 Item added to cart!</div>}
     </section>
   );

@@ -1,66 +1,56 @@
 import React, { useState } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useUser } from "../context/UserContext";
-import "../styles/AdminLogin.css";
 
-const AdminLogin = () => {
+const Login = () => {
   const navigate = useNavigate();
-  const { setUser } = useUser();
-
   const [form, setForm] = useState({ email: "", password: "" });
-  const [error, setError] = useState("");
 
-  const handleChange = (e) =>
+  const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
-  const handleSubmit = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    const { email, password } = form;
 
-    if (email === "admin@textura.com" && password === "admin123") {
-      const adminUser = { name: "Admin", email, role: "admin" };
-      localStorage.setItem("user", JSON.stringify(adminUser));
-      setUser(adminUser);
-      navigate("/admin/dashboard");
-      return;
+    try {
+      const res = await axios.post("http://localhost:5000/api/users/login", form);
+
+      localStorage.setItem("userToken", res.data.token);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+
+      alert("Login successful!");
+      navigate("/"); // redirect to home
+    } catch (err) {
+      alert(err.response?.data?.message || "Invalid login");
     }
-
-    setError("Invalid admin credentials ❌");
   };
 
   return (
-    <div className="admin-login-page">
-      <div className="admin-login-box">
-        <h2>Admin Login</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="input-group">
-            <label>Email</label>
-            <input
-              name="email"
-              type="email"
-              value={form.email}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="input-group">
-            <label>Password</label>
-            <input
-              name="password"
-              type="password"
-              value={form.password}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          {error && <p style={{ color: "#e63946" }}>{error}</p>}
-          <button type="submit" className="login-btn">
-            Login
-          </button>
-        </form>
-      </div>
+    <div className="auth-container">
+      <h2>Login</h2>
+
+      <form onSubmit={handleLogin} className="auth-form">
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          required
+          onChange={handleChange}
+        />
+
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          required
+          onChange={handleChange}
+        />
+
+        <button type="submit">Login</button>
+      </form>
     </div>
   );
 };
 
-export default AdminLogin;
+export default Login;
