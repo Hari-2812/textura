@@ -1,0 +1,57 @@
+.register-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #c3cfe2, #e2ebf0);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+.register-box {
+  background: white;
+  width: 100%;
+  max-width: 370px;
+  padding: 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+  text-align: center;
+  animation: fadeIn2 0.4s;
+}
+
+@keyframes fadeIn2 {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.register-box input {
+  width: 100%;
+  padding: 0.9rem;
+  border: 1px solid #ddd;
+  margin-bottom: 1rem;
+  border-radius: 10px;
+}
+
+.register-box button {
+  width: 100%;
+  padding: 0.85rem;
+  background: #073b4c;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  margin-top: 0.5rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.register-box button:hover {
+  background: #06d6a0;
+}
+
+.register-error {
+  background: #ffe1e1;
+  color: #d90429;
+  padding: 0.7rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}

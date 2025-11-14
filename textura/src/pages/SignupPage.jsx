@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import "../styles/SignupPage.css";
 
 const SignupPage = () => {
   const navigate = useNavigate();
@@ -24,58 +25,59 @@ const SignupPage = () => {
         form
       );
 
-      // ⭐ AUTO LOGIN AFTER REGISTER
+      // Save token + user
       localStorage.setItem("userToken", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
 
       alert("Account created successfully!");
-      navigate("/"); // Redirect to Home
+      navigate("/");
     } catch (err) {
       alert(err.response?.data?.message || "Signup failed");
     }
   };
 
   return (
-    <div className="auth-container">
-      <h2>Create Account</h2>
+    <div className="signup-container">
+      <div className="signup-box">
 
-      <form onSubmit={handleSignup} className="auth-form">
-        <input
-          type="text"
-          name="name"
-          placeholder="Full Name"
-          required
-          onChange={handleChange}
-        />
+        <h2>Create Account</h2>
+        <p className="subtitle">Join Textura — Style starts here!</p>
 
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          required
-          onChange={handleChange}
-        />
+        <form onSubmit={handleSignup} className="signup-form">
+          <input
+            type="text"
+            name="name"
+            placeholder="Full Name"
+            required
+            onChange={handleChange}
+          />
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          required
-          onChange={handleChange}
-        />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email Address"
+            required
+            onChange={handleChange}
+          />
 
-        <button type="submit">Sign Up</button>
-      </form>
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            required
+            onChange={handleChange}
+          />
 
-      <p style={{ marginTop: "15px" }}>
-        Already have an account?
-        <span
-          style={{ color: "blue", cursor: "pointer", marginLeft: "5px" }}
-          onClick={() => navigate("/login")}
-        >
-          Login
-        </span>
-      </p>
+          <button type="submit" className="signup-btn">
+            Sign Up
+          </button>
+        </form>
+
+        <p className="redirect-text">
+          Already have an account?
+          <span onClick={() => navigate("/login")}> Login</span>
+        </p>
+      </div>
     </div>
   );
 };

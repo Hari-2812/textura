@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import "../styles/LoginPage.css";   // ✅ Correct path
 
 const Login = () => {
   const navigate = useNavigate();
@@ -30,39 +31,36 @@ const Login = () => {
   };
 
   return (
-    <div className="auth-container">
-      <h2>Login</h2>
+    <div className="login-container">
+      <div className="login-box">
+        <h2>Welcome Back</h2>
+        <p className="subtitle">Login to continue shopping</p>
 
-      <form onSubmit={handleLogin} className="auth-form">
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          required
-          onChange={handleChange}
-        />
+        <form onSubmit={handleLogin} className="login-form">
+          <input
+            type="email"
+            name="email"
+            placeholder="Email Address"
+            required
+            onChange={handleChange}
+          />
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          required
-          onChange={handleChange}
-        />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            required
+            onChange={handleChange}
+          />
 
-        <button type="submit">Login</button>
-      </form>
+          <button type="submit" className="login-btn">Login</button>
+        </form>
 
-      {/* ⭐ ADD THIS: Register Link */}
-      <p style={{ marginTop: "15px" }}>
-        Don’t have an account?
-        <span
-          style={{ color: "blue", cursor: "pointer", marginLeft: "5px" }}
-          onClick={() => navigate("/signup")}
-        >
-          Register
-        </span>
-      </p>
+        <p className="redirect-text">
+          Don't have an account?
+          <span onClick={() => navigate("/signup")}> Register</span>
+        </p>
+      </div>
     </div>
   );
 };
