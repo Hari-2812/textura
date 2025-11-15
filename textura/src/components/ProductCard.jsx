@@ -8,6 +8,7 @@ const ProductCard = ({ product, onAddToCart }) => {
   const navigate = useNavigate();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
 
+  // ❤️ Toggle wishlist
   const toggleWishlist = (e) => {
     e.stopPropagation();
     if (isInWishlist(product._id)) {
@@ -15,6 +16,22 @@ const ProductCard = ({ product, onAddToCart }) => {
     } else {
       addToWishlist(product);
     }
+  };
+
+  // 🔔 Toast Notification
+  const showToast = (message) => {
+    const container = document.getElementById("toast-container");
+    if (!container) return;
+
+    const toast = document.createElement("div");
+    toast.className = "toast";
+    toast.innerText = message;
+
+    container.appendChild(toast);
+
+    setTimeout(() => {
+      toast.remove();
+    }, 3000);
   };
 
   return (
@@ -29,14 +46,15 @@ const ProductCard = ({ product, onAddToCart }) => {
           alt={product.name}
           className="product-img"
         />
-        {/* wishlist button */}
+
+        {/* ❤️ Wishlist Button */}
         <button
-          className={`wishlist-btn ${
+          className={`pc-wishlist-btn ${
             isInWishlist(product._id) ? "active" : ""
           }`}
           onClick={toggleWishlist}
         >
-          <FaHeart className="heart-icon" />
+          <FaHeart className="pc-wishlist-icon" />
         </button>
       </div>
 
@@ -48,7 +66,13 @@ const ProductCard = ({ product, onAddToCart }) => {
 
       {/* 🛒 Actions */}
       <div className="product-actions">
-        <button className="add-cart-btn" onClick={() => onAddToCart(product)}>
+        <button
+          className="add-cart-btn"
+          onClick={() => {
+            onAddToCart(product);
+            showToast(`${product.name} added to cart`);
+          }}
+        >
           <FaShoppingCart />
           Add to Cart
         </button>

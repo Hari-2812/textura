@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -35,7 +40,6 @@ const AppContent = () => {
   const [showFilters, setShowFilters] = useState(false);
   const location = useLocation();
 
-  // Hide header/footer on these pages:
   const hideHeaderFooter =
     location.pathname === "/login" ||
     location.pathname === "/signup" ||
@@ -64,7 +68,7 @@ const AppContent = () => {
           <Route path="/delivery-partner" element={<DeliveryPartner />} />
           <Route path="/admin/track-order/:id" element={<TrackOrder />} />
 
-          {/* Protected User Routes */}
+          {/* Protected Routes */}
           <Route
             path="/"
             element={
@@ -78,7 +82,10 @@ const AppContent = () => {
             path="/boys"
             element={
               <ProtectedRoute>
-                <BoysPage showFilters={showFilters} setShowFilters={setShowFilters} />
+                <BoysPage
+                  showFilters={showFilters}
+                  setShowFilters={setShowFilters}
+                />
               </ProtectedRoute>
             }
           />
@@ -87,7 +94,10 @@ const AppContent = () => {
             path="/girls"
             element={
               <ProtectedRoute>
-                <GirlsPage showFilters={showFilters} setShowFilters={setShowFilters} />
+                <GirlsPage
+                  showFilters={showFilters}
+                  setShowFilters={setShowFilters}
+                />
               </ProtectedRoute>
             }
           />
@@ -174,6 +184,9 @@ const AppContent = () => {
           />
         </Routes>
       </main>
+
+      {/* Toast Container */}
+      <div id="toast-container"></div>
 
       {!hideHeaderFooter && <Footer />}
     </>

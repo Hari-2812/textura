@@ -21,7 +21,7 @@ const WishlistPage = () => {
         <div className="wishlist-grid">
           {wishlist.map((item) => (
             <ProductCard
-              key={item.id}
+              key={item._id}
               product={item}
               onAddToCart={() => addToCart(item)}
             />

@@ -16,16 +16,17 @@ export const WishlistProvider = ({ children }) => {
   }, [wishlist]);
 
   const addToWishlist = (product) => {
-    if (!wishlist.some((item) => item.id === product.id)) {
+    if (!wishlist.some((item) => item._id === product._id)) {
       setWishlist([...wishlist, product]);
     }
   };
 
   const removeFromWishlist = (id) => {
-    setWishlist(wishlist.filter((item) => item.id !== id));
+    setWishlist(wishlist.filter((item) => item._id !== id));
   };
 
-  const isInWishlist = (id) => wishlist.some((item) => item.id === id);
+  const isInWishlist = (id) =>
+    wishlist.some((item) => item._id === id);
 
   return (
     <WishlistContext.Provider

@@ -1,18 +1,19 @@
 /* =========================
-   PRODUCT SLIDER (Minimal + Balanced Layout)
+   NEW ARRIVALS SLIDER – CLEAN UI
    ========================= */
 .product-slider {
-  text-align: center;
-  padding: 3rem 4rem; /* ✅ side padding added for clean margins */
-  background: #f9fafb;
+  padding: 3rem 4rem;
+  background: #f8f9fb;
   font-family: "Poppins", sans-serif;
+  text-align: center;
 }
 
-.slider-title {
-  font-size: 1.8rem;
-  font-weight: 600;
+.product-slider .slider-title {
+  font-size: 2rem;
+  font-weight: 700;
   color: #222;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
+  letter-spacing: 0.5px;
 }
 
 /* =========================
@@ -20,99 +21,98 @@
    ========================= */
 .product-card {
   background: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  padding: 1rem;
-  margin: 0 10px; /* ✅ tight spacing between cards */
+  border-radius: 14px;
+  padding: 1.2rem;
+  margin: 0 12px;
   transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  text-align: center;
 }
 
 .product-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-6px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
 }
 
 .product-card img {
   width: 100%;
   height: 230px;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 10px;
   margin-bottom: 1rem;
 }
 
+/* =========================
+   PRODUCT TEXT
+   ========================= */
 .product-card h3 {
   font-size: 1rem;
-  color: #333;
-  margin: 0.4rem 0 0.2rem;
-  font-weight: 500;
+  font-weight: 600;
+  color: #1e1e1e;
+  margin-bottom: 0.3rem;
 }
 
 .product-card p {
-  color: #777;
-  font-size: 0.9rem;
-  margin-bottom: 0.8rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #555;
+  margin-bottom: 1rem;
 }
 
 /* =========================
-   BUTTON
+   ADD TO CART BUTTON
    ========================= */
 .product-card button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  background: #222;
+  width: 100%;
+  background: #111;
   color: #fff;
-  padding: 0.5rem 1.2rem; /* ✅ smaller button size */
   border: none;
-  border-radius: 6px;
-  font-size: 0.9rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  margin: 0 auto; /* ✅ centers the button */
-  margin-top: 0.8rem;
+  transition: 0.3s ease;
 }
 
 .product-card button:hover {
   background: #000;
   transform: translateY(-2px);
 }
-.product-card {
-  text-align: center; /* ✅ ensures button and text align centrally */
-}
 
 /* =========================
-   SLICK DOTS
+   SLICK DOTS (Custom)
    ========================= */
-.slick-dots li button:before {
-  color: #aaa;
-  opacity: 0.7;
+.product-slider .slick-dots li button:before {
+  font-size: 10px;
+  color: #999;
+  opacity: 0.6;
 }
 
-.slick-dots li.slick-active button:before {
-  color: #000;
+.product-slider .slick-dots li.slick-active button:before {
+  color: #111;
   opacity: 1;
 }
 
 /* =========================
-   RESPONSIVE DESIGN
+   RESPONSIVE
    ========================= */
-
-/* ✅ For tablets (1024px and below) */
 @media (max-width: 1024px) {
   .product-slider {
-    padding: 2.5rem 2rem; /* less side padding for medium screens */
+    padding: 2.5rem 2rem;
   }
 
   .product-card img {
-    height: 220px;
+    height: 210px;
   }
 }
 
-/* ✅ For mobile (768px and below) */
 @media (max-width: 768px) {
   .product-slider {
-    padding: 2rem 1.2rem; /* consistent side margins on small screens */
+    padding: 2rem 1.2rem;
   }
 
   .product-card {
@@ -120,6 +120,6 @@
   }
 
   .product-card img {
-    height: 200px;
+    height: 190px;
   }
 }
