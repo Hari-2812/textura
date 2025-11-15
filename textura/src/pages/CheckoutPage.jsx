@@ -17,6 +17,9 @@ const CheckoutPage = () => {
 
   const backendUrl = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
+  /* ============================================================
+      PLACE ORDER
+  ============================================================ */
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
 
@@ -30,38 +33,33 @@ const CheckoutPage = () => {
       return;
     }
 
-    // Handle UPI validation
     if (paymentMethod === "upi" && !upiId) {
       alert("Please enter your UPI ID.");
       return;
     }
 
-    // Prepare order data to send to backend
     const orderData = {
-  customerName: user.name,
-  customerEmail: user.email,
-  address: user.address,
-  paymentMethod,
-  upiId: paymentMethod === "upi" ? upiId : null,
+      customerName: user.name,
+      customerEmail: user.email,
+      address: user.address,
+      paymentMethod,
+      upiId: paymentMethod === "upi" ? upiId : null,
 
-  items: cartItems.map((item) => ({
-    name: item.name,
-    price: parseInt(item.price.replace(/[₹,]/g, "")),
-    quantity: item.quantity, // FIX: use "quantity" not "qty"
-  })),
+      // 🛒 FIXED PRICE HANDLING
+      items: cartItems.map((item) => ({
+        name: item.name,
+        price: Number(item.price) || 0,
+        quantity: item.quantity,
+      })),
 
-  total: cartItems.reduce(
-    (sum, item) =>
-      sum +
-      parseInt(item.price.replace(/[₹,]/g, "")) * item.quantity,
-    0
-  ),
+      total: cartItems.reduce(
+        (sum, item) => sum + (Number(item.price) || 0) * item.quantity,
+        0
+      ),
 
-  status: "Pending",
-  createdAt: new Date(),
-};
-
-
+      status: "Pending",
+      createdAt: new Date(),
+    };
 
     try {
       const response = await fetch(`${backendUrl}/api/admin/orders`, {
@@ -84,7 +82,9 @@ const CheckoutPage = () => {
     }
   };
 
-  // 🧠 Handle user info update
+  /* ============================================================
+      UPDATE CUSTOMER DETAILS
+  ============================================================ */
   const handleSaveDetails = () => {
     if (!editData.name || !editData.address) {
       alert("Both fields are required.");
@@ -94,9 +94,13 @@ const CheckoutPage = () => {
     setUser((prev) => ({ ...prev, name: editData.name, address: editData.address }));
     localStorage.setItem("user", JSON.stringify({ ...user, ...editData }));
     setShowEditModal(false);
+
     alert("Customer details updated successfully ✅");
   };
 
+  /* ============================================================
+      JSX UI
+  ============================================================ */
   return (
     <div className="checkout-wrapper">
       <div className="checkout-container">
@@ -114,10 +118,7 @@ const CheckoutPage = () => {
             </p>
 
             {(!user?.name || !user?.address) && (
-              <button
-                className="update-btn"
-                onClick={() => setShowEditModal(true)}
-              >
+              <button className="update-btn" onClick={() => setShowEditModal(true)}>
                 Update Details
               </button>
             )}
@@ -126,6 +127,7 @@ const CheckoutPage = () => {
           {/* 💳 Payment Section */}
           <div className="payment-method">
             <h3>Payment Method</h3>
+
             <div className="payment-options">
               <label className="radio-option">
                 <input
@@ -175,27 +177,26 @@ const CheckoutPage = () => {
         <div className="edit-modal">
           <div className="edit-modal-content">
             <h3>Update Customer Details</h3>
+
             <input
               type="text"
               placeholder="Enter your name"
               value={editData.name}
               onChange={(e) => setEditData({ ...editData, name: e.target.value })}
             />
+
             <textarea
               placeholder="Enter your delivery address"
               value={editData.address}
-              onChange={(e) =>
-                setEditData({ ...editData, address: e.target.value })
-              }
+              onChange={(e) => setEditData({ ...editData, address: e.target.value })}
             ></textarea>
+
             <div className="edit-actions">
               <button className="save-btn" onClick={handleSaveDetails}>
                 Save
               </button>
-              <button
-                className="cancel-btn"
-                onClick={() => setShowEditModal(false)}
-              >
+
+              <button className="cancel-btn" onClick={() => setShowEditModal(false)}>
                 Cancel
               </button>
             </div>

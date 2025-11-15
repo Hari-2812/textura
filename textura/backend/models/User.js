@@ -6,6 +6,14 @@ const userSchema = new mongoose.Schema(
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+
+    // ⭐ NEW FIELDS FOR PROFILE
+    phone: { type: String, default: "" },
+    address: { type: String, default: "" },
+    state: { type: String, default: "" },
+    district: { type: String, default: "" },
+    pincode: { type: String, default: "" },
+    landmark: { type: String, default: "" },
   },
   { timestamps: true }
 );
@@ -22,4 +30,6 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-export default mongoose.model("User", userSchema);
+const User = mongoose.model("User", userSchema);
+
+export default User;

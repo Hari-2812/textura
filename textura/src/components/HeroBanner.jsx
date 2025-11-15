@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import "../styles/HeroBanner.css";
@@ -11,6 +11,7 @@ import img3 from "../assets/images/polo3.jpg";
 
 const HeroBanner = () => {
   const navigate = useNavigate();
+  const [showSelectPopup, setShowSelectPopup] = useState(false);
 
   const settings = {
     dots: true,
@@ -37,17 +38,59 @@ const HeroBanner = () => {
 
   return (
     <div className="hero-banner">
+
+      {/* Slider */}
       <Slider {...settings}>
         {slides.map((slide) => (
           <div key={slide.id} className="hero-slide">
             <img src={slide.image} alt={slide.text} />
             <div className="hero-text">
               <h2>{slide.text}</h2>
-              <button onClick={() => navigate(slide.link)}>Explore Now</button>
+
+              {/* CHANGE ONLY THIS */}
+              <button onClick={() => setShowSelectPopup(true)}>Explore Now</button>
             </div>
           </div>
         ))}
       </Slider>
+
+      {/* POPUP (New Part) */}
+      {showSelectPopup && (
+        <div
+          className="hb-popup-overlay"
+          onClick={() => setShowSelectPopup(false)}
+        >
+          <div
+            className="hb-popup"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3>Select Category</h3>
+
+            <div className="hb-options">
+              <button
+                className="hb-option-btn"
+                onClick={() => navigate("/boys")}
+              >
+                👦 Boys
+              </button>
+
+              <button
+                className="hb-option-btn"
+                onClick={() => navigate("/girls")}
+              >
+                👧 Girls
+              </button>
+            </div>
+
+            <button
+              className="hb-close-btn"
+              onClick={() => setShowSelectPopup(false)}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
