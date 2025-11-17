@@ -42,7 +42,7 @@ const io = new Server(server, {
 app.set("io", io);
 
 // ---------------------------------------------
-// 5️⃣ Connect MongoDB
+// 5️⃣ Connect MongoDB (AFTER dotenv)
 // ---------------------------------------------
 connectDB();
 
@@ -53,7 +53,7 @@ app.use(cors());
 app.use(express.json());
 
 // ---------------------------------------------
-// 7️⃣ Debug check
+// 7️⃣ Debug check: See if JWT loaded
 // ---------------------------------------------
 console.log("🔐 Loaded JWT_SECRET:", process.env.JWT_SECRET);
 
@@ -68,7 +68,7 @@ app.use("/api/admin", adminStatsRoutes);
 app.use("/api/offers", offerRoutes);
 app.use("/api/newsletter", subscriberRoutes);
 
-// Test routes
+// Root route
 app.get("/test-news", (req, res) => {
   res.send("NEWS ROUTE WORKING");
 });

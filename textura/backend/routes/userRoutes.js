@@ -14,6 +14,57 @@ const generateToken = (id) => {
 };
 
 /* ===========================================================
+    REGISTER (Firebase Email/Password Signup)
+=========================================================== */
+router.post("/register", async (req, res) => {
+  try {
+    const { token, name } = req.body;
+
+    if (!token) return res.status(400).json({ message: "Token missing" });
+
+    // 1️⃣ Verify Firebase token
+    const decoded = await admin.auth().verifyIdToken(token);
+
+    const { uid, email } = decoded;
+
+    // 2️⃣ Check if user already exists in MongoDB
+    let user = await User.findOne({
+      $or: [{ firebaseUid: uid }, { email }],
+    });
+
+    // 3️⃣ Create new MongoDB user if required
+    if (!user) {
+      user = await User.create({
+        firebaseUid: uid,
+        name,
+        email,
+        provider: "password",
+        password: "FIREBASE_AUTH", // placeholder (never used)
+      });
+    } else {
+      // If existing user has no firebaseUid, attach it
+      if (!user.firebaseUid) {
+        user.firebaseUid = uid;
+        await user.save();
+      }
+    }
+
+    // 4️⃣ Create backend JWT
+    const backendToken = generateToken(user._id);
+
+    res.json({
+      success: true,
+      token: backendToken,
+      user,
+    });
+
+  } catch (err) {
+    console.error("Signup Error:", err);
+    res.status(500).json({ message: "Signup failed" });
+  }
+});
+
+/* ===========================================================
     LOGIN (Google OR Email/Password through Firebase)
 =========================================================== */
 router.post("/login", async (req, res) => {
@@ -48,7 +99,7 @@ router.post("/login", async (req, res) => {
         name: name || "",
         picture: picture || "",
         provider: sign_in_provider,
-        password: "FIREBASE_AUTH", // placeholder (not used)
+        password: "FIREBASE_AUTH",
       });
     } else {
       // Ensure firebaseUid is saved for old accounts
@@ -66,6 +117,7 @@ router.post("/login", async (req, res) => {
       token: backendToken,
       user,
     });
+
   } catch (err) {
     console.error("Firebase Login Error:", err);
     res.status(401).json({ message: "Invalid Firebase token" });

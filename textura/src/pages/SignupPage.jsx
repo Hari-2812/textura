@@ -3,6 +3,10 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../styles/SignupPage.css";
 
+// Firebase
+import { auth } from "../firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+
 const SignupPage = () => {
   const navigate = useNavigate();
 
@@ -12,28 +16,49 @@ const SignupPage = () => {
     password: "",
   });
 
+  const [loading, setLoading] = useState(false);
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  /* ============================================================
+        🔥 Handle Firebase Signup
+  ============================================================ */
   const handleSignup = async (e) => {
     e.preventDefault();
+    if (loading) return;
+    setLoading(true);
 
     try {
-      const res = await axios.post(
-        "http://localhost:5000/api/users/register",
-        form
+      // 1️⃣ Create account in Firebase
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        form.email,
+        form.password
       );
 
-      // Save token + user
+      // 2️⃣ Get Firebase ID Token
+      const idToken = await userCredential.user.getIdToken();
+
+      // 3️⃣ Send token + name to backend to store in MongoDB
+      const res = await axios.post("http://localhost:5000/api/users/register", {
+        token: idToken,
+        name: form.name,
+      });
+
+      // 4️⃣ Save backend JWT + user profile
       localStorage.setItem("userToken", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
 
       alert("Account created successfully!");
       navigate("/");
     } catch (err) {
-      alert(err.response?.data?.message || "Signup failed");
+      console.error(err);
+      alert(err.response?.data?.message || err.message || "Signup failed");
     }
+
+    setLoading(false);
   };
 
   return (
@@ -68,8 +93,8 @@ const SignupPage = () => {
             onChange={handleChange}
           />
 
-          <button type="submit" className="signup-btn">
-            Sign Up
+          <button type="submit" className="signup-btn" disabled={loading}>
+            {loading ? "Creating..." : "Sign Up"}
           </button>
         </form>
 
