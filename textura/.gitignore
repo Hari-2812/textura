@@ -24,3 +24,7 @@ yarn-error.log*
 
 
 .vscode/
+
+serviceAccountKey.json
+.env
+*.pem
