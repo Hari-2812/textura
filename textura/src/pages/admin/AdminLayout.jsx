@@ -1,5 +1,12 @@
 import React from "react";
-import { NavLink, Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import {
+  NavLink,
+  Routes,
+  Route,
+  Navigate,
+  useNavigate,
+} from "react-router-dom";
+
 import { useUser } from "../../context/UserContext";
 
 // Import Admin Pages
@@ -8,6 +15,7 @@ import OrdersPage from "./OrdersPage";
 import ProductsList from "./ProductsList";
 import EditProduct from "./EditProduct";
 import BulkAddProducts from "./BulkAddProducts";
+import AdminOffersPage from "./AdminOffersPage";
 
 import "../../styles/AdminLayout.css";
 
@@ -28,7 +36,6 @@ const AdminLayout = () => {
 
   return (
     <div className="admin-layout">
-      
       {/* Sidebar */}
       <aside className="admin-sidebar">
         <div className="sidebar-header">
@@ -37,7 +44,6 @@ const AdminLayout = () => {
         </div>
 
         <nav className="sidebar-nav">
-
           <NavLink to="/admin/dashboard" className="sidebar-link">
             📊 Dashboard
           </NavLink>
@@ -58,6 +64,10 @@ const AdminLayout = () => {
             📥 Bulk Add
           </NavLink>
 
+          {/* ⭐ NEW OFFERS PAGE LINK */}
+          <NavLink to="/admin/offers" className="sidebar-link">
+            🎁 Offers
+          </NavLink>
         </nav>
 
         <button className="logout-btn" onClick={handleLogout}>
@@ -65,9 +75,10 @@ const AdminLayout = () => {
         </button>
       </aside>
 
-      {/* Main */}
+      {/* Main Content */}
       <main className="admin-main">
         <Routes>
+          {/* Default Redirect */}
           <Route path="/" element={<Navigate to="dashboard" />} />
 
           {/* Product Management */}
@@ -79,6 +90,9 @@ const AdminLayout = () => {
           {/* Admin Pages */}
           <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="orders" element={<OrdersPage />} />
+
+          {/* ⭐ NEW OFFERS ROUTE */}
+          <Route path="offers" element={<AdminOffersPage />} />
         </Routes>
       </main>
     </div>

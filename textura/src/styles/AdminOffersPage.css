@@ -1,0 +1,46 @@
+.offers-page-container {
+  max-width: 650px;
+  margin: auto;
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.offer-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.offer-form label {
+  font-weight: bold;
+}
+
+.offer-form input,
+.offer-form textarea,
+.offer-form select {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.offer-form textarea {
+  height: 120px;
+  resize: none;
+}
+
+.offer-submit-btn {
+  background: #4b39ef;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.offer-submit-btn:hover {
+  background: #372bc7;
+}
