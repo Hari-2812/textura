@@ -1,99 +1,91 @@
 import express from "express";
-import User from "../models/User.js";
 import jwt from "jsonwebtoken";
+import User from "../models/User.js";
+import admin from "../firebase.js";
 import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-/* Generate JWT */
+/* Generate Backend JWT */
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN || "30d",
   });
 };
 
-/* ============================
-   REGISTER
-============================ */
-router.post("/register", async (req, res) => {
-  try {
-    const { name, email, password } = req.body;
-
-    const exists = await User.findOne({ email });
-    if (exists) {
-      return res
-        .status(400)
-        .json({ success: false, message: "User already exists" });
-    }
-
-    const user = await User.create({ name, email, password });
-    const token = generateToken(user._id);
-
-    res.status(201).json({
-      success: true,
-      token,
-      user: {
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-      },
-    });
-  } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
-  }
-});
-
-/* ============================
-   LOGIN
-============================ */
+/* ===========================================================
+    LOGIN (Google OR Email/Password through Firebase)
+=========================================================== */
 router.post("/login", async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { token } = req.body; // Firebase ID Token
 
-    const user = await User.findOne({ email });
-    if (!user)
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid email or password" });
+    if (!token) {
+      return res.status(400).json({ message: "Token missing" });
+    }
 
-    const isMatch = await user.matchPassword(password);
-    if (!isMatch)
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid email or password" });
+    // 1️⃣ Verify Firebase token
+    const decoded = await admin.auth().verifyIdToken(token);
 
-    const token = generateToken(user._id);
+    const {
+      uid,
+      email,
+      name,
+      picture,
+      firebase: { sign_in_provider },
+    } = decoded;
+
+    // 2️⃣ Check if user exists by firebaseUid OR email
+    let user = await User.findOne({
+      $or: [{ firebaseUid: uid }, { email }],
+    });
+
+    // 3️⃣ If user does not exist → Create new
+    if (!user) {
+      user = await User.create({
+        firebaseUid: uid,
+        email,
+        name: name || "",
+        picture: picture || "",
+        provider: sign_in_provider,
+        password: "FIREBASE_AUTH", // placeholder (not used)
+      });
+    } else {
+      // Ensure firebaseUid is saved for old accounts
+      if (!user.firebaseUid) {
+        user.firebaseUid = uid;
+        await user.save();
+      }
+    }
+
+    // 4️⃣ Issue backend JWT
+    const backendToken = generateToken(user._id);
 
     res.json({
       success: true,
-      token,
-      user: {
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-      },
+      token: backendToken,
+      user,
     });
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    console.error("Firebase Login Error:", err);
+    res.status(401).json({ message: "Invalid Firebase token" });
   }
 });
 
-/* ============================
-   GET PROFILE
-============================ */
+/* ===========================================================
+    GET PROFILE
+=========================================================== */
 router.get("/me", protect, async (req, res) => {
   try {
-    return res.json({ success: true, user: req.user });
+    res.json({ success: true, user: req.user });
   } catch (err) {
-    return res
-      .status(500)
-      .json({ success: false, message: "Failed to load user" });
+    res.status(500).json({ success: false, message: "Failed to load user" });
   }
 });
 
-/* ============================
-   UPDATE PROFILE
-============================ */
+/* ===========================================================
+    UPDATE PROFILE
+=========================================================== */
 router.put("/update", protect, async (req, res) => {
   try {
     const updatedUser = await User.findByIdAndUpdate(
