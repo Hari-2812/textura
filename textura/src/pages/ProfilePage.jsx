@@ -2,22 +2,109 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../styles/ProfilePage.css";
 
-const STATES = [
-  "Tamil Nadu",
+export const STATES = [
+  "Andhra Pradesh",
+  "Arunachal Pradesh",
+  "Assam",
+  "Bihar",
+  "Chhattisgarh",
+  "Goa",
+  "Gujarat",
+  "Haryana",
+  "Himachal Pradesh",
+  "Jharkhand",
   "Karnataka",
   "Kerala",
-  "Andhra Pradesh",
+  "Madhya Pradesh",
+  "Maharashtra",
+  "Manipur",
+  "Meghalaya",
+  "Mizoram",
+  "Nagaland",
+  "Odisha",
+  "Punjab",
+  "Rajasthan",
+  "Sikkim",
+  "Tamil Nadu",
   "Telangana",
-  "Maharashtra"
+  "Tripura",
+  "Uttar Pradesh",
+  "Uttarakhand",
+  "West Bengal",
+
+  // Union Territories
+  "Andaman and Nicobar Islands",
+  "Chandigarh",
+  "Dadra and Nagar Haveli & Daman and Diu",
+  "Delhi",
+  "Jammu and Kashmir",
+  "Ladakh",
+  "Lakshadweep",
+  "Puducherry",
 ];
 
-const DISTRICTS = {
-  "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai", "Salem", "Dindigul", "Erode"],
-  Karnataka: ["Bangalore", "Mysore", "Hubli", "Belgaum"],
-  Kerala: ["Kochi", "Trivandrum", "Kozhikode"],
-  "Andhra Pradesh": ["Vijayawada", "Visakhapatnam"],
-  Telangana: ["Hyderabad", "Warangal"],
-  Maharashtra: ["Mumbai", "Pune", "Nagpur"]
+export const DISTRICTS = {
+  "Andhra Pradesh": [
+    "Visakhapatnam",
+    "Vijayawada",
+    "Guntur",
+    "Nellore",
+    "Kurnool",
+    "Tirupati",
+  ],
+  "Arunachal Pradesh": ["Itanagar"],
+  Assam: ["Guwahati", "Dibrugarh", "Silchar"],
+  Bihar: ["Patna", "Gaya", "Bhagalpur"],
+  Chhattisgarh: ["Raipur", "Bhilai", "Bilaspur"],
+  Goa: ["Panaji", "Margao"],
+  Gujarat: ["Ahmedabad", "Surat", "Vadodara", "Rajkot"],
+  Haryana: ["Gurugram", "Faridabad", "Panipat", "Hisar"],
+  "Himachal Pradesh": ["Shimla", "Manali"],
+  Jharkhand: ["Ranchi", "Jamshedpur", "Dhanbad"],
+  Karnataka: ["Bengaluru", "Mysuru", "Mangalore", "Hubli"],
+  Kerala: ["Kochi", "Thiruvananthapuram", "Kozhikode"],
+  "Madhya Pradesh": ["Bhopal", "Indore", "Gwalior", "Jabalpur"],
+  Maharashtra: ["Mumbai", "Pune", "Nagpur", "Thane", "Nashik"],
+  Manipur: ["Imphal"],
+  Meghalaya: ["Shillong"],
+  Mizoram: ["Aizawl"],
+  Nagaland: ["Kohima", "Dimapur"],
+  Odisha: ["Bhubaneswar", "Cuttack", "Rourkela"],
+  Punjab: ["Ludhiana", "Amritsar", "Jalandhar"],
+  Rajasthan: ["Jaipur", "Udaipur", "Jodhpur", "Kota"],
+  Sikkim: ["Gangtok"],
+  "Tamil Nadu": [
+    "Tiruppur",
+    "Chennai",
+    "Coimbatore",
+    "Madurai",
+    "Tiruchirappalli",
+    "Salem",
+    "Erode",
+    "Dindigul",
+  ],
+  Telangana: ["Hyderabad", "Warangal", "Karimnagar"],
+  Tripura: ["Agartala"],
+  "Uttar Pradesh": [
+    "Lucknow",
+    "Kanpur",
+    "Noida",
+    "Varanasi",
+    "Agra",
+    "Ghaziabad",
+  ],
+  Uttarakhand: ["Dehradun", "Haridwar"],
+  "West Bengal": ["Kolkata", "Howrah", "Siliguri"],
+
+  // Union Territories
+  "Andaman and Nicobar Islands": ["Port Blair"],
+  Chandigarh: ["Chandigarh"],
+  "Dadra and Nagar Haveli & Daman and Diu": ["Daman", "Silvassa"],
+  Delhi: ["New Delhi", "South Delhi", "North Delhi"],
+  "Jammu and Kashmir": ["Srinagar", "Jammu"],
+  Ladakh: ["Leh", "Kargil"],
+  Lakshadweep: ["Kavaratti"],
+  Puducherry: ["Puducherry", "Karaikal"],
 };
 
 const ProfilePage = () => {
@@ -72,9 +159,7 @@ const ProfilePage = () => {
 
     if (name === "state") {
       setStateSuggestions(
-        STATES.filter((st) =>
-          st.toLowerCase().startsWith(value.toLowerCase())
-        )
+        STATES.filter((st) => st.toLowerCase().startsWith(value.toLowerCase()))
       );
     }
 
@@ -124,7 +209,6 @@ const ProfilePage = () => {
   return (
     <div className="profile-page">
       <div className="profile-card">
-
         {/* PROFILE HEADER */}
         <div className="profile-header">
           <img
@@ -141,12 +225,24 @@ const ProfilePage = () => {
         {/* DETAILS SECTION */}
         {!isEditing ? (
           <div className="profile-details">
-            <p><b>Phone:</b> {form.phone || "Not added"}</p>
-            <p><b>Address:</b> {form.address || "Not added"}</p>
-            <p><b>State:</b> {form.state || "Not added"}</p>
-            <p><b>District:</b> {form.district || "Not added"}</p>
-            <p><b>Pincode:</b> {form.pincode || "Not added"}</p>
-            <p><b>Landmark:</b> {form.landmark || "Not added"}</p>
+            <p>
+              <b>Phone:</b> {form.phone || "Not added"}
+            </p>
+            <p>
+              <b>Address:</b> {form.address || "Not added"}
+            </p>
+            <p>
+              <b>State:</b> {form.state || "Not added"}
+            </p>
+            <p>
+              <b>District:</b> {form.district || "Not added"}
+            </p>
+            <p>
+              <b>Pincode:</b> {form.pincode || "Not added"}
+            </p>
+            <p>
+              <b>Landmark:</b> {form.landmark || "Not added"}
+            </p>
 
             <button className="edit-btn" onClick={() => setIsEditing(true)}>
               Edit Profile
@@ -154,7 +250,6 @@ const ProfilePage = () => {
           </div>
         ) : (
           <div className="edit-section">
-
             <input name="name" value={form.name} onChange={handleChange} />
             <input name="email" value={form.email} disabled />
 
@@ -236,7 +331,6 @@ const ProfilePage = () => {
         <button className="logout-btn" onClick={logout}>
           Logout
         </button>
-
       </div>
     </div>
   );
