@@ -67,45 +67,7 @@
   animation: popIn 0.5s ease;
 }
 
-
-/* ==========================
-   🔔 Toast Notification
-========================== */
-.toast-container {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  z-index: 9999;
-}
-
-.toast {
-  background: #222;
-  color: #fff;
-  padding: 14px 18px;
-  font-size: 15px;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  animation: slideUp 0.5s ease forwards, fadeOut 0.5s ease 5s forwards;
-  opacity: 0;
-}
-
-/* 🔥 Slide up from bottom */
-@keyframes slideUp {
-  0% { transform: translateY(30px); opacity: 0; }
-  100% { transform: translateY(0px); opacity: 1; }
-}
-
-/* 🔥 Auto fade-out */
-@keyframes fadeOut {
-  from { opacity: 1; }
-  to { opacity: 0; transform: translateY(20px); }
-}
-
-
-/* 🎨 Top Accent Bar Variants */
+/* Top Accent Bar Variants */
 .stat-card::before {
   content: "";
   position: absolute;
@@ -133,7 +95,7 @@
   background: linear-gradient(90deg, #ef476f, #ff6b6b);
 }
 
-/* ✨ Hover Effects */
+/* Hover Effects */
 .stat-card:hover {
   transform: translateY(-8px) scale(1.02);
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.18);
@@ -143,7 +105,97 @@
   color: #0077b6;
 }
 
-/* 📱 Responsive */
+/* ============================================================
+   🚨 PERSISTENT ALERT BOX
+=========================================================== */
+.alert-box {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 9999999 !important;
+}
+
+.alert-item {
+  background: #ff3b3b;
+  color: #fff;
+  padding: 16px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  animation: dropDown 0.4s ease;
+}
+
+.alert-item p {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.alert-item button {
+  background: #fff;
+  color: #ff3b3b;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.alert-item button:hover {
+  background: #ffecec;
+}
+
+/* Drop down animation */
+@keyframes dropDown {
+  from { transform: translateY(-15px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* ============================================================
+   🔔 TOAST NOTIFICATION
+=========================================================== */
+.toast-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 9999999 !important;
+}
+
+.toast {
+  background: #222;
+  color: #fff;
+  padding: 14px 18px;
+  font-size: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  animation: slideUp 0.5s ease forwards, fadeOut 0.5s ease 5s forwards;
+}
+
+/* 🔥 Slide up from bottom */
+@keyframes slideUp {
+  0% { transform: translateY(30px); opacity: 0; }
+  100% { transform: translateY(0px); opacity: 1; }
+}
+
+/* 🔥 Auto fade-out */
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; transform: translateY(20px); }
+}
+
+/* ============================================================
+   📱 Responsive
+=========================================================== */
 @media (max-width: 768px) {
   .admin-dashboard-page {
     padding: 15px;
@@ -159,7 +211,9 @@
   }
 }
 
-/* 🎬 Animations */
+/* ============================================================
+   🎬 Animations
+=========================================================== */
 @keyframes fadeIn {
   from {
     opacity: 0;

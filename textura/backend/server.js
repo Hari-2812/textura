@@ -28,7 +28,7 @@ const app = express();
 const server = http.createServer(app);
 
 // ---------------------------------------------
-// 4️⃣ Socket.io (optional)
+// 4️⃣ Socket.io Setup
 // ---------------------------------------------
 const io = new Server(server, {
   cors: {
@@ -38,8 +38,11 @@ const io = new Server(server, {
   transports: ["websocket", "polling"],
 });
 
+// ⭐ Make io available to all routes
+app.set("io", io);
+
 // ---------------------------------------------
-// 5️⃣ Connect MongoDB (AFTER dotenv)
+// 5️⃣ Connect MongoDB
 // ---------------------------------------------
 connectDB();
 
@@ -50,7 +53,7 @@ app.use(cors());
 app.use(express.json());
 
 // ---------------------------------------------
-// 7️⃣ Debug check: See if JWT loaded
+// 7️⃣ Debug check
 // ---------------------------------------------
 console.log("🔐 Loaded JWT_SECRET:", process.env.JWT_SECRET);
 
@@ -63,9 +66,9 @@ app.use("/api/admin/orders", orderRoutes);
 app.use("/api/admin", adminStatsRoutes);
 
 app.use("/api/offers", offerRoutes);
-app.use("/api/newsletter", subscriberRoutes); // ⭐ FIXED NEWSLETTER ROUTE
+app.use("/api/newsletter", subscriberRoutes);
 
-// Root route
+// Test routes
 app.get("/test-news", (req, res) => {
   res.send("NEWS ROUTE WORKING");
 });
