@@ -38,8 +38,6 @@ const HeroBanner = () => {
 
   return (
     <div className="hero-banner">
-
-      {/* Slider */}
       <Slider {...settings}>
         {slides.map((slide) => (
           <div key={slide.id} className="hero-slide">
@@ -47,8 +45,8 @@ const HeroBanner = () => {
             <div className="hero-text">
               <h2>{slide.text}</h2>
 
-              {/* CHANGE ONLY THIS */}
-              <button onClick={() => setShowSelectPopup(true)}>Explore Now</button>
+              {/* Direct Navigate Based on Slide */}
+              <button onClick={() => navigate(slide.link)}>Explore Now</button>
             </div>
           </div>
         ))}
@@ -60,10 +58,7 @@ const HeroBanner = () => {
           className="hb-popup-overlay"
           onClick={() => setShowSelectPopup(false)}
         >
-          <div
-            className="hb-popup"
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div className="hb-popup" onClick={(e) => e.stopPropagation()}>
             <h3>Select Category</h3>
 
             <div className="hb-options">

@@ -56,10 +56,6 @@ const AdminLayout = () => {
             🛍 Products
           </NavLink>
 
-          <NavLink to="/admin/add-product" className="sidebar-link">
-            ➕ Add Product
-          </NavLink>
-
           <NavLink to="/admin/bulk-add" className="sidebar-link">
             📥 Bulk Add
           </NavLink>
