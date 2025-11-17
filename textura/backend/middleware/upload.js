@@ -4,15 +4,17 @@ import cloudinary from "../config/cloudinary.js";
 
 const storage = new CloudinaryStorage({
   cloudinary,
-  params: {
-    folder: "products",
-    allowedFormats: ["jpg", "png", "jpeg", "webp"],
+  params: (req, file) => {
+    return {
+      folder: req.folder || "products", // default: products
+      allowedFormats: ["jpg", "png", "jpeg", "webp"],
+    };
   },
 });
 
 const upload = multer({
   storage,
-  limits: { fileSize: 20 * 1024 * 1024 }, // 5MB limit
+  limits: { fileSize: 20 * 1024 * 1024 },
 });
 
 export default upload;

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { FaHome, FaBox, FaCreditCard, FaTruck } from "react-icons/fa";
+import { FaHome, FaBox, FaCreditCard, FaTruck, FaGift } from "react-icons/fa";
 
 const AdminSidebar = () => {
   const location = useLocation();
@@ -10,6 +10,7 @@ const AdminSidebar = () => {
     { name: "Orders", path: "/admin/orders", icon: <FaBox /> },
     { name: "Payments", path: "/admin/payments", icon: <FaCreditCard /> },
     { name: "Track Orders", path: "/admin/track", icon: <FaTruck /> },
+    { name: "Offers", path: "/admin/offers", icon: <FaGift /> }, // ✅ NEW
   ];
 
   return (

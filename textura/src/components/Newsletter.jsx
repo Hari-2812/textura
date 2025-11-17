@@ -1,6 +1,5 @@
 // src/components/Newsletter.jsx
 import React, { useState } from "react";
-import emailjs from "emailjs-com";
 import "../styles/Newsletter.css";
 
 const Newsletter = () => {
@@ -10,7 +9,14 @@ const Newsletter = () => {
   const handleSubscribe = async (e) => {
     e.preventDefault();
 
-    if (!email || !/\S+@\S+\.\S+/.test(email)) {
+    // Remove ZERO-WIDTH characters + trim
+    const cleanEmail = email.replace(/[\u200B-\u200D\uFEFF]/g, "").trim();
+
+    console.log("Typed email:", email);
+    console.log("Clean email:", cleanEmail);
+
+    // Validate cleaned email
+    if (!cleanEmail || !/\S+@\S+\.\S+/.test(cleanEmail)) {
       setStatus("error");
       return;
     }
@@ -18,16 +24,23 @@ const Newsletter = () => {
     setStatus("loading");
 
     try {
-      // ✉️ Send email using EmailJS
-      await emailjs.send(
-        "your_service_id",
-        "your_template_id",
-        { to_email: email },
-        "your_public_key"
+      const res = await fetch(
+        "http://localhost:5000/api/newsletter/subscribe",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: cleanEmail }),
+        }
       );
 
-      setStatus("success");
-      setEmail("");
+      const data = await res.json();
+
+      if (data.success) {
+        setStatus("success");
+        setEmail("");
+      } else {
+        setStatus("error");
+      }
     } catch (err) {
       console.error(err);
       setStatus("error");
@@ -57,14 +70,10 @@ const Newsletter = () => {
       </form>
 
       {status === "success" && (
-        <p className="success-msg">
-          🎉 Subscription successful! Check your inbox.
-        </p>
+        <p className="success-msg">🎉 Subscription successful!</p>
       )}
       {status === "error" && (
-        <p className="error-msg">
-          ❌ Please enter a valid email or try again later.
-        </p>
+        <p className="error-msg">❌ Invalid email. Try again.</p>
       )}
     </section>
   );

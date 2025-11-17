@@ -18,6 +18,8 @@ import productRoutes from "./routes/productRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import orderRoutes from "./routes/orders.js";
 import adminStatsRoutes from "./routes/adminStats.js";
+import offerRoutes from "./routes/offerRoutes.js";
+import subscriberRoutes from "./routes/subscriberRoutes.js"; // ⭐ NEWSLETTER ROUTE
 
 // ---------------------------------------------
 // 3️⃣ App + Server setup
@@ -55,12 +57,19 @@ console.log("🔐 Loaded JWT_SECRET:", process.env.JWT_SECRET);
 // ---------------------------------------------
 // 8️⃣ API Routes
 // ---------------------------------------------
-app.use("/api/users", userRoutes);        // USER ROUTES FIRST
+app.use("/api/users", userRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/admin/orders", orderRoutes);
 app.use("/api/admin", adminStatsRoutes);
 
+app.use("/api/offers", offerRoutes);
+app.use("/api/newsletter", subscriberRoutes); // ⭐ FIXED NEWSLETTER ROUTE
+
 // Root route
+app.get("/test-news", (req, res) => {
+  res.send("NEWS ROUTE WORKING");
+});
+
 app.get("/", (req, res) => {
   res.send("API running...");
 });
