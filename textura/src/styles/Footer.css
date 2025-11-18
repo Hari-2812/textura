@@ -1,7 +1,6 @@
-/* =========================
-   Minimalist Footer (Polished)
-   ========================= */
-
+/* =================================================
+   GENERAL FOOTER
+   ================================================= */
 .footer {
   background: #000;
   color: #fff;
@@ -10,8 +9,6 @@
   padding: 3rem 1rem 1.5rem;
 }
 
-/* Footer Layout */
-.footer-content,
 .footer-row {
   display: flex;
   justify-content: space-between;
@@ -23,46 +20,41 @@
   text-align: left;
 }
 
-/* Each Section */
 .footer-section {
   flex: 1;
   min-width: 220px;
 }
 
-/* Footer Logo or Title */
+/* Logo */
 .footer-logo {
   font-size: 1.8rem;
   font-weight: 600;
-  margin-bottom: 1rem;
   color: #fff;
   cursor: pointer;
+  margin-bottom: 1rem;
 }
 
-/* Footer Description (if any) */
 .footer-desc {
-  font-size: 0.95rem;
   color: #ccc;
+  font-size: 0.95rem;
   line-height: 1.6;
-  margin-bottom: 1.2rem;
 }
 
-/* Footer Headings */
+/* Section Heading */
 .footer-section h3 {
   font-size: 1.1rem;
-  margin-bottom: 0.8rem;
-  font-weight: 500;
-  color: #fff;
+  margin-bottom: 0.7rem;
   border-bottom: 1px solid #333;
-  padding-bottom: 0.4rem;
+  padding-bottom: 0.35rem;
 }
 
-/* Footer Links or Paragraphs */
+/* Links */
 .footer-section p {
   font-size: 0.95rem;
   color: #bbb;
-  margin: 0.5rem 0;
+  margin: 0.45rem 0;
   cursor: pointer;
-  transition: color 0.3s, transform 0.3s;
+  transition: 0.3s;
 }
 
 .footer-section p:hover {
@@ -70,122 +62,102 @@
   transform: translateX(4px);
 }
 
-/* Social Icons (Optional but Neat) */
+/* =================================================
+   FOLLOW US SECTION — NEW UI
+   ================================================= */
+
 .footer-socials {
   display: flex;
-  gap: 0.8rem;
+  gap: 1rem;
+  align-items: center;
   margin-top: 1rem;
 }
 
-.footer-socials a {
-  color: #fff;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
+.social-icon {
+  width: 42px;
+  height: 42px;
   background: #111;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.1rem;
-  transition: background 0.3s, transform 0.3s;
+  font-size: 1.3rem;
+  color: #fff;
+  overflow: hidden;
+  transition: transform 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
 }
 
-.footer-socials a:hover {
-  background: #333;
-  transform: scale(1.1);
+/* Fix images inside icons */
+.social-icon img {
+  width: 55%;
+  height: 55%;
+  object-fit: contain;
+  filter: invert(1);
 }
 
-/* Footer Bottom */
+/* Hover Glow */
+.social-icon:hover {
+  transform: scale(1.12);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.25);
+}
+
+/* Instagram — Gradient */
+.social-icon.instagram:hover {
+  background: linear-gradient(45deg, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5);
+  box-shadow: 0 0 12px rgba(214, 41, 118, 0.6);
+}
+
+/* WhatsApp — Green */
+.social-icon.whatsapp:hover {
+  background: #25D366;
+  box-shadow: 0 0 12px rgba(37, 211, 102, 0.6);
+}
+
+/* Telegram — Blue */
+.social-icon.telegram:hover {
+  background: #0088cc;
+  box-shadow: 0 0 12px rgba(0, 136, 204, 0.6);
+}
+
+/* Email — Red */
+.social-icon.email:hover {
+  background: #d44638;
+  box-shadow: 0 0 12px rgba(212, 70, 56, 0.6);
+}
+
+/* =================================================
+   FOOTER BOTTOM
+   ================================================= */
 .footer-bottom {
   border-top: 1px solid #222;
-  padding-top: 1.2rem;
+  padding-top: 1.1rem;
   font-size: 0.9rem;
   color: #aaa;
-  text-align: center;
 }
-/* =========================
-   Improved Mobile Responsive Footer
-   ========================= */
+
+/* =================================================
+   RESPONSIVE
+   ================================================= */
 
 @media (max-width: 900px) {
-  .footer {
-    padding: 2.5rem 1rem 1rem;
-  }
-
-  .footer-content,
   .footer-row {
     flex-direction: column;
-    align-items: center;
     text-align: center;
     gap: 2rem;
-    margin-bottom: 1.5rem;
   }
-
   .footer-section {
-    width: 100%;
-    max-width: 350px;
+    max-width: 360px;
+    margin: 0 auto;
   }
-
-  .footer-logo {
-    font-size: 1.6rem;
-  }
-
-  .footer-section h3 {
-    font-size: 1.05rem;
-    margin-bottom: 0.6rem;
-    border: none;       /* cleaner look for mobile */
-  }
-
-  .footer-section p {
-    font-size: 0.95rem;
-    margin: 0.35rem 0;
-  }
-
-  /* make social icons centered */
   .footer-socials {
     justify-content: center;
-    margin-top: 1rem;
-  }
-
-  .footer-socials a {
-    width: 34px;
-    height: 34px;
-    font-size: 1rem;
-  }
-
-  /* footer bottom */
-  .footer-bottom {
-    font-size: 0.85rem;
-    padding-top: 1rem;
   }
 }
 
-/* Extra-small phones (under 480px) */
 @media (max-width: 480px) {
-  .footer {
-    padding: 2.2rem 0.8rem 1rem;
-  }
-
-  .footer-section {
-    max-width: 300px;
-  }
-
-  .footer-section h3 {
-    font-size: 1rem;
-  }
-
-  .footer-section p {
-    font-size: 0.85rem;
-  }
-
-  .footer-socials a {
-    width: 30px;
-    height: 30px;
-    font-size: 0.9rem;
-  }
-
-  .footer-bottom {
-    font-size: 0.8rem;
-    padding-top: 0.8rem;
+  .social-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 1.1rem;
   }
 }

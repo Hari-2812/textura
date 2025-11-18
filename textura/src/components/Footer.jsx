@@ -1,12 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  FaFacebookF,
-  FaInstagram,
-  FaTwitter,
-  FaYoutube,
-  FaLinkedinIn,
-} from "react-icons/fa";
+import { FaInstagram } from "react-icons/fa";
 import "../styles/Footer.css";
 
 const Footer = () => {
@@ -15,6 +9,7 @@ const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-row">
+
         {/* 🏢 Company Info */}
         <div className="footer-section company">
           <h3 className="footer-logo" onClick={() => navigate("/")}>
@@ -26,7 +21,7 @@ const Footer = () => {
           </p>
         </div>
 
-        {/* 🛍️ Shop Section */}
+        {/* 🛍️ Shop */}
         <div className="footer-section">
           <h3>Shop</h3>
           <p onClick={() => navigate("/boys")}>Boys</p>
@@ -35,7 +30,7 @@ const Footer = () => {
           <p onClick={() => navigate("/wishlist")}>Wishlist</p>
         </div>
 
-        {/* 🌍 Explore Section */}
+        {/* 🌍 Explore */}
         <div className="footer-section">
           <h3>Explore</h3>
           <p onClick={() => navigate("/about")}>About Us</p>
@@ -43,27 +38,53 @@ const Footer = () => {
           <p onClick={() => navigate("/help")}>Help Center</p>
         </div>
 
-        {/* 🌐 Social Media */}
+        {/* 🌐 Follow Us */}
         <div className="footer-section">
           <h3>Follow Us</h3>
+
           <div className="footer-socials">
-            <a href="https://facebook.com" target="_blank" rel="noreferrer" title="Facebook">
-              <FaFacebookF />
-            </a>
-            <a href="https://instagram.com" target="_blank" rel="noreferrer" title="Instagram">
+
+            {/* Instagram */}
+            <a
+              href="https://instagram.com/YOUR_INSTAGRAM"
+              target="_blank"
+              rel="noreferrer"
+              className="social-icon instagram"
+            >
               <FaInstagram />
             </a>
-            <a href="https://twitter.com" target="_blank" rel="noreferrer" title="Twitter">
-              <FaTwitter />
+
+            {/* WhatsApp */}
+            <a
+              href="https://api.whatsapp.com/send?phone=919876543210"
+              target="_blank"
+              rel="noreferrer"
+              className="social-icon whatsapp"
+            >
+              <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp" />
             </a>
-            <a href="https://youtube.com" target="_blank" rel="noreferrer" title="YouTube">
-              <FaYoutube />
+
+            {/* Telegram */}
+            <a
+              href="https://t.me/YOUR_TELEGRAM"
+              target="_blank"
+              rel="noreferrer"
+              className="social-icon telegram"
+            >
+              <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="Telegram" />
             </a>
-            <a href="https://linkedin.com" target="_blank" rel="noreferrer" title="LinkedIn">
-              <FaLinkedinIn />
+
+            {/* Email */}
+            <a
+              href="mailto:Textura0511@gmail.com"
+              className="social-icon email"
+            >
+              <img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" alt="Email" />
             </a>
+
           </div>
         </div>
+
       </div>
 
       <div className="footer-bottom">
