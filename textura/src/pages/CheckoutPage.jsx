@@ -10,6 +10,8 @@ const CheckoutPage = () => {
   const [paymentMethod, setPaymentMethod] = useState("cod");
   const [upiId, setUpiId] = useState("");
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [orderId, setOrderId] = useState("");
   const [editData, setEditData] = useState({
     name: user?.name || "",
     address: user?.address || "",
@@ -18,7 +20,7 @@ const CheckoutPage = () => {
   const backendUrl = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
   /* ============================================================
-      PLACE ORDER
+        PLACE ORDER
   ============================================================ */
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
@@ -44,19 +46,15 @@ const CheckoutPage = () => {
       address: user.address,
       paymentMethod,
       upiId: paymentMethod === "upi" ? upiId : null,
-
-      // 🛒 FIXED PRICE HANDLING
       items: cartItems.map((item) => ({
         name: item.name,
         price: Number(item.price) || 0,
         quantity: item.quantity,
       })),
-
       total: cartItems.reduce(
         (sum, item) => sum + (Number(item.price) || 0) * item.quantity,
         0
       ),
-
       status: "Pending",
       createdAt: new Date(),
     };
@@ -71,8 +69,13 @@ const CheckoutPage = () => {
       const data = await response.json();
 
       if (data.success) {
-        alert("✅ Order placed successfully!");
+        setOrderId(data.orderId);
+        setShowSuccess(true);
         clearCart();
+
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 4000);
       } else {
         alert("❌ Failed to place order. Please try again.");
       }
@@ -83,7 +86,7 @@ const CheckoutPage = () => {
   };
 
   /* ============================================================
-      UPDATE CUSTOMER DETAILS
+        UPDATE USER DETAILS
   ============================================================ */
   const handleSaveDetails = () => {
     if (!editData.name || !editData.address) {
@@ -98,26 +101,18 @@ const CheckoutPage = () => {
     alert("Customer details updated successfully ✅");
   };
 
-  /* ============================================================
-      JSX UI
-  ============================================================ */
   return (
     <div className="checkout-wrapper">
       <div className="checkout-container">
         <h2 className="checkout-title">🛒 Checkout</h2>
 
         <div className="checkout-card">
-          {/* 👤 Customer Info */}
+          {/* 👤 Customer Information */}
           <div className="customer-info">
             <h3>Customer Details</h3>
-            <p>
-              <strong>Name:</strong> {user?.name || "Not available"}
-            </p>
-            <p>
-              <strong>Address:</strong> {user?.address || "No address added"}
-            </p>
-
-            {(!user?.name || !user?.address) && (
+            <p><strong>Name:</strong> {user?.name || "Not available"}</p>
+            <p><strong>Address:</strong> {user?.address || "No address added"}</p>
+            {!user?.address && (
               <button className="update-btn" onClick={() => setShowEditModal(true)}>
                 Update Details
               </button>
@@ -132,7 +127,6 @@ const CheckoutPage = () => {
               <label className="radio-option">
                 <input
                   type="radio"
-                  name="payment"
                   value="cod"
                   checked={paymentMethod === "cod"}
                   onChange={() => setPaymentMethod("cod")}
@@ -143,12 +137,21 @@ const CheckoutPage = () => {
               <label className="radio-option">
                 <input
                   type="radio"
-                  name="payment"
                   value="upi"
                   checked={paymentMethod === "upi"}
                   onChange={() => setPaymentMethod("upi")}
                 />
                 UPI Payment
+              </label>
+
+              <label className="radio-option">
+                <input
+                  type="radio"
+                  value="qr"
+                  checked={paymentMethod === "qr"}
+                  onChange={() => setPaymentMethod("qr")}
+                />
+                QR Code Payment
               </label>
             </div>
 
@@ -157,22 +160,44 @@ const CheckoutPage = () => {
                 <label>Enter your UPI ID</label>
                 <input
                   type="text"
-                  placeholder="e.g., username@upi"
+                  placeholder="example@upi"
                   value={upiId}
                   onChange={(e) => setUpiId(e.target.value)}
                 />
               </div>
             )}
+
+            {paymentMethod === "qr" && (
+              <div className="qr-box">
+                <p>Scan to Pay</p>
+                <img
+                  src="/assets/qr-demo.png"
+                  alt="QR Code"
+                  className="qr-image"
+                />
+              </div>
+            )}
           </div>
 
-          {/* 🚀 Place Order */}
           <button onClick={handlePlaceOrder} className="place-order-btn">
             Place Order
           </button>
         </div>
       </div>
 
-      {/* ✏️ Edit Modal */}
+      {/* 🎉 Order Success Popup */}
+      {showSuccess && (
+        <div className="order-success-modal">
+          <div className="order-success-box">
+            <h2>🎉 Order Placed Successfully!</h2>
+            <p>Your Order ID:</p>
+            <h3 className="order-id">{orderId}</h3>
+            <p>You will be redirected to Home shortly…</p>
+          </div>
+        </div>
+      )}
+
+      {/* ✏ Edit Modal */}
       {showEditModal && (
         <div className="edit-modal">
           <div className="edit-modal-content">
@@ -180,13 +205,12 @@ const CheckoutPage = () => {
 
             <input
               type="text"
-              placeholder="Enter your name"
               value={editData.name}
               onChange={(e) => setEditData({ ...editData, name: e.target.value })}
             />
 
             <textarea
-              placeholder="Enter your delivery address"
+              placeholder="Address"
               value={editData.address}
               onChange={(e) => setEditData({ ...editData, address: e.target.value })}
             ></textarea>
@@ -195,7 +219,6 @@ const CheckoutPage = () => {
               <button className="save-btn" onClick={handleSaveDetails}>
                 Save
               </button>
-
               <button className="cancel-btn" onClick={() => setShowEditModal(false)}>
                 Cancel
               </button>
@@ -203,8 +226,10 @@ const CheckoutPage = () => {
           </div>
         </div>
       )}
+
     </div>
   );
 };
 
 export default CheckoutPage;
+

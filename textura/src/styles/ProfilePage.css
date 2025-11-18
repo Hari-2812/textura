@@ -38,6 +38,15 @@
   margin-right: 14px;
 }
 
+/* FORCE BUTTON ALIGNMENT */
+.profile-card button {
+  display: block !important;
+  width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  text-align: center !important;
+}
+
 /* DROPDOWN */
 .dropdown-container {
   position: relative;

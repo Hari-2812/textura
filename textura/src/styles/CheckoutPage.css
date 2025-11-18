@@ -1,105 +1,133 @@
-/* 🌸 Checkout Page - Modern Design */
+/* ---------------------------------------------
+   🌟 Global Layout Wrapper
+--------------------------------------------- */
 .checkout-wrapper {
   min-height: 100vh;
+  background: linear-gradient(135deg, #eef2f3, #dfe9f3);
   display: flex;
   justify-content: center;
-  align-items: center;
-  background: linear-gradient(135deg, #f9fbfc 0%, #f3f4f7 100%);
-  padding: 2rem;
+  align-items: flex-start;
+  padding: 28px;
   font-family: "Poppins", sans-serif;
 }
 
+/* ---------------------------------------------
+   🧾 Checkout Main Card
+--------------------------------------------- */
 .checkout-container {
   width: 100%;
-  max-width: 500px;
-  background: #fff;
-  border-radius: 20px;
-  padding: 2.5rem 2rem;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-  transition: 0.3s ease;
+  max-width: 480px;
 }
 
-.checkout-container:hover {
-  transform: translateY(-3px);
+.checkout-card {
+  background: #ffffff;
+  padding: 26px;
+  border-radius: 16px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.09);
+  animation: fadeIn 0.35s ease;
 }
 
+/* Title */
 .checkout-title {
   text-align: center;
-  font-weight: 600;
   font-size: 1.8rem;
-  color: #333;
-  margin-bottom: 1.5rem;
+  font-weight: 700;
+  color: #1a1d23;
+  margin-bottom: 18px;
 }
 
+/* ---------------------------------------------
+   👤 Customer Info Box
+--------------------------------------------- */
 .customer-info {
-  background: #f8fafc;
-  border-radius: 10px;
-  padding: 1rem 1.2rem;
-  margin-bottom: 1.5rem;
-  border: 1px solid #e0e0e0;
+  background: #f5f7fa;
+  padding: 14px 18px;
+  border-radius: 12px;
+  border: 1px solid #e3e8ee;
+  margin-bottom: 22px;
+}
+
+.customer-info h3 {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+  color: #1a1d23;
 }
 
 .customer-info p {
-  color: #555;
+  margin: 6px 0;
   font-size: 0.95rem;
-  margin: 0.3rem 0;
+  color: #555;
 }
 
+/* Update Details Button */
 .update-btn {
-  margin-top: 0.8rem;
-  background: linear-gradient(135deg, #ffb347, #ffcc33);
-  color: #333;
+  margin-top: 10px;
+  background: #ffd54f;
+  color: #1a1d23;
   border: none;
-  padding: 0.6rem 1rem;
-  border-radius: 25px;
-  font-weight: 500;
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-size: 0.95rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: 0.3s;
+  transition: 0.25s;
 }
 
 .update-btn:hover {
-  background: linear-gradient(135deg, #ffc107, #ffdb4d);
-  transform: translateY(-2px);
+  background: #ffca28;
+  transform: translateY(-1px);
 }
 
-/* 💳 Payment */
+/* ---------------------------------------------
+   💳 Payment Method Card
+--------------------------------------------- */
 .payment-method {
-  background: #f8fafc;
-  border-radius: 10px;
-  padding: 1rem 1.2rem;
-  border: 1px solid #e0e0e0;
-  margin-bottom: 1.5rem;
+  background: #f5f7fa;
+  padding: 14px 18px;
+  border: 1px solid #e3e8ee;
+  border-radius: 12px;
+  margin-bottom: 22px;
 }
 
+.payment-method h3 {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+/* Radio Buttons */
 .payment-options {
   display: flex;
   flex-direction: column;
-  gap: 0.7rem;
-  margin-top: 0.6rem;
+  gap: 10px;
 }
 
 .radio-option {
   font-size: 1rem;
-  color: #444;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 10px;
+  cursor: pointer;
 }
 
-.radio-option input {
-  transform: scale(1.2);
-}
-
-/* 🆔 UPI Input */
+/* ---------------------------------------------
+   🆔 UPI Input Box
+--------------------------------------------- */
 .upi-input {
-  margin-top: 1rem;
+  margin-top: 15px;
+}
+
+.upi-input label {
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+  display: block;
+  color: #333;
 }
 
 .upi-input input {
   width: 100%;
-  padding: 0.8rem 1rem;
-  border-radius: 8px;
-  border: 1px solid #ccc;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ccd1d9;
   font-size: 1rem;
   transition: 0.3s ease;
 }
@@ -110,19 +138,48 @@
   outline: none;
 }
 
-/* 🚀 Place Order Button */
+/* ---------------------------------------------
+   📷 QR Code Box
+--------------------------------------------- */
+.qr-box {
+  margin-top: 18px;
+  text-align: center;
+}
+
+.qr-box p {
+  font-size: 0.95rem;
+  margin-bottom: 10px;
+  color: #333;
+  font-weight: bold;
+}
+
+.qr-image {
+  width: 200px;
+  height: 200px;
+  border-radius: 12px;
+  object-fit: contain;
+  border: 1px solid #ddd;
+  padding: 10px;
+  background: white;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+}
+
+/* ---------------------------------------------
+   🚀 Place Order Button
+--------------------------------------------- */
 .place-order-btn {
   width: 100%;
-  padding: 0.9rem;
+  padding: 14px;
+  background: linear-gradient(135deg, #4f8bfe, #5cd4ff);
   border: none;
-  border-radius: 30px;
-  font-size: 1.1rem;
-  font-weight: 600;
-  background: linear-gradient(135deg, #4facfe, #00f2fe);
+  border-radius: 12px;
   color: white;
+  font-size: 1.1rem;
   cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  box-shadow: 0 5px 15px rgba(79, 172, 254, 0.3);
+  margin-top: 10px;
+  font-weight: 600;
+  box-shadow: 0 6px 14px rgba(79, 139, 254, 0.25);
+  transition: 0.3s ease;
 }
 
 .place-order-btn:hover {
@@ -130,86 +187,135 @@
   transform: translateY(-2px);
 }
 
-/* ✏️ Edit Modal */
-.edit-modal {
+/* ---------------------------------------------
+   🎉 Order Success Popup
+--------------------------------------------- */
+.order-success-modal {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0,0,0,0.45);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 999;
+  z-index: 2000;
+}
+
+.order-success-box {
+  background: #ffffff;
+  padding: 28px;
+  width: 90%;
+  max-width: 360px;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  animation: popIn 0.35s ease-out;
+}
+
+.order-success-box h2 {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+}
+
+.order-id {
+  background: #e0e7ff;
+  padding: 10px 14px;
+  border-radius: 10px;
+  margin-top: 8px;
+  font-weight: bold;
+  color: #1e3a8a;
+  font-size: 1.1rem;
+}
+
+/* ---------------------------------------------
+   ✏ Edit Popup Modal
+--------------------------------------------- */
+.edit-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
 }
 
 .edit-modal-content {
-  background: #fff;
-  border-radius: 15px;
-  padding: 2rem;
+  background: white;
+  padding: 24px;
   width: 90%;
-  max-width: 400px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-  text-align: center;
+  max-width: 360px;
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
 }
 
 .edit-modal-content h3 {
-  margin-bottom: 1rem;
-  color: #333;
+  text-align: center;
+  margin-bottom: 14px;
 }
 
 .edit-modal-content input,
 .edit-modal-content textarea {
   width: 100%;
-  margin-bottom: 1rem;
-  padding: 0.8rem 1rem;
-  border-radius: 8px;
-  border: 1px solid #ccc;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ccd1d9;
+  margin-bottom: 12px;
   font-size: 1rem;
 }
 
+/* Save + Cancel Buttons */
 .edit-actions {
   display: flex;
-  justify-content: center;
-  gap: 1rem;
-}
-
-.save-btn,
-.cancel-btn {
-  padding: 0.6rem 1.4rem;
-  border: none;
-  border-radius: 25px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.3s;
+  justify-content: space-between;
+  gap: 10px;
 }
 
 .save-btn {
-  background: linear-gradient(135deg, #43e97b, #38f9d7);
+  flex: 1;
+  padding: 12px;
+  background: #43e97b;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
   color: white;
+  cursor: pointer;
 }
 
 .cancel-btn {
-  background: #eee;
-  color: #333;
+  flex: 1;
+  padding: 12px;
+  background: #f1f1f1;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
 }
 
-.save-btn:hover {
-  transform: translateY(-2px);
-}
-
-.cancel-btn:hover {
-  background: #ddd;
-}
-
+/* ---------------------------------------------
+   📱 Mobile Responsive
+--------------------------------------------- */
 @media (max-width: 600px) {
-  .checkout-container {
-    padding: 1.8rem 1.2rem;
-    border-radius: 15px;
+  .checkout-card {
+    padding: 20px;
   }
 
   .checkout-title {
     font-size: 1.5rem;
   }
+}
+
+/* ---------------------------------------------
+   🎬 Animations
+--------------------------------------------- */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0px); }
+}
+
+@keyframes popIn {
+  from { transform: scale(0.85); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
 }
