@@ -1,0 +1,87 @@
+.help-wrapper {
+  max-width: 900px;
+  margin: auto;
+  padding: 2rem 1rem;
+  font-family: "Poppins", sans-serif;
+  color: #222;
+}
+
+.help-title {
+  text-align: center;
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.help-subtitle {
+  text-align: center;
+  color: #666;
+  font-size: 1rem;
+  margin-bottom: 2rem;
+}
+
+/* Page Boxes */
+.help-section {
+  background: #fff;
+  padding: 1.4rem;
+  margin-bottom: 1.4rem;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
+}
+
+.help-section h2 {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  color: #111;
+}
+
+/* FAQ */
+.faq-item {
+  margin-bottom: 1rem;
+}
+
+.faq-item h3 {
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: #000;
+  margin-bottom: 0.3rem;
+}
+
+.faq-item p {
+  color: #555;
+  line-height: 1.5;
+}
+
+/* WhatsApp Button */
+.help-whatsapp-btn {
+  display: inline-block;
+  background: #25D366;
+  color: #fff;
+  padding: 0.8rem 1.3rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: 0.3s ease;
+}
+
+.help-whatsapp-btn:hover {
+  background: #1ebc57;
+  transform: translateY(-2px);
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .help-title {
+    font-size: 1.8rem;
+  }
+
+  .help-section {
+    padding: 1.1rem;
+  }
+
+  .help-whatsapp-btn {
+    width: 100%;
+    text-align: center;
+  }
+}

@@ -35,6 +35,9 @@ import TrackOrder from "./pages/admin/TrackOrdersPage";
 import { CartProvider } from "./context/CartContext";
 import { UserProvider } from "./context/UserContext";
 import ProtectedRoute from "./components/ProtectedRoute";
+import HelpCenter from "./pages/HelpCenter";
+
+
 
 const AppContent = () => {
   const [showFilters, setShowFilters] = useState(false);
@@ -62,6 +65,8 @@ const AppContent = () => {
           {/* Admin */}
           <Route path="/admin-login" element={<AdminLogin />} />
           <Route path="/admin/*" element={<AdminLayout />} />
+          <Route path="/help" element={<HelpCenter />} />
+
 
           {/* Delivery */}
           <Route path="/delivery" element={<DeliveryOrders />} />
