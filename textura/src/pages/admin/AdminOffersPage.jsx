@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import "../../styles/AdminOffersPage.css";
-import io from "socket.io-client";
-
-const socket = io("http://localhost:5000"); // ⭐ connect socket
+import socket from "../../socket"; // FIXED
 
 const AdminOffersPage = () => {
   const [offerData, setOfferData] = useState({
@@ -16,6 +14,20 @@ const AdminOffersPage = () => {
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  // ⭐ Toast State
+  const [toast, setToast] = useState({
+    show: false,
+    message: "",
+    type: "success",
+  });
+
+  const showToast = (message, type = "success") => {
+    setToast({ show: true, message, type });
+    setTimeout(() => {
+      setToast({ show: false, message: "", type });
+    }, 2500);
+  };
+
   const handleChange = (e) => {
     setOfferData({
       ...offerData,
@@ -26,9 +38,9 @@ const AdminOffersPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!offerData.title.trim()) return alert("Enter a title");
-    if (!offerData.description.trim()) return alert("Enter description");
-    if (!offerData.category) return alert("Select a category");
+    if (!offerData.title.trim()) return showToast("Enter a title", "error");
+    if (!offerData.description.trim()) return showToast("Enter description", "error");
+    if (!offerData.category) return showToast("Select a category", "error");
 
     setLoading(true);
 
@@ -53,9 +65,9 @@ const AdminOffersPage = () => {
       const result = await response.json();
 
       if (result.success) {
-        alert("🎉 Offer posted & emails sent!");
-        
-        // ⭐ Notify user-side offers page in real-time
+        showToast("🎉 Offer posted & notifications sent!", "success");
+
+        // Notify all customers in real-time
         socket.emit("newOffer", result.offer);
 
         // Reset form
@@ -68,11 +80,11 @@ const AdminOffersPage = () => {
         });
         setImage(null);
       } else {
-        alert("Failed to send offer");
+        showToast("Failed to send offer", "error");
       }
     } catch (err) {
       console.error(err);
-      alert("Something went wrong!");
+      showToast("Something went wrong!", "error");
     }
 
     setLoading(false);
@@ -80,6 +92,13 @@ const AdminOffersPage = () => {
 
   return (
     <div className="offers-page-container">
+
+      {/* ⭐ Beautiful Toast Popup */}
+      <div className={`notify-popup ${toast.show ? "show" : ""} ${toast.type}`}>
+        <i className="fa-solid fa-circle-check"></i>
+        {toast.message}
+      </div>
+
       <h2>Create New Offer</h2>
 
       <form className="offer-form" onSubmit={handleSubmit}>

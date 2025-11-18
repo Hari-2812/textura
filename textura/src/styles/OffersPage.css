@@ -66,6 +66,30 @@
   margin-bottom: 1rem;
 }
 
+/* ================================
+   🔥 REAL-TIME TOAST NOTIFICATION
+================================ */
+.offer-toast {
+  position: fixed;
+  top: 25px;
+  right: -300px;
+  background: #ff5722;
+  color: white;
+  padding: 14px 22px;
+  font-size: 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  transition: all 0.4s ease;
+  z-index: 9999;
+  opacity: 0;
+  font-weight: 600;
+}
+
+.offer-toast.show {
+  right: 25px;
+  opacity: 1;
+}
+
 /* 🛍️ Button */
 .shop-now-btn {
   background: linear-gradient(135deg, #4facfe, #00f2fe);

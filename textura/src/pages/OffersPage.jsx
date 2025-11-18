@@ -6,18 +6,32 @@ import io from "socket.io-client";
 const OffersPage = () => {
   const [offers, setOffers] = useState([]);
 
-  // ⭐ Connect Socket.io for real-time updates
+  // ⭐ Toast State
+  const [toast, setToast] = useState({
+    show: false,
+    message: "",
+  });
+
+  const showToast = (msg) => {
+    setToast({ show: true, message: msg });
+    setTimeout(() => {
+      setToast({ show: false, message: "" });
+    }, 3000);
+  };
+
+  // ⭐ Socket Real-time Updates
   useEffect(() => {
     const socket = io("http://localhost:5000");
 
     socket.on("newOffer", (offer) => {
       setOffers((prev) => [offer, ...prev]);
+      showToast("🔥 New Offer Added!");
     });
 
     return () => socket.disconnect();
   }, []);
 
-  // 🔄 Fetch offers from backend API
+  // 🔄 Fetch existing offers
   useEffect(() => {
     const fetchOffers = async () => {
       try {
@@ -33,21 +47,31 @@ const OffersPage = () => {
 
   return (
     <div className="offers-page">
+
+      {/* ⭐ Real-time Toast Popup */}
+      <div className={`offer-toast ${toast.show ? "show" : ""}`}>
+        {toast.message}
+      </div>
+
       <h2 className="offers-title">🔥 Latest Offers & Deals</h2>
 
       {offers.length === 0 ? (
-        <p className="no-offers">No active offers right now. Check back soon!</p>
+        <p className="no-offers">
+          No active offers right now. Check back soon!
+        </p>
       ) : (
         <div className="offers-grid">
           {offers.map((offer) => (
             <div className="offer-card" key={offer._id}>
-              <img src={offer.image} alt={offer.title} />
+              <img
+                src={`http://localhost:5000${offer.image}`}
+                alt={offer.title}
+              />
 
               <div className="offer-content">
                 <h3>{offer.title}</h3>
                 <p>{offer.description}</p>
 
-                {/* ⭐ Show dates if available */}
                 {offer.endDate && (
                   <span className="offer-valid">
                     Valid till: {new Date(offer.endDate).toLocaleDateString()}

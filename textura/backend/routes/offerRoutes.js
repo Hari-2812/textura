@@ -1,76 +1,108 @@
-import React, { useEffect, useState } from "react";
-import "../styles/OffersPage.css";
-import axios from "axios";
+import express from "express";
+import multer from "multer";
+import fs from "fs";
+import path from "path";
+import Offer from "../models/offerModel.js";
+import Subscriber from "../models/subscriberModel.js";
+import sendEmail from "../utils/sendEmail.js";
 
-const OffersPage = () => {
-  const [offers, setOffers] = useState([]);
+const router = express.Router();
 
-  // 🔄 Fetch offers from backend API
-  useEffect(() => {
-    const fetchOffers = async () => {
-      try {
-        // ✅ You can later replace this URL with your backend API
-        const res = await axios.get("/api/offers");
-        setOffers(res.data);
-      } catch (error) {
-        console.error("Error fetching offers:", error);
-        // Dummy offers for now
-        setOffers([
-          {
-            id: 1,
-            title: "🎉 Diwali Festive Sale!",
-            description: "Flat 50% OFF on all Kidswear. Limited time offer.",
-            image:
-              "https://images.unsplash.com/photo-1600181958243-23154e1b6d4e?auto=format&fit=crop&w=600&q=60",
-            validTill: "Nov 20, 2025",
-          },
-          {
-            id: 2,
-            title: "👗 New Winter Collection",
-            description:
-              "Buy 2 get 1 FREE on Jackets, Hoodies, and Sweatshirts.",
-            image:
-              "https://images.unsplash.com/photo-1600181958243-23154e1b6d4e?auto=format&fit=crop&w=600&q=60",
-            validTill: "Dec 31, 2025",
-          },
-          {
-            id: 3,
-            title: "🎁 Weekend Bonanza",
-            description:
-              "Use code WEEKEND20 to get extra 20% off on selected items.",
-            image:
-              "https://images.unsplash.com/photo-1562158070-622a935f463e?auto=format&fit=crop&w=600&q=60",
-            validTill: "Nov 15, 2025",
-          },
-        ]);
-      }
-    };
-    fetchOffers();
-  }, []);
+// =============================================
+// 🔥 AUTO-CREATE uploads/offers FOLDER
+// =============================================
+const uploadDir = path.join(process.cwd(), "uploads", "offers");
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
 
-  return (
-    <div className="offers-page">
-      <h2 className="offers-title">🔥 Latest Offers & Deals</h2>
+// =============================================
+// MULTER IMAGE UPLOAD
+// =============================================
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, "uploads/offers"),
+  filename: (req, file, cb) =>
+    cb(null, Date.now() + "-" + file.originalname),
+});
 
-      {offers.length === 0 ? (
-        <p className="no-offers">No active offers right now. Check back soon!</p>
-      ) : (
-        <div className="offers-grid">
-          {offers.map((offer) => (
-            <div className="offer-card" key={offer.id}>
-              <img src={offer.image} alt={offer.title} />
-              <div className="offer-content">
-                <h3>{offer.title}</h3>
-                <p>{offer.description}</p>
-                <span className="offer-valid">Valid till: {offer.validTill}</span>
-                <button className="shop-now-btn">Shop Now</button>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-};
+const upload = multer({ storage });
 
-export default OffersPage;
+// =============================================
+// POST: /api/offers/send-offer
+// =============================================
+router.post("/send-offer", upload.single("image"), async (req, res) => {
+  try {
+    const { title, description, category, startDate, endDate } = req.body;
+
+    if (!title || !description || !category) {
+      return res.json({ success: false, message: "All fields are required" });
+    }
+
+    // Save image path
+    const image = req.file ? `/uploads/offers/${req.file.filename}` : null;
+
+    // Save offer to DB
+    const newOffer = await Offer.create({
+      title,
+      description,
+      category,
+      startDate,
+      endDate,
+      image,
+    });
+
+    // Send email notifications
+    const subscribers = await Subscriber.find();
+    subscribers.forEach((sub) => {
+      sendEmail(
+        sub.email,
+        `New Offer: ${title}`,
+        `${description}\n\nValid from ${startDate} to ${endDate}`
+      );
+    });
+
+    // SOCKET.IO BROADCAST
+    const io = req.app.get("io");
+    io.emit("offerUpdated", newOffer);
+
+    return res.json({
+      success: true,
+      message: "Offer posted, subscribers notified",
+      offer: newOffer,
+    });
+
+  } catch (error) {
+    console.log("Error creating offer:", error);
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
+});
+
+// =============================================
+// GET ALL OFFERS
+// =============================================
+router.get("/", async (req, res) => {
+  try {
+    const offers = await Offer.find().sort({ createdAt: -1 });
+    res.json({ success: true, offers });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
+});
+
+// =============================================
+// DELETE OFFER
+// =============================================
+router.delete("/:id", async (req, res) => {
+  try {
+    const deletedOffer = await Offer.findByIdAndDelete(req.params.id);
+    if (!deletedOffer) {
+      return res.json({ success: false, message: "Offer not found" });
+    }
+
+    res.json({ success: true, message: "Offer deleted" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
+});
+
+export default router;
