@@ -4,7 +4,7 @@ import "../styles/ProductDetails.css";
 import axios from "axios";
 import { FaShoppingCart, FaPlay } from "react-icons/fa";
 import { useCart } from "../context/CartContext";
-import SizeGuideModal from "../components/SizeGuideModal"; // ⭐ IMPORTANT
+import SizeGuideModal from "../components/SizeGuideModal";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -13,7 +13,16 @@ const ProductDetails = () => {
   const [product, setProduct] = useState(null);
   const [recommended, setRecommended] = useState([]);
   const [selectedSize, setSelectedSize] = useState(null);
-  const [showGuide, setShowGuide] = useState(false); // ⭐ FIXED
+  const [showGuide, setShowGuide] = useState(false);
+
+  // ⭐ Added: Inline error + success toast
+  const [sizeError, setSizeError] = useState("");
+  const [toast, setToast] = useState("");
+
+  const showToast = (msg) => {
+    setToast(msg);
+    setTimeout(() => setToast(""), 2000);
+  };
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -56,23 +65,30 @@ const ProductDetails = () => {
 
   const handleAddToCart = () => {
     if (!selectedSize) {
-      alert("Please select a size before adding to cart 👕");
+      setSizeError("⚠️ Please select a size before adding to cart.");
       return;
     }
+
+    setSizeError(""); // clear
+
     addToCart({ ...product, size: selectedSize });
-    alert(`${product.name} (${selectedSize}) added to cart 🛒`);
+
+    showToast(`${product.name} (${selectedSize}) added to cart 🛒`);
   };
 
   return (
     <>
+      {/* ⭐ Global Toast */}
+      {toast && <div className="cart-toast">{toast}</div>}
+
       <div className="product-details">
         <div className="product-details-container">
-          {/* ⭐ Left: Product Image */}
+          {/* ⭐ Left: Image */}
           <div className="product-image-section">
             <img src={product.images?.[0]?.url} alt={product.name} />
           </div>
 
-          {/* ⭐ Right: Product Info */}
+          {/* ⭐ Right: Info */}
           <div className="product-info-section">
             <h2>{product.name}</h2>
             <p className="price">₹{product.price}</p>
@@ -99,6 +115,9 @@ const ProductDetails = () => {
                 )}
               </div>
 
+              {/* ⭐ Inline Error */}
+              {sizeError && <div className="size-error-box">{sizeError}</div>}
+
               {/* ⭐ Height Guide */}
               {selectedSize && (
                 <p className="height-guide">
@@ -114,20 +133,19 @@ const ProductDetails = () => {
               </button>
             </div>
 
-            {/* ⭐ Description */}
             <p className="desc">
               {product.description ||
                 "Crafted with high-quality materials, this outfit ensures comfort and durability — designed to match your unique style!"}
             </p>
 
-            {/* ⭐ Buttons */}
             <div className="button-group">
               <button className="add-btn" onClick={handleAddToCart}>
                 <FaShoppingCart /> Add to Cart
               </button>
+
               <button
                 className="try-btn"
-                onClick={() => alert("Try feature demo")}
+                onClick={() => showToast("Try feature coming soon!")}
               >
                 <FaPlay /> Try Now
               </button>
@@ -135,7 +153,7 @@ const ProductDetails = () => {
           </div>
         </div>
 
-        {/* ⭐ Recommended Products */}
+        {/* ⭐ Recommended Section */}
         {recommended.length > 0 && (
           <div className="recommended-section">
             <h3>🛍️ Recommended for You</h3>
@@ -148,7 +166,10 @@ const ProductDetails = () => {
                   <h4>{item.name}</h4>
                   <p>₹{item.price}</p>
                   <button
-                    onClick={() => addToCart(item)}
+                    onClick={() => {
+                      addToCart(item);
+                      showToast(`${item.name} added to cart 🛒`);
+                    }}
                     className="small-cart-btn"
                   >
                     <FaShoppingCart /> Add to Cart

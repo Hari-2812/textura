@@ -70,7 +70,7 @@ const ProductCard = ({ product, onAddToCart }) => {
           className="add-cart-btn"
           onClick={() => {
             onAddToCart(product);
-            showToast(`${product.name} added to cart`);
+            // showToast(`${product.name} added to cart`);
           }}
         >
           <FaShoppingCart />
