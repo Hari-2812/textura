@@ -1,0 +1,88 @@
+.orders-page {
+  padding: 20px;
+  max-width: 800px;
+  margin: auto;
+}
+
+.orders-page h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 28px;
+}
+
+.no-orders {
+  text-align: center;
+}
+
+.no-orders img {
+  width: 160px;
+  margin-bottom: 15px;
+}
+
+.no-orders button {
+  padding: 10px 20px;
+  background: black;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.order-card {
+  background: white;
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.08);
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.order-header h4 {
+  margin: 0;
+}
+
+.status {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.status.pending { background: #ffebcc; color: #b36b00; }
+.status.accepted { background: #e0ffd1; color: #2e7d32; }
+.status["picked up"] { background: #d1e0ff; color: #0d47a1; }
+.status["in transit"] { background: #d1e6ff; color: #0d47a1; }
+.status.delivered { background: #d1ffd8; color: #1b5e20; }
+
+.order-items {
+  margin-bottom: 12px;
+  border-top: 1px solid #eee;
+  padding-top: 10px;
+}
+
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.order-footer {
+  border-top: 1px solid #eee;
+  padding-top: 10px;
+  font-size: 15px;
+  color: #555;
+}
+
+.order-footer .date {
+  font-size: 13px;
+  margin-top: 4px;
+}

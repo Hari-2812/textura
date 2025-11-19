@@ -31,7 +31,7 @@ const OffersPage = () => {
     return () => socket.disconnect();
   }, []);
 
-  // 🔄 Fetch existing offers
+  // ⭐ Fetch Offers
   useEffect(() => {
     const fetchOffers = async () => {
       try {
@@ -46,29 +46,24 @@ const OffersPage = () => {
   }, []);
 
   return (
-    <div className="offers-page">
+    <section className="offers-page">
+      {/* ⭐ Toast */}
+      {toast.show && <div className="offer-toast">{toast.message}</div>}
 
-      {/* ⭐ Real-time Toast Popup */}
-      <div className={`offer-toast ${toast.show ? "show" : ""}`}>
-        {toast.message}
-      </div>
+      <h2 className="offers-title">🔥 Latest Offers</h2>
 
-      <h2 className="offers-title">🔥 Latest Offers & Deals</h2>
-
-      {offers.length === 0 ? (
-        <p className="no-offers">
-          No active offers right now. Check back soon!
-        </p>
-      ) : (
-        <div className="offers-grid">
-          {offers.map((offer) => (
+      <div className="offers-container">
+        {offers.length === 0 ? (
+          <p className="no-offers">No offers available right now.</p>
+        ) : (
+          offers.map((offer) => (
             <div className="offer-card" key={offer._id}>
               <img
                 src={`http://localhost:5000${offer.image}`}
                 alt={offer.title}
               />
 
-              <div className="offer-content">
+              <div className="offer-text">
                 <h3>{offer.title}</h3>
                 <p>{offer.description}</p>
 
@@ -77,14 +72,14 @@ const OffersPage = () => {
                     Valid till: {new Date(offer.endDate).toLocaleDateString()}
                   </span>
                 )}
-
-                <button className="shop-now-btn">Shop Now</button>
               </div>
+
+              <button className="shop-now-btn">Shop Now</button>
             </div>
-          ))}
-        </div>
-      )}
-    </div>
+          ))
+        )}
+      </div>
+    </section>
   );
 };
 
