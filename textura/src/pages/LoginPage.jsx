@@ -16,7 +16,15 @@ const Login = () => {
 
   const [form, setForm] = useState({ email: "", password: "" });
   const [loadingGoogle, setLoadingGoogle] = useState(false);
-  const [showPassword, setShowPassword] = useState(false); // 👁️ Show/hide password
+  const [showPassword, setShowPassword] = useState(false);
+
+  // ⭐ NEW — Toast state
+  const [toast, setToast] = useState("");
+
+  const showToast = (msg) => {
+    setToast(msg);
+    setTimeout(() => setToast(""), 2000); // Auto-hide
+  };
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -44,10 +52,14 @@ const Login = () => {
       localStorage.setItem("userToken", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
 
-      alert("Login successful!");
-      navigate("/");
+      // ⭐ No alert — show toast!
+      showToast("Login successful 🎉");
+
+      setTimeout(() => {
+        navigate("/", { replace: true });
+      }, 1200);
     } catch (err) {
-      alert(err.message || "Invalid login");
+      showToast(err.message || "Invalid login");
     }
   };
 
@@ -70,11 +82,14 @@ const Login = () => {
       localStorage.setItem("userToken", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
 
-      alert("Google login successful!");
-      navigate("/");
+      showToast("Google login successful 🎉");
+
+      setTimeout(() => {
+        navigate("/", { replace: true });
+      }, 1200);
     } catch (err) {
       if (err.code !== "auth/cancelled-popup-request") {
-        alert(err.message);
+        showToast(err.message);
       }
     }
 
@@ -86,20 +101,23 @@ const Login = () => {
   // -------------------------------
   const handleForgotPassword = async () => {
     if (!form.email) {
-      alert("Enter your email first.");
+      showToast("Enter your email first");
       return;
     }
 
     try {
       await sendPasswordResetEmail(auth, form.email);
-      alert("Password reset email sent!");
+      showToast("Password reset email sent!");
     } catch (err) {
-      alert(err.message);
+      showToast(err.message);
     }
   };
 
   return (
     <div className="login-container">
+      {/* ⭐ Toast Notification */}
+      {toast && <div className="login-toast">{toast}</div>}
+
       <div className="login-box">
         <h2>Welcome Back</h2>
         <p className="subtitle">Login to continue shopping</p>
@@ -132,7 +150,7 @@ const Login = () => {
             </span>
           </div>
 
-          {/* FORGOT PASSWORD LINK */}
+          {/* FORGOT PASSWORD */}
           <p className="forgot-password" onClick={handleForgotPassword}>
             Forgot Password?
           </p>

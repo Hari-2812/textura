@@ -18,6 +18,14 @@ const SignupPage = () => {
 
   const [loading, setLoading] = useState(false);
 
+  // ⭐ Toast state
+  const [toast, setToast] = useState("");
+
+  const showToast = (msg) => {
+    setToast(msg);
+    setTimeout(() => setToast(""), 2500);
+  };
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -51,11 +59,13 @@ const SignupPage = () => {
       localStorage.setItem("userToken", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
 
-      alert("Account created successfully!");
-      navigate("/");
+      // ⭐ Replace alert with toast
+      showToast("Account created successfully 🎉");
+
+      // Auto redirect
+      setTimeout(() => navigate("/"), 1500);
     } catch (err) {
-      console.error(err);
-      alert(err.response?.data?.message || err.message || "Signup failed");
+      showToast(err.response?.data?.message || err.message || "Signup failed");
     }
 
     setLoading(false);
@@ -63,8 +73,10 @@ const SignupPage = () => {
 
   return (
     <div className="signup-container">
-      <div className="signup-box">
+      {/* ⭐ Toast UI */}
+      {toast && <div className="login-toast">{toast}</div>}
 
+      <div className="signup-box">
         <h2>Create Account</h2>
         <p className="subtitle">Join Textura — Style starts here!</p>
 

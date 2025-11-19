@@ -20,8 +20,16 @@ const Register = () => {
     password: "",
   });
 
-  const [showPassword, setShowPassword] = useState(false); // 👁️ toggle password
+  const [showPassword, setShowPassword] = useState(false);
   const [loadingGoogle, setLoadingGoogle] = useState(false);
+
+  // ⭐ Toast state
+  const [toast, setToast] = useState("");
+
+  const showToast = (msg) => {
+    setToast(msg);
+    setTimeout(() => setToast(""), 2000);
+  };
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -40,26 +48,28 @@ const Register = () => {
         form.password
       );
 
-      // add display name
+      // Add display name
       await updateProfile(userCredential.user, {
         displayName: form.name,
       });
 
       const idToken = await userCredential.user.getIdToken();
 
-      // send to your backend
-      const res = await axios.post(
-        "http://localhost:5000/api/users/login",
-        { token: idToken }
-      );
+      // Send token to backend
+      const res = await axios.post("http://localhost:5000/api/users/login", {
+        token: idToken,
+      });
 
       localStorage.setItem("userToken", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
 
-      alert("Registration successful!");
-      navigate("/profile");
+      // ⭐ Replace alert with toast
+      showToast("Registration successful 🎉");
+
+      // Auto redirect
+      setTimeout(() => navigate("/profile"), 1200);
     } catch (err) {
-      alert(err.message || "Registration failed");
+      showToast(err.message || "Registration failed");
     }
   };
 
@@ -75,19 +85,18 @@ const Register = () => {
       const googleUser = await signInWithPopup(auth, googleProvider);
       const idToken = await googleUser.user.getIdToken();
 
-      const res = await axios.post(
-        "http://localhost:5000/api/users/login",
-        { token: idToken }
-      );
+      const res = await axios.post("http://localhost:5000/api/users/login", {
+        token: idToken,
+      });
 
       localStorage.setItem("userToken", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
 
-      alert("Google signup successful!");
-      navigate("/profile");
+      showToast("Google signup successful 🎉");
+
+      setTimeout(() => navigate("/profile"), 1200);
     } catch (err) {
-      console.error(err);
-      alert(err.message);
+      showToast(err.message);
     }
 
     setLoadingGoogle(false);
@@ -95,8 +104,10 @@ const Register = () => {
 
   return (
     <div className="register-container">
-      <div className="register-box">
+      {/* ⭐ Toast message */}
+      {toast && <div className="login-toast">{toast}</div>}
 
+      <div className="register-box">
         <h2>Create Account</h2>
         <p className="subtitle">Join Textura and enjoy the best styles!</p>
 
