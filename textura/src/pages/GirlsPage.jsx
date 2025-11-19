@@ -13,20 +13,24 @@ const GirlsPage = ({ showFilters, setShowFilters }) => {
   const [style, setStyle] = useState("all");
 
   const { addToCart } = useCart();
-  const [popup, setPopup] = useState(false);
 
-  // ⭐ Fetch products from backend
+  // ⭐ Unified Toast
+  const [toast, setToast] = useState("");
+
+  const showToast = (msg) => {
+    setToast(msg);
+    setTimeout(() => setToast(""), 2000);
+  };
+
+  // ⭐ Fetch products
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const res = await axios.get("http://localhost:5000/api/products");
         const allProducts = res.data.products || [];
 
-        // ⭐ Category "2" or "girls"
         const girls = allProducts.filter(
-          (p) =>
-            p.category === "2" ||
-            p.category.toLowerCase() === "girls"
+          (p) => p.category === "2" || p.category.toLowerCase() === "girls"
         );
 
         setGirlsProducts(girls);
@@ -61,24 +65,21 @@ const GirlsPage = ({ showFilters, setShowFilters }) => {
     setShowFilters(false);
   };
 
-  // ⭐ Reset when filters are closed
+  // ⭐ Reset on filter close
   useEffect(() => {
     if (!showFilters && filteredProducts.length === 0) {
       setFilteredProducts(girlsProducts);
     }
   }, [showFilters, girlsProducts, filteredProducts.length]);
 
-  // ⭐ Add-to-cart popup
-  const showCartPopup = () => {
-    setPopup(true);
-    setTimeout(() => setPopup(false), 2000);
-  };
-
   return (
     <section className="girls-page">
+      {/* ⭐ Toast Notification */}
+      {toast && <div className="login-toast">{toast}</div>}
+
       <h2>Girls Collection</h2>
 
-      {/* ⭐ Filter Popup */}
+      {/* Filter Popup */}
       {showFilters && (
         <div className="filter-popup">
           <div className="filter-header">
@@ -116,12 +117,12 @@ const GirlsPage = ({ showFilters, setShowFilters }) => {
         </div>
       )}
 
-      {/* ⭐ Overlay */}
+      {/* Overlay */}
       {showFilters && (
         <div className="overlay" onClick={() => setShowFilters(false)} />
       )}
 
-      {/* ⭐ Product Grid */}
+      {/* Product Grid */}
       <div className="girls-container">
         {filteredProducts.length > 0 ? (
           filteredProducts.map((p) => (
@@ -130,7 +131,7 @@ const GirlsPage = ({ showFilters, setShowFilters }) => {
               product={p}
               onAddToCart={(item) => {
                 addToCart(item);
-                showCartPopup();
+                showToast("🛒 Item added to cart!");
               }}
             />
           ))
@@ -138,9 +139,6 @@ const GirlsPage = ({ showFilters, setShowFilters }) => {
           <p>No products found</p>
         )}
       </div>
-
-      {/* ⭐ Popup */}
-      {popup && <div className="popup">🛒 Item added to cart!</div>}
     </section>
   );
 };

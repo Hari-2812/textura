@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -12,17 +12,25 @@ import { FaShoppingCart } from "react-icons/fa";
 const NewArrival = () => {
   const { addToCart } = useCart();
 
+  // ⭐ Toast state
+  const [toast, setToast] = useState("");
+
+  const showToast = (msg) => {
+    setToast(msg);
+    setTimeout(() => setToast(""), 2000);
+  };
+
   const settings = {
     dots: true,
     infinite: true,
     speed: 600,
-    slidesToShow: 3, // ✅ for desktop
+    slidesToShow: 3,
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 2500,
     responsive: [
-      { breakpoint: 1024, settings: { slidesToShow: 2 } }, // ✅ 2 cards for tablets
-      { breakpoint: 768, settings: { slidesToShow: 2 } }, // ✅ 2 cards for mobile
+      { breakpoint: 1024, settings: { slidesToShow: 2 } },
+      { breakpoint: 768, settings: { slidesToShow: 2 } },
     ],
   };
 
@@ -36,17 +44,22 @@ const NewArrival = () => {
 
   return (
     <section className="product-slider">
+      {/* ⭐ Toast UI */}
+      {toast && <div className="login-toast">{toast}</div>}
+
       <h2 className="slider-title">🆕 New Arrivals</h2>
+
       <Slider {...settings}>
         {newArrivals.map((item) => (
           <div key={item.id} className="product-card">
             <img src={item.image} alt={item.name} />
             <h3>{item.name}</h3>
             <p>{item.price}</p>
+
             <button
               onClick={() => {
                 addToCart(item);
-                alert(`${item.name} added to cart 🛒`);
+                showToast(`${item.name} added to cart 🛒`);
               }}
             >
               <FaShoppingCart />

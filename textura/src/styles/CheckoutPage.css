@@ -59,7 +59,7 @@
   color: #555;
 }
 
-/* Update Details Button */
+/* Update Button */
 .update-btn {
   margin-top: 10px;
   background: #ffd54f;
@@ -79,7 +79,7 @@
 }
 
 /* ---------------------------------------------
-   💳 Payment Method Card
+   💳 Payment Box
 --------------------------------------------- */
 .payment-method {
   background: #f5f7fa;
@@ -94,23 +94,49 @@
   margin-bottom: 10px;
 }
 
-/* Radio Buttons */
-.payment-options {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
 .radio-option {
   font-size: 1rem;
   display: flex;
   align-items: center;
   gap: 10px;
   cursor: pointer;
+  margin-bottom: 6px;
 }
 
 /* ---------------------------------------------
-   🆔 UPI Input Box
+   ❗ Checkout Inline Error
+--------------------------------------------- */
+.checkout-error-box {
+  background: #ffe6e6;
+  color: #c70000;
+  border: 1px solid #ffb3b3;
+  padding: 12px;
+  border-radius: 10px;
+  margin: 12px 0 18px;
+  font-size: 0.95rem;
+  text-align: center;
+  font-weight: 600;
+  animation: fadeIn 0.3s ease;
+}
+
+/* ---------------------------------------------
+   ❗ Modal Error Box
+--------------------------------------------- */
+.modal-error-box {
+  background: #ffe6e6;
+  color: #c70000;
+  border: 1px solid #ffb3b3;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 600;
+  animation: fadeIn 0.3s ease;
+}
+
+/* ---------------------------------------------
+   🆔 UPI
 --------------------------------------------- */
 .upi-input {
   margin-top: 15px;
@@ -132,7 +158,7 @@
 }
 
 /* ---------------------------------------------
-   📷 QR Code Box
+   📷 QR Code
 --------------------------------------------- */
 .qr-box {
   margin-top: 18px;
@@ -158,7 +184,7 @@
 }
 
 /* ---------------------------------------------
-   🚀 Place Order Button
+   🟦 Place Order Button
 --------------------------------------------- */
 .place-order-btn {
   width: 100%;
@@ -220,7 +246,7 @@
 }
 
 /* ---------------------------------------------
-   ✏ Edit Popup Modal
+   ✏ Edit Modal
 --------------------------------------------- */
 .edit-modal {
   position: fixed;
@@ -247,7 +273,6 @@
   margin-bottom: 14px;
 }
 
-/* Input + textarea */
 .edit-modal-content input,
 .edit-modal-content textarea,
 .edit-modal-content select {
@@ -268,7 +293,6 @@
   outline: none;
 }
 
-/* Buttons */
 .edit-actions {
   display: flex;
   justify-content: space-between;

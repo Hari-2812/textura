@@ -14,6 +14,9 @@ const CheckoutPage = () => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [orderId, setOrderId] = useState("");
 
+  const [errorMsg, setErrorMsg] = useState(""); // checkout error
+  const [modalError, setModalError] = useState(""); // modal error
+
   const [editData, setEditData] = useState({
     name: user?.name || "",
     phone: user?.phone || "",
@@ -27,7 +30,7 @@ const CheckoutPage = () => {
   const backendUrl = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
   /* ============================================================
-      VALIDATION FUNCTION
+      VALIDATION (FOR MODAL)
   ============================================================ */
   const validateDetails = () => {
     const nameRegex = /^[A-Za-z ]{3,}$/;
@@ -35,41 +38,42 @@ const CheckoutPage = () => {
     const pincodeRegex = /^[0-9]{6}$/;
 
     if (!nameRegex.test(editData.name)) {
-      alert("Please enter a valid name.");
+      setModalError("Please enter a valid full name.");
       return false;
     }
 
     if (!phoneRegex.test(editData.phone)) {
-      alert("Phone number must be 10 digits.");
+      setModalError("Phone number must be exactly 10 digits.");
       return false;
     }
 
     if (editData.address.length < 10) {
-      alert("Please enter a full detailed address.");
+      setModalError("Please enter a full detailed address.");
       return false;
     }
 
     if (!STATES.includes(editData.state)) {
-      alert("Please select a valid state.");
+      setModalError("Please select a valid state.");
       return false;
     }
 
     const districts = DISTRICTS[editData.state] || [];
     if (!districts.includes(editData.district)) {
-      alert("Please select a valid district.");
+      setModalError("Please select a valid district.");
       return false;
     }
 
     if (!pincodeRegex.test(editData.pincode)) {
-      alert("Pincode must be 6 digits.");
+      setModalError("Pincode must be exactly 6 digits.");
       return false;
     }
 
+    setModalError("");
     return true;
   };
 
   /* ============================================================
-      SAVE PROFILE MODAL DETAILS
+      SAVE DETAILS (INSIDE MODAL)
   ============================================================ */
   const handleSaveDetails = () => {
     if (!validateDetails()) return;
@@ -88,8 +92,10 @@ const CheckoutPage = () => {
     setUser(updatedUser);
     localStorage.setItem("user", JSON.stringify(updatedUser));
 
+    setModalError("");
+    setErrorMsg("Delivery details updated successfully ✓");
+
     setShowEditModal(false);
-    alert("Customer details updated successfully ✅");
   };
 
   /* ============================================================
@@ -99,19 +105,23 @@ const CheckoutPage = () => {
     e.preventDefault();
 
     if (!user?.name || !user?.address || !user?.state) {
-      alert("Please complete your delivery address before placing the order.");
+      setErrorMsg(
+        "Please complete your delivery details before placing the order."
+      );
       return;
     }
 
     if (cartItems.length === 0) {
-      alert("Your cart is empty.");
+      setErrorMsg("Your cart is empty.");
       return;
     }
 
     if (paymentMethod === "upi" && !upiId) {
-      alert("Please enter your UPI ID.");
+      setErrorMsg("Please enter a valid UPI ID.");
       return;
     }
+
+    setErrorMsg("");
 
     const orderData = {
       customerName: user.name,
@@ -149,26 +159,19 @@ const CheckoutPage = () => {
       const data = await response.json();
 
       if (data.success) {
-        const id =
-          data.order?.orderId || // backend nested
-          data.orderId || // flat fallback
-          data.id || // any other naming
-          "";
-
+        const id = data.order?.orderId || data.orderId || data.id || "";
         setOrderId(id);
-
         setShowSuccess(true);
         clearCart();
 
-        // DO NOT redirect instantly (give users time to see the orderId)
         setTimeout(() => {
           window.location.href = "/";
         }, 5000);
       } else {
-        alert("❌ Order failed. Try again.");
+        setErrorMsg("Order failed. Please try again.");
       }
     } catch (error) {
-      alert("⚠️ Server error while placing order.");
+      setErrorMsg("Server error. Please try again later.");
       console.error(error);
     }
   };
@@ -179,7 +182,7 @@ const CheckoutPage = () => {
         <h2 className="checkout-title">🛒 Checkout</h2>
 
         <div className="checkout-card">
-          {/* CUSTOMER DETAILS */}
+          {/* CUSTOMER INFO */}
           <div className="customer-info">
             <h3>Delivery Details</h3>
             <p>
@@ -265,6 +268,9 @@ const CheckoutPage = () => {
             )}
           </div>
 
+          {/* INLINE ERROR BOX */}
+          {errorMsg && <div className="checkout-error-box">{errorMsg}</div>}
+
           <button className="place-order-btn" onClick={handlePlaceOrder}>
             Place Order
           </button>
@@ -288,6 +294,9 @@ const CheckoutPage = () => {
         <div className="edit-modal">
           <div className="edit-modal-content">
             <h3>Update Delivery Details</h3>
+
+            {/* MODAL ERROR */}
+            {modalError && <div className="modal-error-box">{modalError}</div>}
 
             <input
               type="text"
@@ -315,7 +324,6 @@ const CheckoutPage = () => {
               }
             ></textarea>
 
-            {/* STATE */}
             <select
               value={editData.state}
               onChange={(e) =>
@@ -334,7 +342,6 @@ const CheckoutPage = () => {
               ))}
             </select>
 
-            {/* DISTRICT */}
             <select
               value={editData.district}
               onChange={(e) =>
@@ -375,7 +382,10 @@ const CheckoutPage = () => {
               </button>
               <button
                 className="cancel-btn"
-                onClick={() => setShowEditModal(false)}
+                onClick={() => {
+                  setModalError("");
+                  setShowEditModal(false);
+                }}
               >
                 Cancel
               </button>

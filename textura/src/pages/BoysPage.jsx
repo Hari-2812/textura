@@ -13,20 +13,24 @@ const BoysPage = ({ showFilters, setShowFilters }) => {
   const [style, setStyle] = useState("all");
 
   const { addToCart } = useCart();
-  const [popup, setPopup] = useState(false);
 
-  // ⭐ Fetch products from backend
+  // ⭐ Toast state
+  const [toast, setToast] = useState("");
+
+  const showToast = (msg) => {
+    setToast(msg);
+    setTimeout(() => setToast(""), 2000);
+  };
+
+  // ⭐ Fetch products
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const res = await axios.get("http://localhost:5000/api/products");
         const allProducts = res.data.products || [];
 
-        // ⭐ FIXED: Show category "1" OR "boys"
         const boys = allProducts.filter(
-          (p) =>
-            p.category === "1" ||
-            p.category.toLowerCase() === "boys"
+          (p) => p.category === "1" || p.category.toLowerCase() === "boys"
         );
 
         setBoysProducts(boys);
@@ -61,24 +65,14 @@ const BoysPage = ({ showFilters, setShowFilters }) => {
     setShowFilters(false);
   };
 
-  // ⭐ Reset when no filters active
-  useEffect(() => {
-    if (!showFilters && filteredProducts.length === 0) {
-      setFilteredProducts(boysProducts);
-    }
-  }, [showFilters, boysProducts, filteredProducts.length]);
-
-  // ⭐ Popup animation handler
-  const showCartPopup = () => {
-    setPopup(true);
-    setTimeout(() => setPopup(false), 2000);
-  };
-
   return (
     <section className="boys-page">
+      {/* ⭐ Toast UI */}
+      {toast && <div className="login-toast">{toast}</div>}
+
       <h2>Boys Collection</h2>
 
-      {/* ⭐ Filter Popup */}
+      {/* Filter Popup */}
       {showFilters && (
         <div className="filter-popup">
           <div className="filter-header">
@@ -116,7 +110,7 @@ const BoysPage = ({ showFilters, setShowFilters }) => {
         </div>
       )}
 
-      {/* ⭐ Overlay */}
+      {/* Overlay */}
       {showFilters && (
         <div className="overlay" onClick={() => setShowFilters(false)} />
       )}
@@ -130,7 +124,7 @@ const BoysPage = ({ showFilters, setShowFilters }) => {
               product={p}
               onAddToCart={(item) => {
                 addToCart(item);
-                showCartPopup();
+                showToast("🛒 Item added to cart!");
               }}
             />
           ))
@@ -138,9 +132,6 @@ const BoysPage = ({ showFilters, setShowFilters }) => {
           <p>No products found</p>
         )}
       </div>
-
-      {/* ⭐ Popup */}
-      {popup && <div className="popup">🛒 Item added to cart!</div>}
     </section>
   );
 };
