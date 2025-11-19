@@ -8,13 +8,18 @@ const router = express.Router();
 ============================================================ */
 router.post("/", async (req, res) => {
   try {
-    const io = req.app.get("io"); // ⭐ access socket.io instance
+    const io = req.app.get("io");
 
-    const newOrder = await Order.create(req.body);
+    // Generate unique order ID
+    const orderId = "TXR" + Math.floor(100000 + Math.random() * 900000);
 
-    // 🔥 Emit real-time notification to Admin Dashboard
+    const newOrder = await Order.create({
+      ...req.body,
+      orderId, // 👈 FIX HERE
+    });
+
     io.emit("newOrder", {
-      message: `🛒 New order received (Order ID: ${newOrder._id})`,
+      message: `🛒 New order received (Order ID: ${newOrder.orderId})`,
       order: newOrder,
     });
 
@@ -75,6 +80,27 @@ router.get("/", async (req, res) => {
   } catch (err) {
     console.error("Fetch Orders Error:", err);
     res.status(500).json({ message: "Failed to fetch orders" });
+  }
+});
+
+/* ============================================================
+   📌 GET ORDERS BY USER EMAIL
+============================================================ */
+router.get("/user/:email", async (req, res) => {
+  try {
+    const userEmail = req.params.email;
+
+    const orders = await Order.find({ customerEmail: userEmail }).sort({
+      createdAt: -1,
+    });
+
+    res.json({
+      success: true,
+      orders,
+    });
+  } catch (err) {
+    console.error("Error fetching user orders:", err);
+    res.status(500).json({ message: "Failed to fetch user orders" });
   }
 });
 

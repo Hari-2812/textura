@@ -16,11 +16,10 @@ import connectDB from "./config/db.js";
 // Routes
 import productRoutes from "./routes/productRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
-import orderRoutes from "./routes/orders.js";
 import adminStatsRoutes from "./routes/adminStats.js";
 import offerRoutes from "./routes/offerRoutes.js";
 import subscriberRoutes from "./routes/subscriberRoutes.js"; // ⭐ NEWSLETTER ROUTE
-
+import orderRoutes from "./routes/orderRoutes.js";
 // ---------------------------------------------
 // 3️⃣ App + Server setup
 // ---------------------------------------------
@@ -63,8 +62,10 @@ console.log("🔐 Loaded JWT_SECRET:", process.env.JWT_SECRET);
 app.use("/api/users", userRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/admin/orders", orderRoutes);
-app.use("/api/admin", adminStatsRoutes);
 
+app.use("/api/admin", adminStatsRoutes);
+app.use("/api/orders", orderRoutes);
+app.use("/api/admin/orders", orderRoutes);
 app.use("/api/offers", offerRoutes);
 app.use("/api/newsletter", subscriberRoutes);
 

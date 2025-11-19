@@ -36,8 +36,7 @@ import { CartProvider } from "./context/CartContext";
 import { UserProvider } from "./context/UserContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import HelpCenter from "./pages/HelpCenter";
-
-
+import MyOrders from "./pages/MyOrders";
 
 const AppContent = () => {
   const [showFilters, setShowFilters] = useState(false);
@@ -66,7 +65,6 @@ const AppContent = () => {
           <Route path="/admin-login" element={<AdminLogin />} />
           <Route path="/admin/*" element={<AdminLayout />} />
           <Route path="/help" element={<HelpCenter />} />
-
 
           {/* Delivery */}
           <Route path="/delivery" element={<DeliveryOrders />} />
@@ -157,6 +155,15 @@ const AppContent = () => {
             element={
               <ProtectedRoute>
                 <WishlistPage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/orders"
+            element={
+              <ProtectedRoute>
+                <MyOrders />
               </ProtectedRoute>
             }
           />
