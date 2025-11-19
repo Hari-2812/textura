@@ -8,11 +8,12 @@ import img2 from "../assets/images/polo2.jpg";
 import img3 from "../assets/images/polo3.jpg";
 import { useCart } from "../context/CartContext";
 import { FaShoppingCart } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const NewArrival = () => {
   const { addToCart } = useCart();
+  const navigate = useNavigate();
 
-  // ⭐ Toast state
   const [toast, setToast] = useState("");
 
   const showToast = (msg) => {
@@ -35,16 +36,15 @@ const NewArrival = () => {
   };
 
   const newArrivals = [
-    { id: 1, image: img1, name: "Benetton Polo 1", price: "$29" },
-    { id: 2, image: img2, name: "Benetton Polo 2", price: "$32" },
-    { id: 3, image: img3, name: "Benetton Polo 3", price: "$30" },
-    { id: 4, image: img1, name: "Benetton Polo 4", price: "$28" },
-    { id: 5, image: img2, name: "Benetton Polo 5", price: "$31" },
+    { id: "6744aa11c9d1", image: img1, name: "Benetton Polo 1", price: 29 },
+    { id: "6744ab22d112", image: img2, name: "Benetton Polo 2", price: 32 },
+    { id: "6744ac33b882", image: img3, name: "Benetton Polo 3", price: 30 },
+    { id: "6744ad44cc12", image: img1, name: "Benetton Polo 4", price: 28 },
+    { id: "6744ae55dd21", image: img2, name: "Benetton Polo 5", price: 31 },
   ];
 
   return (
     <section className="product-slider">
-      {/* ⭐ Toast UI */}
       {toast && <div className="login-toast">{toast}</div>}
 
       <h2 className="slider-title">🆕 New Arrivals</h2>
@@ -52,10 +52,17 @@ const NewArrival = () => {
       <Slider {...settings}>
         {newArrivals.map((item) => (
           <div key={item.id} className="product-card">
-            <img src={item.image} alt={item.name} />
-            <h3>{item.name}</h3>
-            <p>{item.price}</p>
+            {/* CLICK TO OPEN PRODUCT DETAILS */}
+            <div
+              className="slider-click-area"
+              onClick={() => navigate(`/product/${item.id}`)}
+            >
+              <img src={item.image} alt={item.name} />
+              <h3>{item.name}</h3>
+              <p>₹{item.price}</p>
+            </div>
 
+            {/* ADD TO CART BUTTON */}
             <button
               onClick={() => {
                 addToCart(item);
