@@ -25,7 +25,6 @@
   min-width: 220px;
 }
 
-/* Logo */
 .footer-logo {
   font-size: 1.8rem;
   font-weight: 600;
@@ -40,7 +39,6 @@
   line-height: 1.6;
 }
 
-/* Section Heading */
 .footer-section h3 {
   font-size: 1.1rem;
   margin-bottom: 0.7rem;
@@ -48,7 +46,6 @@
   padding-bottom: 0.35rem;
 }
 
-/* Links */
 .footer-section p {
   font-size: 0.95rem;
   color: #bbb;
@@ -63,9 +60,8 @@
 }
 
 /* =================================================
-   FOLLOW US SECTION — NEW UI
+   SOCIAL ICONS
    ================================================= */
-
 .footer-socials {
   display: flex;
   gap: 1rem;
@@ -87,7 +83,6 @@
   transition: transform 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
 }
 
-/* Fix images inside icons */
 .social-icon img {
   width: 55%;
   height: 55%;
@@ -95,31 +90,26 @@
   filter: invert(1);
 }
 
-/* Hover Glow */
 .social-icon:hover {
   transform: scale(1.12);
   box-shadow: 0 0 12px rgba(255, 255, 255, 0.25);
 }
 
-/* Instagram — Gradient */
 .social-icon.instagram:hover {
   background: linear-gradient(45deg, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5);
   box-shadow: 0 0 12px rgba(214, 41, 118, 0.6);
 }
 
-/* WhatsApp — Green */
 .social-icon.whatsapp:hover {
-  background: #25D366;
+  background: #25d366;
   box-shadow: 0 0 12px rgba(37, 211, 102, 0.6);
 }
 
-/* Telegram — Blue */
 .social-icon.telegram:hover {
   background: #0088cc;
   box-shadow: 0 0 12px rgba(0, 136, 204, 0.6);
 }
 
-/* Email — Red */
 .social-icon.email:hover {
   background: #d44638;
   box-shadow: 0 0 12px rgba(212, 70, 56, 0.6);
@@ -138,7 +128,6 @@
 /* =================================================
    RESPONSIVE
    ================================================= */
-
 @media (max-width: 900px) {
   .footer-row {
     flex-direction: column;
@@ -159,5 +148,94 @@
     width: 36px;
     height: 36px;
     font-size: 1.1rem;
+  }
+}
+
+/* =================================================
+   EMAIL POPUP (MOBILE)
+   ================================================= */
+.email-popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 3000;
+}
+
+.email-popup {
+  background: #fff;
+  padding: 1.8rem;
+  width: 90%;
+  max-width: 360px;
+  text-align: center;
+  border-radius: 12px;
+  animation: popIn 0.3s ease-out;
+}
+
+.email-popup h4 {
+  font-size: 1.3rem;
+  margin-bottom: 0.4rem;
+  color: #111;
+}
+
+.email-popup p {
+  color: #555;
+  font-size: 0.95rem;
+  margin-bottom: 1.2rem;
+}
+
+.email-popup-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.email-btn {
+  padding: 10px 14px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: 600;
+  width: 100%;
+}
+
+.email-btn.app {
+  background: #d44638;
+  color: #fff;
+}
+
+.email-btn.app:hover {
+  background: #b9382d;
+}
+
+.email-btn.browser {
+  background: #111;
+  color: #fff;
+}
+
+.email-btn.browser:hover {
+  background: #000;
+}
+
+.email-btn.cancel {
+  background: #f1f1f1;
+  color: #333;
+}
+
+.email-btn.cancel:hover {
+  background: #e1e1e1;
+}
+
+@keyframes popIn {
+  from {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
   }
 }
