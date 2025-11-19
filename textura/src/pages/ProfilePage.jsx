@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useUser } from "../context/UserContext";
 import axios from "axios";
 import "../styles/ProfilePage.css";
 
@@ -108,7 +109,7 @@ export const DISTRICTS = {
 };
 
 const ProfilePage = () => {
-  const [user, setUser] = useState(null);
+  const { user, setUser } = useUser();
   const [isEditing, setIsEditing] = useState(false);
 
   const [form, setForm] = useState({
@@ -190,6 +191,32 @@ const ProfilePage = () => {
       await axios.put("http://localhost:5000/api/users/update", form, {
         headers: { Authorization: `Bearer ${token}` },
       });
+
+      setUser({
+        ...user,
+        name: form.name,
+        phone: form.phone,
+        address: form.address,
+        state: form.state,
+        district: form.district,
+        pincode: form.pincode,
+        landmark: form.landmark,
+      });
+
+      // Make sure localStorage updates also
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          ...user,
+          name: form.name,
+          phone: form.phone,
+          address: form.address,
+          state: form.state,
+          district: form.district,
+          pincode: form.pincode,
+          landmark: form.landmark,
+        })
+      );
 
       alert("Profile updated successfully!");
       setIsEditing(false);

@@ -116,13 +116,6 @@
   margin-top: 15px;
 }
 
-.upi-input label {
-  font-size: 0.9rem;
-  margin-bottom: 5px;
-  display: block;
-  color: #333;
-}
-
 .upi-input input {
   width: 100%;
   padding: 12px;
@@ -192,10 +185,7 @@
 --------------------------------------------- */
 .order-success-modal {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background: rgba(0,0,0,0.45);
   display: flex;
   justify-content: center;
@@ -249,6 +239,7 @@
   max-width: 360px;
   border-radius: 14px;
   box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  animation: popIn 0.35s ease-out;
 }
 
 .edit-modal-content h3 {
@@ -256,17 +247,28 @@
   margin-bottom: 14px;
 }
 
+/* Input + textarea */
 .edit-modal-content input,
-.edit-modal-content textarea {
+.edit-modal-content textarea,
+.edit-modal-content select {
   width: 100%;
   padding: 12px;
   border-radius: 10px;
   border: 1px solid #ccd1d9;
   margin-bottom: 12px;
   font-size: 1rem;
+  transition: 0.3s ease;
 }
 
-/* Save + Cancel Buttons */
+.edit-modal-content input:focus,
+.edit-modal-content textarea:focus,
+.edit-modal-content select:focus {
+  border-color: #4f8bfe;
+  box-shadow: 0 0 0 3px rgba(79, 139, 254, 0.15);
+  outline: none;
+}
+
+/* Buttons */
 .edit-actions {
   display: flex;
   justify-content: space-between;
@@ -284,6 +286,10 @@
   cursor: pointer;
 }
 
+.save-btn:hover {
+  background: #2ecc71;
+}
+
 .cancel-btn {
   flex: 1;
   padding: 12px;
@@ -294,14 +300,17 @@
   cursor: pointer;
 }
 
+.cancel-btn:hover {
+  background: #e2e2e2;
+}
+
 /* ---------------------------------------------
-   📱 Mobile Responsive
+   📱 Responsive
 --------------------------------------------- */
 @media (max-width: 600px) {
   .checkout-card {
     padding: 20px;
   }
-
   .checkout-title {
     font-size: 1.5rem;
   }
