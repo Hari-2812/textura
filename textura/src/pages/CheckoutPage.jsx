@@ -149,13 +149,21 @@ const CheckoutPage = () => {
       const data = await response.json();
 
       if (data.success) {
-        setOrderId(data.orderId);
+        const id =
+          data.order?.orderId || // backend nested
+          data.orderId || // flat fallback
+          data.id || // any other naming
+          "";
+
+        setOrderId(id);
+
         setShowSuccess(true);
         clearCart();
 
+        // DO NOT redirect instantly (give users time to see the orderId)
         setTimeout(() => {
           window.location.href = "/";
-        }, 4000);
+        }, 5000);
       } else {
         alert("❌ Order failed. Try again.");
       }
