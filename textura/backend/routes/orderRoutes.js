@@ -1,4 +1,5 @@
 import express from "express";
+import mongoose from "mongoose";   // ✅ REQUIRED FIX
 import Order from "../models/Order.js";
 
 const router = express.Router();
@@ -10,12 +11,11 @@ router.post("/", async (req, res) => {
   try {
     const io = req.app.get("io");
 
-    // Generate unique order ID
     const orderId = "TXR" + Math.floor(100000 + Math.random() * 900000);
 
     const newOrder = await Order.create({
       ...req.body,
-      orderId, // 👈 FIX HERE
+      orderId,
     });
 
     io.emit("newOrder", {
@@ -50,7 +50,6 @@ router.put("/:id/status", async (req, res) => {
       return res.status(404).json({ message: "Order not found" });
     }
 
-    // 🔥 Emit update event
     io.emit("orderUpdated", {
       message: `🔄 Order ${updatedOrder._id} status updated to "${updatedOrder.status}"`,
       order: updatedOrder,
@@ -88,11 +87,9 @@ router.get("/", async (req, res) => {
 ============================================================ */
 router.get("/user/:email", async (req, res) => {
   try {
-    const userEmail = req.params.email;
-
-    const orders = await Order.find({ customerEmail: userEmail }).sort({
-      createdAt: -1,
-    });
+    const orders = await Order.find({
+      customerEmail: req.params.email,
+    }).sort({ createdAt: -1 });
 
     res.json({
       success: true,
@@ -101,6 +98,45 @@ router.get("/user/:email", async (req, res) => {
   } catch (err) {
     console.error("Error fetching user orders:", err);
     res.status(500).json({ message: "Failed to fetch user orders" });
+  }
+});
+
+/* ============================================================
+   🔍 3️⃣ GET ORDER BY ID or orderId
+============================================================ */
+router.get("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    let order = null;
+
+    // Check MongoDB ObjectId
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      order = await Order.findById(id);
+    }
+
+    // If not found by _id, check orderId
+    if (!order) {
+      order = await Order.findOne({ orderId: id });
+    }
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      order,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "Server error fetching order",
+      error: err.message,
+    });
   }
 });
 

@@ -27,8 +27,10 @@ const TrackOrder = () => {
   };
 
   useEffect(() => {
-    fetchOrderDetails();
-  }, [id]);
+  if (!id) return;    // ⛔ prevents first 404 call
+  fetchOrderDetails();
+}, [id]);
+
 
   if (loading) return <p className="loading-text">Loading Order...</p>;
   if (!order) return <p className="loading-text">Order not found.</p>;
