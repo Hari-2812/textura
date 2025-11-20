@@ -49,10 +49,10 @@ const HelpCenter = () => {
       <section className="help-section">
         <h2>Contact Support</h2>
         <p>📧 Email: <strong>Textura0511@gmail.com</strong></p>
-        <p>📱 WhatsApp: <strong>+91 YOUR_NUMBER</strong></p>
+        <p>📱 WhatsApp: <strong>+919361876698</strong></p>
 
         <a
-          href="https://wa.me/YOUR_NUMBER?text=Hello%20Textura%20Support%2C%20I%20need%20help"
+          href="https://wa.me/9361876698?text=Hello%20Textura%20Support%2C%20I%20need%20help"
           target="_blank"
           rel="noreferrer"
           className="help-whatsapp-btn"

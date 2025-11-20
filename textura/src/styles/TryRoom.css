@@ -1,0 +1,191 @@
+/* ============================================= */
+/* 🔳 Overlay */
+/* ============================================= */
+.tryroom-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: fadeIn 0.25s ease;
+}
+
+/* ============================================= */
+/* 🔳 Modal Box */
+/* ============================================= */
+.tryroom-box {
+  width: 95%;
+  max-width: 950px;
+  background: #ffffff;
+  padding: 28px;
+  border-radius: 18px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+  animation: slideUp 0.35s ease;
+}
+
+.tryroom-box h2 {
+  text-align: center;
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 25px;
+  color: #222;
+}
+
+/* ============================================= */
+/* 🔳 Two Column Layout */
+/* ============================================= */
+.tryroom-content {
+  display: flex;
+  justify-content: space-between;
+  gap: 25px;
+  width: 100%;
+}
+
+/* ============================================= */
+/* LEFT SIDE — CAMERA */
+/* ============================================= */
+.tryroom-left {
+  flex: 1;
+}
+
+/* Camera view */
+#tryroom-camera {
+  width: 100%;
+  height: 350px;
+  background: #000;
+  border-radius: 12px;
+  border: 2px solid #e2e2e2;
+  object-fit: cover;
+}
+
+/* Camera Buttons */
+.tryroom-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+  gap: 10px;
+}
+
+.tryroom-buttons button {
+  flex: 1;
+  padding: 12px;
+  background: #007bff;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.tryroom-buttons button:hover {
+  background: #005fcc;
+  transform: translateY(-2px);
+}
+
+/* ============================================= */
+/* RIGHT SIDE — UPLOAD + CANVAS */
+/* ============================================= */
+.tryroom-right {
+  flex: 1;
+  text-align: center;
+}
+
+/* Upload label */
+.tryroom-right p {
+  margin-bottom: 8px;
+  color: #444;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Upload input */
+.tryroom-right input[type="file"] {
+  margin-bottom: 12px;
+}
+
+/* Canvas Preview */
+#tryroom-canvas {
+  width: 100%;
+  height: 350px;
+  background: #fafafa;
+  border: 2px solid #e2e2e2;
+  border-radius: 12px;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Apply Try On button */
+.gen-btn {
+  width: 100%;
+  background: #28a745;
+  padding: 15px;
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-size: 17px;
+  font-weight: 700;
+  margin-top: 18px;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0, 128, 0, 0.25);
+  transition: 0.25s ease;
+}
+
+.gen-btn:hover {
+  background: #1e7e34;
+  transform: translateY(-2px);
+}
+
+/* ============================================= */
+/* ✨ Animations */
+/* ============================================= */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(35px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* ============================================= */
+/* 📱 Mobile Responsive */
+/* ============================================= */
+@media (max-width: 768px) {
+  .tryroom-content {
+    flex-direction: column;
+  }
+
+  #tryroom-camera,
+  #tryroom-canvas {
+    height: 270px;
+  }
+
+  .gen-btn {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  #tryroom-camera,
+  #tryroom-canvas {
+    height: 240px;
+  }
+
+  .tryroom-box {
+    padding: 20px;
+  }
+
+  .tryroom-buttons button {
+    padding: 10px;
+    font-size: 13px;
+  }
+}

@@ -20,6 +20,7 @@ import adminStatsRoutes from "./routes/adminStats.js";
 import offerRoutes from "./routes/offerRoutes.js";
 import subscriberRoutes from "./routes/subscriberRoutes.js"; // ⭐ NEWSLETTER ROUTE
 import orderRoutes from "./routes/orderRoutes.js";
+
 // ---------------------------------------------
 // 3️⃣ App + Server setup
 // ---------------------------------------------
@@ -68,6 +69,7 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/admin/orders", orderRoutes);
 app.use("/api/offers", offerRoutes);
 app.use("/api/newsletter", subscriberRoutes);
+
 
 // Root route
 app.get("/test-news", (req, res) => {
