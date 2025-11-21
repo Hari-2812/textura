@@ -31,6 +31,10 @@ import AdminLogin from "./pages/AdminLogin";
 import DeliveryOrders from "./pages/delivery/DeliveryOrders";
 import DeliveryPartner from "./pages/admin/DeliveryPartner";
 import TrackOrder from "./pages/admin/TrackOrdersPage";
+import BlogDetails from "./components/BlogDetails";
+
+
+
 
 import { CartProvider } from "./context/CartContext";
 import { UserProvider } from "./context/UserContext";
@@ -70,6 +74,7 @@ const AppContent = () => {
           <Route path="/delivery" element={<DeliveryOrders />} />
           <Route path="/delivery-partner" element={<DeliveryPartner />} />
           <Route path="/admin/track-order/:id" element={<TrackOrder />} />
+          <Route path="/blog/:id" element={<BlogDetails />} />
 
           {/* Protected Routes */}
           <Route
