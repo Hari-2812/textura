@@ -3,13 +3,15 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../styles/LoginPage.css";
 
-// Firebase imports
 import { auth, googleProvider } from "../firebase";
 import {
   signInWithEmailAndPassword,
   signInWithPopup,
   sendPasswordResetEmail,
 } from "firebase/auth";
+
+// React Icons
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -18,21 +20,16 @@ const Login = () => {
   const [loadingGoogle, setLoadingGoogle] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  // ⭐ NEW — Toast state
   const [toast, setToast] = useState("");
-
   const showToast = (msg) => {
     setToast(msg);
-    setTimeout(() => setToast(""), 2000); // Auto-hide
+    setTimeout(() => setToast(""), 2000);
   };
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // -------------------------------
-  // EMAIL + PASSWORD LOGIN
-  // -------------------------------
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -52,23 +49,15 @@ const Login = () => {
       localStorage.setItem("userToken", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
 
-      // ⭐ No alert — show toast!
       showToast("Login successful 🎉");
-
-      setTimeout(() => {
-        navigate("/", { replace: true });
-      }, 1200);
+      setTimeout(() => navigate("/", { replace: true }), 1200);
     } catch (err) {
       showToast(err.message || "Invalid login");
     }
   };
 
-  // -------------------------------
-  // GOOGLE LOGIN
-  // -------------------------------
   const handleGoogleLogin = async () => {
     if (loadingGoogle) return;
-
     setLoadingGoogle(true);
 
     try {
@@ -82,11 +71,8 @@ const Login = () => {
       localStorage.setItem("userToken", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
 
-      showToast("Google login successful 🎉");
-
-      setTimeout(() => {
-        navigate("/", { replace: true });
-      }, 1200);
+      showToast("Google Login Successful 🎉");
+      setTimeout(() => navigate("/", { replace: true }), 1200);
     } catch (err) {
       if (err.code !== "auth/cancelled-popup-request") {
         showToast(err.message);
@@ -96,18 +82,12 @@ const Login = () => {
     setLoadingGoogle(false);
   };
 
-  // -------------------------------
-  // FORGOT PASSWORD
-  // -------------------------------
   const handleForgotPassword = async () => {
-    if (!form.email) {
-      showToast("Enter your email first");
-      return;
-    }
+    if (!form.email) return showToast("Enter your email first");
 
     try {
       await sendPasswordResetEmail(auth, form.email);
-      showToast("Password reset email sent!");
+      showToast("Password reset link sent!");
     } catch (err) {
       showToast(err.message);
     }
@@ -115,7 +95,6 @@ const Login = () => {
 
   return (
     <div className="login-container">
-      {/* ⭐ Toast Notification */}
       {toast && <div className="login-toast">{toast}</div>}
 
       <div className="login-box">
@@ -123,7 +102,6 @@ const Login = () => {
         <p className="subtitle">Login to continue shopping</p>
 
         <form onSubmit={handleLogin} className="login-form">
-          {/* EMAIL FIELD */}
           <input
             type="email"
             name="email"
@@ -132,7 +110,7 @@ const Login = () => {
             onChange={handleChange}
           />
 
-          {/* PASSWORD FIELD + EYE TOGGLE */}
+          {/* Password With Icon */}
           <div className="password-wrapper">
             <input
               type={showPassword ? "text" : "password"}
@@ -146,11 +124,10 @@ const Login = () => {
               className="eye-icon"
               onClick={() => setShowPassword(!showPassword)}
             >
-              {showPassword ? "🙈" : "👁️"}
+              {showPassword ? <FiEye size={22} /> : <FiEyeOff size={22} />}
             </span>
           </div>
 
-          {/* FORGOT PASSWORD */}
           <p className="forgot-password" onClick={handleForgotPassword}>
             Forgot Password?
           </p>
@@ -160,23 +137,21 @@ const Login = () => {
           </button>
         </form>
 
-        {/* GOOGLE LOGIN BUTTON */}
         <button
           onClick={handleGoogleLogin}
           className="google-btn"
           disabled={loadingGoogle}
-          style={{ opacity: loadingGoogle ? 0.6 : 1 }}
         >
           <img
             src="https://developers.google.com/identity/images/g-logo.png"
-            alt="Google"
             className="google-icon"
+            alt="Google"
           />
           {loadingGoogle ? "Please wait..." : "Login with Google"}
         </button>
 
         <p className="redirect-text">
-          Don't have an account?
+          Don’t have an account?
           <span onClick={() => navigate("/signup")}> Register</span>
         </p>
       </div>
