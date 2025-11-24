@@ -1,19 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import "../styles/ProductDetails.css";
-import "../styles/TryRoom.css";
-
 import axios from "axios";
 import { FaShoppingCart, FaPlay } from "react-icons/fa";
 import { useCart } from "../context/CartContext";
 import SizeGuideModal from "../components/SizeGuideModal";
-
-import { applyAdvancedTryOn } from "../utils/tryonAdvanced";
-
-// TensorFlow
-import * as bodyPix from "@tensorflow-models/body-pix";
-import "@tensorflow/tfjs";
-import * as tf from "@tensorflow/tfjs";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -24,33 +15,19 @@ const ProductDetails = () => {
   const [selectedSize, setSelectedSize] = useState(null);
   const [showGuide, setShowGuide] = useState(false);
 
-  const [showTryRoom, setShowTryRoom] = useState(false);
+  // ⭐ Toast + Inline Error
+  const [sizeError, setSizeError] = useState("");
   const [toast, setToast] = useState("");
 
-  const [sizeError, setSizeError] = useState("");
+  // ⭐ Try Room Popup (simple)
+  const [showTryPopup, setShowTryPopup] = useState(false);
 
   const showToast = (msg) => {
     setToast(msg);
     setTimeout(() => setToast(""), 2000);
   };
 
-  // ⭐ INITIALIZE TENSORFLOW BACKEND
-  useEffect(() => {
-    const initTF = async () => {
-      try {
-        await tf.setBackend("webgl");
-        await tf.ready();
-        console.log("TensorFlow WebGL backend ready");
-      } catch (err) {
-        console.log("TF Backend Error:", err);
-      }
-    };
-    initTF();
-  }, []);
-
-  // ============================
-  // Fetch Product + Recommended
-  // ============================
+  // Fetch Product
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -66,6 +43,7 @@ const ProductDetails = () => {
         setRecommended(rec);
       } catch (error) {
         console.log("Product fetch error:", error);
+        setProduct(null);
       }
     };
 
@@ -76,79 +54,7 @@ const ProductDetails = () => {
     return <p className="loading">Product not found 😕</p>;
   }
 
-  // ============================
-  // ⭐ CAMERA / CAPTURE / UPLOAD
-  // ============================
-  const startCamera = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: {
-          width: { ideal: 1280 },
-          height: { ideal: 720 },
-          facingMode: "user",
-        },
-        audio: false,
-      });
-
-      document.getElementById("tryroom-camera").srcObject = stream;
-    } catch (err) {
-      console.log("Camera Error:", err);
-
-      if (err.name === "NotFoundError") {
-        alert("No camera found. Please connect a webcam or use a phone.");
-      } else if (err.name === "NotAllowedError") {
-        alert("Camera permission blocked. Please allow camera access.");
-      } else {
-        alert("Camera error: " + err.message);
-      }
-    }
-  };
-
-  const captureImage = () => {
-    const video = document.getElementById("tryroom-camera");
-    const canvas = document.getElementById("tryroom-canvas");
-
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-
-    const ctx = canvas.getContext("2d");
-    ctx.drawImage(video, 0, 0);
-  };
-
-  const uploadImage = (e) => {
-    const file = e.target.files[0];
-    const canvas = document.getElementById("tryroom-canvas");
-    const ctx = canvas.getContext("2d");
-
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      const img = new Image();
-      img.onload = () => {
-        canvas.width = img.width;
-        canvas.height = img.height;
-        ctx.drawImage(img, 0, 0);
-      };
-      img.src = ev.target.result;
-    };
-    reader.readAsDataURL(file);
-  };
-
-  // ============================
-  // ⭐ Apply Try On (Advanced)
-  // ============================
-  const applyTryOn = async () => {
-    try {
-      const canvas = document.getElementById("tryroom-canvas");
-      await applyAdvancedTryOn(canvas, product.images?.[0]?.url);
-    } catch (err) {
-      console.log("Try-on error:", err);
-      alert("Try-on failed: " + err.message);
-    }
-  };
-
-  // ============================
-  // Size Height Guide
-  // ============================
+  // Size Guide
   const heightGuide = {
     "2-3Y": "92–98 cm",
     "3-4Y": "98–104 cm",
@@ -167,17 +73,22 @@ const ProductDetails = () => {
       setSizeError("⚠️ Please select a size before adding to cart.");
       return;
     }
+
     setSizeError("");
+
     addToCart({ ...product, size: selectedSize });
+
     showToast(`${product.name} (${selectedSize}) added to cart 🛒`);
   };
 
   return (
     <>
+      {/* ⭐ Global Toast */}
       {toast && <div className="cart-toast">{toast}</div>}
 
       <div className="product-details">
         <div className="product-details-container">
+
           {/* Left Image */}
           <div className="product-image-section">
             <img src={product.images?.[0]?.url} alt={product.name} />
@@ -193,21 +104,27 @@ const ProductDetails = () => {
               <p>Select Size:</p>
 
               <div className="size-grid">
-                {product.sizes?.map((s) => (
-                  <div
-                    key={s.label}
-                    className={`size-box 
-                      ${selectedSize === s.label ? "active" : ""} 
-                      ${s.stock === 0 ? "disabled" : ""}`}
-                    onClick={() => s.stock !== 0 && setSelectedSize(s.label)}
-                  >
-                    {s.label}
-                  </div>
-                ))}
+                {product.sizes && product.sizes.length > 0 ? (
+                  product.sizes.map((s) => (
+                    <div
+                      key={s.label}
+                      className={`size-box 
+                        ${selectedSize === s.label ? "active" : ""} 
+                        ${s.stock === 0 ? "disabled" : ""}`}
+                      onClick={() => s.stock !== 0 && setSelectedSize(s.label)}
+                    >
+                      {s.label}
+                    </div>
+                  ))
+                ) : (
+                  <p>No sizes available</p>
+                )}
               </div>
 
+              {/* INLINE ERROR */}
               {sizeError && <div className="size-error-box">{sizeError}</div>}
 
+              {/* Height Guide */}
               {selectedSize && (
                 <p className="height-guide">
                   Height: {heightGuide[selectedSize]}
@@ -222,26 +139,25 @@ const ProductDetails = () => {
               </button>
             </div>
 
-            {/* Description */}
             <p className="desc">
               {product.description ||
                 "Crafted with high-quality materials, this outfit ensures comfort and durability — designed to match your unique style!"}
             </p>
 
-            {/* Buttons */}
             <div className="button-group">
               <button className="add-btn" onClick={handleAddToCart}>
                 <FaShoppingCart /> Add to Cart
               </button>
 
-              <button className="try-btn" onClick={() => setShowTryRoom(true)}>
+              {/* ⭐ NEW: Try Now opens popup */}
+              <button className="try-btn" onClick={() => setShowTryPopup(true)}>
                 <FaPlay /> Try Now
               </button>
             </div>
           </div>
         </div>
 
-        {/* Recommended */}
+        {/* Recommended Section */}
         {recommended.length > 0 && (
           <div className="recommended-section">
             <h3>🛍️ Recommended for You</h3>
@@ -269,40 +185,24 @@ const ProductDetails = () => {
         )}
       </div>
 
-      {/* ⭐ Try Room Modal */}
-      {showTryRoom && (
-        <div className="tryroom-overlay">
-          <div className="tryroom-box">
-            <h2>Virtual Try Room</h2>
+      {/* ⭐ POPUP FOR TRY-ON COMING SOON */}
+      {showTryPopup && (
+        <div className="try-popup-overlay">
+          <div className="try-popup-box">
+            <h2>👗 Virtual Try-On</h2>
+            <p>This feature is coming soon! Stay tuned 😊</p>
 
-            <div className="tryroom-content">
-              {/* LEFT SIDE */}
-              <div className="tryroom-left">
-                <video id="tryroom-camera" autoPlay playsInline></video>
-
-                <div className="tryroom-buttons">
-                  <button onClick={startCamera}>Start Camera</button>
-                  <button onClick={captureImage}>Capture</button>
-                  <button onClick={() => setShowTryRoom(false)}>Close</button>
-                </div>
-              </div>
-
-              {/* RIGHT SIDE */}
-              <div className="tryroom-right">
-                <p>Or upload your full-body image</p>
-                <input type="file" accept="image/*" onChange={uploadImage} />
-
-                <canvas id="tryroom-canvas"></canvas>
-
-                <button className="gen-btn" onClick={applyTryOn}>
-                  Apply Virtual Try-On
-                </button>
-              </div>
-            </div>
+            <button
+              className="close-popup-btn"
+              onClick={() => setShowTryPopup(false)}
+            >
+              Close
+            </button>
           </div>
         </div>
       )}
 
+      {/* Size Guide */}
       {showGuide && <SizeGuideModal onClose={() => setShowGuide(false)} />}
     </>
   );
