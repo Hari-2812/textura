@@ -263,21 +263,22 @@ const Header = ({ onFilterToggle }) => {
         </div>
 
         {isProductPage ? (
-          <div className="bottom-nav-item" onClick={onFilterToggle}>
-            <FaFilter />
-            <span>Filter</span>
-          </div>
-        ) : (
-          <div
-            className={`bottom-nav-item ${
-              location.pathname === "/explore" ? "active" : ""
-            }`}
-            onClick={() => navigate("/explore")}
-          >
-            <FaCompass />
-            <span>Explore</span>
-          </div>
-        )}
+  <div className="bottom-nav-item" onClick={onFilterToggle}>
+    <FaFilter />
+    <span>Filter</span>
+  </div>
+) : (
+  <div
+    className={`bottom-nav-item ${
+      location.pathname === "/offers" ? "active" : ""
+    }`}
+    onClick={() => navigate("/offers")}
+  >
+    <FaCompass />
+    <span>Offers</span>
+  </div>
+)}
+
 
         <div
           className={`bottom-nav-item ${

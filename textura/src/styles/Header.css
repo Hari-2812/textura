@@ -355,6 +355,11 @@
   color: #ef476f;
 }
 
+/* Fix Offers text alignment */
+.bottom-nav-item span {
+  width: max-content;
+}
+
 /* =========================
    ✨ OPTIONAL: SHORTEN NAME LOGIC
    ========================= */
