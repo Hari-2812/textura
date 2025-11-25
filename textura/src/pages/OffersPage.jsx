@@ -2,9 +2,13 @@ import React, { useEffect, useState } from "react";
 import "../styles/OffersPage.css";
 import axios from "axios";
 import io from "socket.io-client";
+import { useCart } from "../context/CartContext"; // ⭐ Added
 
 const OffersPage = () => {
   const [offers, setOffers] = useState([]);
+
+  // ⭐ Cart
+  const { addToCart } = useCart(); // ⭐ Use cart context
 
   // ⭐ Toast State
   const [toast, setToast] = useState({
@@ -16,7 +20,7 @@ const OffersPage = () => {
     setToast({ show: true, message: msg });
     setTimeout(() => {
       setToast({ show: false, message: "" });
-    }, 3000);
+    }, 2000);
   };
 
   // ⭐ Socket Real-time Updates
@@ -44,6 +48,19 @@ const OffersPage = () => {
 
     fetchOffers();
   }, []);
+
+  // ⭐ Add to Cart Handler
+  const handleAddToCart = (offer) => {
+    const item = {
+      id: offer._id,
+      name: offer.title,
+      price: offer.price || 0,
+      img: `http://localhost:5000${offer.image}`,
+    };
+
+    addToCart(item); // add item to cart
+    showToast("✔ Added to Cart!");
+  };
 
   return (
     <section className="offers-page">
@@ -74,7 +91,13 @@ const OffersPage = () => {
                 )}
               </div>
 
-              <button className="shop-now-btn">Shop Now</button>
+              {/* ⭐ NEW BUTTON */}
+              <button
+                className="add-cart-btn"
+                onClick={() => handleAddToCart(offer)}
+              >
+                Add to Cart
+              </button>
             </div>
           ))
         )}
