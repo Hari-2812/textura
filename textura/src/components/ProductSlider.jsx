@@ -20,18 +20,34 @@ const NewArrival = () => {
     setToast(msg);
     setTimeout(() => setToast(""), 2000);
   };
-
   const settings = {
     dots: true,
     infinite: true,
     speed: 600,
-    slidesToShow: 3,
+    slidesToShow: 3, // DESKTOP
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 2500,
+
     responsive: [
-      { breakpoint: 1024, settings: { slidesToShow: 2 } },
-      { breakpoint: 768, settings: { slidesToShow: 2 } },
+      {
+        breakpoint: 1024, // Tablets / small laptops
+        settings: {
+          slidesToShow: 2, // Show 2 slides
+        },
+      },
+      {
+        breakpoint: 768, // Mobile screens
+        settings: {
+          slidesToShow: 2, // Still 2 slides
+        },
+      },
+      {
+        breakpoint: 480, // Very small screens
+        settings: {
+          slidesToShow: 1, // Optional: 1 slide for tiny screens
+        },
+      },
     ],
   };
 
