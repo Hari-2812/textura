@@ -3,9 +3,11 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../styles/SignupPage.css";
 
-// Firebase
 import { auth } from "../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+
+// Icons
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 const SignupPage = () => {
   const navigate = useNavigate();
@@ -17,10 +19,9 @@ const SignupPage = () => {
   });
 
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
-  // ⭐ Toast state
   const [toast, setToast] = useState("");
-
   const showToast = (msg) => {
     setToast(msg);
     setTimeout(() => setToast(""), 2500);
@@ -30,42 +31,34 @@ const SignupPage = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  /* ============================================================
-        🔥 Handle Firebase Signup
-  ============================================================ */
   const handleSignup = async (e) => {
     e.preventDefault();
     if (loading) return;
+
     setLoading(true);
 
     try {
-      // 1️⃣ Create account in Firebase
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         form.email,
         form.password
       );
 
-      // 2️⃣ Get Firebase ID Token
       const idToken = await userCredential.user.getIdToken();
 
-      // 3️⃣ Send token + name to backend to store in MongoDB
       const res = await axios.post("http://localhost:5000/api/users/register", {
         token: idToken,
         name: form.name,
       });
 
-      // 4️⃣ Save backend JWT + user profile
       localStorage.setItem("userToken", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
 
-      // ⭐ Replace alert with toast
       showToast("Account created successfully 🎉");
 
-      // Auto redirect
-      setTimeout(() => navigate("/"), 1500);
+      setTimeout(() => navigate("/"), 1200);
     } catch (err) {
-      showToast(err.response?.data?.message || err.message || "Signup failed");
+      showToast(err.response?.data?.message || err.message);
     }
 
     setLoading(false);
@@ -73,7 +66,6 @@ const SignupPage = () => {
 
   return (
     <div className="signup-container">
-      {/* ⭐ Toast UI */}
       {toast && <div className="login-toast">{toast}</div>}
 
       <div className="signup-box">
@@ -97,15 +89,25 @@ const SignupPage = () => {
             onChange={handleChange}
           />
 
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            required
-            onChange={handleChange}
-          />
+          {/* Password + Icon */}
+          <div className="password-wrapper">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Password"
+              required
+              onChange={handleChange}
+            />
 
-          <button type="submit" className="signup-btn" disabled={loading}>
+            <span
+              className="eye-icon"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <FiEye size={22} /> : <FiEyeOff size={22} />}
+            </span>
+          </div>
+
+          <button className="signup-btn" disabled={loading}>
             {loading ? "Creating..." : "Sign Up"}
           </button>
         </form>
