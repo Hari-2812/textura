@@ -7,7 +7,13 @@ import { useUser } from "../context/UserContext";
 import { products } from "../data/products";
 import OfferBar from "../components/OfferBar";
 
-import { FaShoppingCart, FaSearch, FaHeart, FaFilter, FaCompass } from "react-icons/fa";
+import {
+  FaShoppingCart,
+  FaSearch,
+  FaHeart,
+  FaFilter,
+  FaCompass,
+} from "react-icons/fa";
 
 const Header = ({ onFilterToggle }) => {
   const [search, setSearch] = useState("");
@@ -64,7 +70,6 @@ const Header = ({ onFilterToggle }) => {
 
       <header className="header">
         <nav className="navbar">
-
           {/* LEFT SECTION */}
           <div className="navbar-left">
             <div className="logo" onClick={() => navigate("/")}>
@@ -88,7 +93,10 @@ const Header = ({ onFilterToggle }) => {
               {suggestions.length > 0 && (
                 <ul className="search-suggestions">
                   {suggestions.map((item) => (
-                    <li key={item.id} onClick={() => handleSuggestionClick(item)}>
+                    <li
+                      key={item.id}
+                      onClick={() => handleSuggestionClick(item)}
+                    >
                       <img src={item.img} alt={item.name} />
                       <span>{item.name}</span>
                     </li>
@@ -100,7 +108,6 @@ const Header = ({ onFilterToggle }) => {
 
           {/* RIGHT ICONS */}
           <div className="navbar-right">
-
             <div className="nav-item" onClick={() => navigate("/wishlist")}>
               <FaHeart />
               <span>Wishlist</span>
@@ -125,7 +132,7 @@ const Header = ({ onFilterToggle }) => {
             )}
 
             <div
-              className="nav-item profile-section"
+              className="nav-item profile-box"
               onClick={() => setShowProfile(!showProfile)}
             >
               <img
