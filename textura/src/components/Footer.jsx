@@ -14,15 +14,22 @@ const Footer = () => {
     const isMobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent);
 
     if (!isMobile) {
-      // DESKTOP → always open Gmail web
       window.open(
         "https://mail.google.com/mail/?view=cm&fs=1&to=Textura0511@gmail.com",
         "_blank"
       );
     } else {
-      // MOBILE → show option popup
       setShowEmailPopup(true);
     }
+  };
+
+  // ⭐ Reusable function: navigate then scroll to top
+  const goTo = (path) => {
+    navigate(path);
+    // wait a tiny bit so the route change happens, then scroll
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }, 20);
   };
 
   return (
@@ -31,7 +38,7 @@ const Footer = () => {
         <div className="footer-row">
           {/* 🏢 Company Info */}
           <div className="footer-section company">
-            <h3 className="footer-logo" onClick={() => navigate("/")}>
+            <h3 className="footer-logo" onClick={() => goTo("/")}>
               Textura
             </h3>
             <p className="footer-desc">
@@ -43,18 +50,18 @@ const Footer = () => {
           {/* 🛍️ Shop */}
           <div className="footer-section">
             <h3>Shop</h3>
-            <p onClick={() => navigate("/boys")}>Boys</p>
-            <p onClick={() => navigate("/girls")}>Girls</p>
-            <p onClick={() => navigate("/offers")}>Offers</p>
-            <p onClick={() => navigate("/wishlist")}>Wishlist</p>
+            <p onClick={() => goTo("/boys")}>Boys</p>
+            <p onClick={() => goTo("/girls")}>Girls</p>
+            <p onClick={() => goTo("/offers")}>Offers</p>
+            <p onClick={() => goTo("/wishlist")}>Wishlist</p>
           </div>
 
           {/* 🌍 Explore */}
           <div className="footer-section">
             <h3>Explore</h3>
-            <p onClick={() => navigate("/about")}>About Us</p>
-            <p onClick={() => navigate("/language")}>Language</p>
-            <p onClick={() => navigate("/help")}>Help Center</p>
+            <p onClick={() => goTo("/about")}>About Us</p>
+            <p onClick={() => goTo("/language")}>Language</p>
+            <p onClick={() => goTo("/help")}>Help Center</p>
           </div>
 
           {/* 🌐 Follow Us */}

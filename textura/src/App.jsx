@@ -24,6 +24,7 @@ import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import ForgotPassword from "./pages/ForgotPassword";
 import OffersPage from "./pages/OffersPage";
+import ScrollToTop from "./components/ScrollToTop";
 
 import AdminLayout from "./pages/admin/AdminLayout";
 import AdminLogin from "./pages/AdminLogin";
@@ -33,15 +34,16 @@ import DeliveryPartner from "./pages/admin/DeliveryPartner";
 import TrackOrder from "./pages/admin/TrackOrdersPage";
 import BlogDetails from "./components/BlogDetails";
 
-
-
-
 import { CartProvider } from "./context/CartContext";
 import { UserProvider } from "./context/UserContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import HelpCenter from "./pages/HelpCenter";
 import MyOrders from "./pages/MyOrders";
 
+
+// ===============================
+// APP CONTENT PART
+// ===============================
 const AppContent = () => {
   const [showFilters, setShowFilters] = useState(false);
   const location = useLocation();
@@ -60,20 +62,22 @@ const AppContent = () => {
 
       <main style={{ minHeight: "80vh" }}>
         <Routes>
-          {/* Public Routes */}
+          {/* Public */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/help" element={<HelpCenter />} />
 
           {/* Admin */}
           <Route path="/admin-login" element={<AdminLogin />} />
           <Route path="/admin/*" element={<AdminLayout />} />
-          <Route path="/help" element={<HelpCenter />} />
+          <Route path="/admin/track-order/:id" element={<TrackOrder />} />
 
           {/* Delivery */}
           <Route path="/delivery" element={<DeliveryOrders />} />
           <Route path="/delivery-partner" element={<DeliveryPartner />} />
-          <Route path="/admin/track-order/:id" element={<TrackOrder />} />
+
+          {/* Blog */}
           <Route path="/blog/:id" element={<BlogDetails />} />
 
           {/* Protected Routes */}
@@ -199,6 +203,7 @@ const AppContent = () => {
               </ProtectedRoute>
             }
           />
+
         </Routes>
       </main>
 
@@ -210,9 +215,16 @@ const AppContent = () => {
   );
 };
 
+
+// ===============================
+// MAIN APP WITH SCROLL TO TOP
+// ===============================
 const App = () => {
   return (
     <Router>
+      {/* ⭐ ScrollToTop MUST be directly under Router */}
+      <ScrollToTop />
+
       <UserProvider>
         <CartProvider>
           <AppContent />
