@@ -15,7 +15,7 @@ const CategoryCard = ({ image, title, description, link }) => {
       <div className="category-info">
         <h3>{title}</h3>
         <p>{description}</p>
-        <button className="buy-btn">Explore</button>
+        <button className="buy-btn">Buy Now</button>
       </div>
     </div>
   );

@@ -17,9 +17,16 @@ const NewArrival = () => {
   const [toast, setToast] = useState("");
 
   const showToast = (msg) => {
-    setToast(msg);
-    setTimeout(() => setToast(""), 2000);
-  };
+  const box = document.getElementById("toast-container");
+  const div = document.createElement("div");
+
+  div.className = "toast";
+  div.innerText = msg;
+  box.appendChild(div);
+
+  setTimeout(() => div.remove(), 2000);
+};
+
   const settings = {
     dots: true,
     infinite: true,
@@ -61,7 +68,6 @@ const NewArrival = () => {
 
   return (
     <section className="product-slider">
-      {toast && <div className="login-toast">{toast}</div>}
 
       <h2 className="slider-title"> New Arrivals</h2>
 

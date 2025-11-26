@@ -207,9 +207,6 @@ const AppContent = () => {
         </Routes>
       </main>
 
-      {/* Toast Container */}
-      <div id="toast-container"></div>
-
       {!hideHeaderFooter && <Footer />}
     </>
   );
@@ -222,12 +219,14 @@ const AppContent = () => {
 const App = () => {
   return (
     <Router>
-      {/* ⭐ ScrollToTop MUST be directly under Router */}
       <ScrollToTop />
 
       <UserProvider>
         <CartProvider>
           <AppContent />
+
+          {/* ⭐ MOVE TOAST HERE */}
+          <div id="toast-container"></div>
         </CartProvider>
       </UserProvider>
     </Router>

@@ -48,14 +48,17 @@ const CartPage = () => {
           {/* 🧺 Product List */}
           <div className="cart-items">
             {cartItems.map((item) => (
-              <div className="cart-item" key={item.id}>
+              <div className="cart-item" key={item._id || item.id}>
                 <img src={item.img} alt={item.name} />
                 <div className="item-details">
                   <h4>{item.name}</h4>
                   <p>{item.style}</p>
                   <p className="item-price">{item.price}</p>
+
                   <div className="quantity-controls">
-                    <button onClick={() => removeFromCart(item.id)}>-</button>
+                    <button onClick={() => removeFromCart(item._id || item.id)}>
+                      -
+                    </button>
                     <span>{item.quantity}</span>
                     <button onClick={() => addToCart(item)}>+</button>
                   </div>
@@ -75,12 +78,12 @@ const CartPage = () => {
               <strong>₹{totalPrice.toLocaleString("en-IN")}</strong>
             </p>
 
-            {/* ✅ Checkout Button */}
+            {/* Checkout Button */}
             <button className="checkout-btn" onClick={handleProceedToCheckout}>
               Proceed to Checkout
             </button>
 
-            {/* ❌ Clear Cart */}
+            {/* Clear Cart */}
             <button className="clear-btn" onClick={clearCart}>
               Clear Cart
             </button>
