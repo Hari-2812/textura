@@ -63,7 +63,7 @@ const NewArrival = () => {
     <section className="product-slider">
       {toast && <div className="login-toast">{toast}</div>}
 
-      <h2 className="slider-title">🆕 New Arrivals</h2>
+      <h2 className="slider-title"> New Arrivals</h2>
 
       <Slider {...settings}>
         {newArrivals.map((item) => (
