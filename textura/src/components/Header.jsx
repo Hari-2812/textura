@@ -70,6 +70,7 @@ const Header = ({ onFilterToggle }) => {
 
       <header className="header">
         <nav className="navbar">
+
           {/* LEFT SECTION */}
           <div className="navbar-left">
             <div className="logo" onClick={() => navigate("/")}>
@@ -85,18 +86,16 @@ const Header = ({ onFilterToggle }) => {
             <div className="search-container">
               <input
                 type="text"
-                placeholder="Search for T-Shirts, Jeans, Jackets..."
+                placeholder={t("searchPlaceholder")}
                 value={search}
                 onChange={handleSearchChange}
               />
               <FaSearch className="search-icon" />
+
               {suggestions.length > 0 && (
                 <ul className="search-suggestions">
                   {suggestions.map((item) => (
-                    <li
-                      key={item.id}
-                      onClick={() => handleSuggestionClick(item)}
-                    >
+                    <li key={item.id} onClick={() => handleSuggestionClick(item)}>
                       <img src={item.img} alt={item.name} />
                       <span>{item.name}</span>
                     </li>
@@ -108,26 +107,27 @@ const Header = ({ onFilterToggle }) => {
 
           {/* RIGHT ICONS */}
           <div className="navbar-right">
+
             <div className="nav-item" onClick={() => navigate("/wishlist")}>
               <FaHeart />
-              <span>Wishlist</span>
+              <span>{t("wishlist")}</span>
             </div>
 
             <div className="nav-item" onClick={() => navigate("/cart")}>
               <FaShoppingCart />
               {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
-              <span>Cart</span>
+              <span>{t("cart")}</span>
             </div>
 
             {isProductPage ? (
               <div className="nav-item" onClick={onFilterToggle}>
                 <FaFilter />
-                <span>Filter</span>
+                <span>{t("filter")}</span>
               </div>
             ) : (
               <div className="nav-item" onClick={() => navigate("/offers")}>
                 <FaCompass />
-                <span>Offers</span>
+                <span>{t("offers")}</span>
               </div>
             )}
 
@@ -139,13 +139,15 @@ const Header = ({ onFilterToggle }) => {
                 src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
                 className="profile-avatar"
               />
-              <span className="profile-username">{user?.name || "Guest"}</span>
+              <span className="profile-username">
+                {user?.name || t("guest")}
+              </span>
 
               {showProfile && (
                 <div className="profile-dropdown">
-                  <p onClick={() => navigate("/profile")}>My Profile</p>
-                  <p onClick={() => navigate("/orders")}>My Orders</p>
-                  <p onClick={handleLogout}>Logout</p>
+                  <p onClick={() => navigate("/profile")}>{t("profile")}</p>
+                  <p onClick={() => navigate("/orders")}>{t("orders")}</p>
+                  <p onClick={handleLogout}>{t("logout")}</p>
                 </div>
               )}
             </div>
@@ -153,30 +155,29 @@ const Header = ({ onFilterToggle }) => {
         </nav>
       </header>
 
-      {/* MOBILE BOTTOM NAV */}
+      {/* MOBILE NAV */}
       <div className="bottom-nav">
+
         <div className="bottom-nav-item" onClick={() => navigate("/wishlist")}>
           <FaHeart />
-          <span>Wishlist</span>
+          <span>{t("wishlist")}</span>
         </div>
 
         <div className="bottom-nav-item" onClick={() => navigate("/cart")}>
-          <div className="cart-icon">
-            <FaShoppingCart />
-            {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
-          </div>
-          <span>Cart</span>
+          <FaShoppingCart />
+          {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
+          <span>{t("cart")}</span>
         </div>
 
         {isProductPage ? (
           <div className="bottom-nav-item" onClick={onFilterToggle}>
             <FaFilter />
-            <span>Filter</span>
+            <span>{t("filter")}</span>
           </div>
         ) : (
           <div className="bottom-nav-item" onClick={() => navigate("/offers")}>
             <FaCompass />
-            <span>Offers</span>
+            <span>{t("offers")}</span>
           </div>
         )}
 
@@ -185,7 +186,7 @@ const Header = ({ onFilterToggle }) => {
             src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
             className="profile-avatar-small"
           />
-          <span>Profile</span>
+          <span>{t("profile")}</span>
         </div>
       </div>
     </>

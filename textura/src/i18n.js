@@ -1,7 +1,7 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
-// 🔹 Define translations for supported languages
+// 🌍 Language Packs
 const resources = {
   en: {
     translation: {
@@ -25,6 +25,7 @@ const resources = {
       chooseLanguage: "Choose Language",
     },
   },
+
   ta: {
     translation: {
       welcome: "டெக்ஸ்டுராவிற்கு வரவேற்கிறோம்",
@@ -47,6 +48,7 @@ const resources = {
       chooseLanguage: "மொழியைத் தேர்ந்தெடு",
     },
   },
+
   hi: {
     translation: {
       welcome: "टेक्सचुरा में आपका स्वागत है",
@@ -71,13 +73,16 @@ const resources = {
   },
 };
 
-// Initialize i18next
+// ⭐ Initialize i18n
 i18n.use(initReactI18next).init({
   resources,
-  lng: localStorage.getItem("preferredLang") || "en", // default language
+  lng: localStorage.getItem("preferredLang") || "en", // Default language
   fallbackLng: "en",
   interpolation: {
     escapeValue: false,
+  },
+  react: {
+    useSuspense: false,
   },
 });
 

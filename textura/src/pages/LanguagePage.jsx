@@ -7,36 +7,41 @@ const languages = [
   { code: "en", name: "English", flag: "🇬🇧" },
   { code: "ta", name: "தமிழ் (Tamil)", flag: "🇮🇳" },
   { code: "hi", name: "हिन्दी (Hindi)", flag: "🇮🇳" },
-  { code: "ml", name: "മലയാളം (Malayalam)", flag: "🇮🇳" },
-  { code: "te", name: "తెలుగు (Telugu)", flag: "🇮🇳" },
-  { code: "fr", name: "Français (French)", flag: "🇫🇷" },
 ];
 
 const LanguagePage = () => {
   const { i18n } = useTranslation();
+
   const [selectedLang, setSelectedLang] = useState(
     localStorage.getItem("preferredLang") || "en"
   );
 
-  // Persist selected language
-  useEffect(() => {
-    i18n.changeLanguage(selectedLang);
-    localStorage.setItem("preferredLang", selectedLang);
-  }, [selectedLang, i18n]);
+  // ⭐ Global toast function (same as Add to Cart)
+  const showToast = (msg) => {
+    const box = document.getElementById("toast-container");
+    const div = document.createElement("div");
+
+    div.className = "toast";
+    div.innerText = msg;
+    box.appendChild(div);
+
+    setTimeout(() => div.remove(), 2500);
+  };
 
   const handleLanguageChange = (lang) => {
     setSelectedLang(lang.code);
     i18n.changeLanguage(lang.code);
+
     localStorage.setItem("preferredLang", lang.code);
-    alert(`🌐 Language changed to ${lang.name}`);
+
+    showToast(`🌐 Language changed to: ${lang.name}`);
   };
 
   return (
     <div className="language-page">
       <div className="language-header">
         <FiGlobe className="lang-icon" />
-        <h1>Choose Your Language</h1>
-        <p>Select your preferred language for a better experience</p>
+        <h1>Select Language</h1>
       </div>
 
       <div className="language-grid">
@@ -55,13 +60,6 @@ const LanguagePage = () => {
             )}
           </div>
         ))}
-      </div>
-
-      <div className="language-footer">
-        <p>
-          🌏 Your language preference is saved — you can change it anytime from
-          the menu.
-        </p>
       </div>
     </div>
   );
