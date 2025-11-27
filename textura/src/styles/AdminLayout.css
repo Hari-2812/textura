@@ -1,194 +1,177 @@
-/* 🌐 Layout Wrapper */
+/* ===========================
+   GLOBAL LAYOUT
+=========================== */
 .admin-layout {
   display: flex;
   height: 100vh;
-  background: #eef2f7;
+  background: #f3f6fc;
   font-family: "Poppins", sans-serif;
   overflow: hidden;
 }
 
-/* ================================
-   🧭 SIDEBAR
-=================================== */
+/* ===========================
+   SIDEBAR WRAPPER
+=========================== */
 .admin-sidebar {
   width: 260px;
-  background: linear-gradient(180deg, #141e30, #243b55);
-  color: #ffffff;
+  background: linear-gradient(180deg, #131b2e, #19273f);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  box-shadow: 4px 0 16px rgba(0, 0, 0, 0.25);
-  padding-bottom: 20px;
-  transition: all 0.3s ease-in-out;
+  box-shadow: 4px 0 16px rgba(0,0,0,0.25);
+  border-right: 1px solid rgba(255,255,255,0.1);
+  padding: 20px 0;
+  transition: width .3s ease;
 }
 
-/* Sidebar Header */
+/* ===========================
+   HEADER
+=========================== */
 .sidebar-header {
   text-align: center;
-  padding: 30px 0 15px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  padding-bottom: 20px;
 }
 .sidebar-header h2 {
   margin: 0;
-  font-size: 24px;
-  color: #00c6ff;
+  font-size: 22px;
   font-weight: 700;
-  letter-spacing: 1px;
-}
-.sidebar-header p {
-  margin-top: 5px;
-  font-size: 13px;
-  color: #d3d3d3;
+  color: #4e8cff;
 }
 
-/* Sidebar Navigation */
-.sidebar-nav {
+/* ===========================
+   SIDEBAR NAVIGATION
+=========================== */
+.sidebar-menu {
   display: flex;
   flex-direction: column;
-  margin-top: 25px;
+  flex-grow: 1; /* IMPORTANT FIX */
+  gap: 8px;
+  padding: 0 14px;
 }
 
-.sidebar-link {
-  color: #e5e5e5;
-  text-decoration: none;
-  font-size: 16px;
-  padding: 14px 25px;
+/* ===========================
+   MENU ITEMS
+=========================== */
+.menu-link {
   display: flex;
   align-items: center;
   gap: 14px;
-  border-left: 4px solid transparent;
-  transition: all 0.25s ease;
-}
-
-.sidebar-link:hover {
-  background: rgba(255, 255, 255, 0.12);
-  border-left: 4px solid #00c6ff;
-  color: #00c6ff;
-  transform: translateX(6px);
-}
-
-.sidebar-link.active {
-  background: rgba(255, 255, 255, 0.18);
-  border-left: 4px solid #00c6ff;
-  color: #00c6ff;
-}
-
-/* Sections Title */
-.sidebar-title {
-  margin-left: 25px;
-  margin-top: 20px;
-  margin-bottom: 5px;
-  text-transform: uppercase;
-  font-size: 12px;
-  color: #9ca3af;
-  letter-spacing: 1px;
-}
-
-/* Logout Button */
-.logout-btn {
-
-  background: linear-gradient(90deg, #ff4b2b, #ff416c);
-  color: white;
-  border: none;
-  border-radius: 10px;
-  margin: 20px;
-  padding: 12px;
+  padding: 12px 16px;
+  color: rgba(255,255,255,0.85);
   font-size: 15px;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: .25s;
   cursor: pointer;
-  transition: 0.3s ease;
+}
+
+/* ICON STYLE */
+.menu-link .icon {
+  font-size: 20px;
+  width: 42px;
+  height: 42px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: .25s;
+}
+
+/* ===========================
+   HOVER STATE
+=========================== */
+.menu-link:hover {
+  background: rgba(255,255,255,0.15);
+  padding-left: 20px;
+  color: #4e8cff;
+}
+.menu-link:hover .icon {
+  background: #4e8cff;
+  color: white;
+  transform: scale(1.05);
+}
+
+/* ===========================
+   ACTIVE STATE
+=========================== */
+.menu-link.active {
+  background: rgba(78,140,255,0.18);
+  border-radius: 12px;
+  color: #4e8cff;
+}
+.menu-link.active .icon {
+  background: #4e8cff;
+  color: white;
+  transform: scale(1.07);
+}
+
+/* ===========================
+   BADGE STYLE
+=========================== */
+.badge {
+  margin-left: auto;
+  background: #ff2b2b;
+  padding: 4px 8px;
+  font-size: 10px;
+  border-radius: 10px;
+  color: white;
+  font-weight: 600;
+}
+
+/* ===========================
+   FOOTER AREA
+=========================== */
+.sidebar-footer {
+  padding: 14px;
+}
+
+/* THEME */
+.theme-btn {
+  width: 100%;
+  border: none;
+  padding: 12px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 10px;
+  cursor: pointer;
+  color: white;
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+/* LOGOUT BUTTON */
+.logout-btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(90deg, #ff4b2b, #e7305b);
+  border-radius: 10px;
+  border: none;
+  font-size: 15px;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+  transition: .2s;
 }
 .logout-btn:hover {
-  background: linear-gradient(90deg, #e63946, #f72585);
   transform: translateY(-3px);
+  box-shadow: 0 6px 14px rgba(255,0,0,0.4);
 }
 
-/* ================================
-   📌 MAIN CONTENT AREA
-=================================== */
+/* ===========================
+   MAIN CONTENT
+=========================== */
 .admin-main {
-  flex-grow: 1;
-  background: #f8faff;
-  padding: 45px;
+  width: 100%;
   overflow-y: auto;
-  position: relative;
-  animation: fadeIn 0.4s ease;
+  padding: 32px;
+  background: #f8faff;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Main headings */
-.admin-main h2,
-.admin-main h3 {
-  color: #1a1a2e;
-  margin-bottom: 20px;
-}
-
-/* ================================
-   🧊 Modern Glass Cards
-=================================== */
-.admin-card {
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 16px;
-  backdrop-filter: blur(6px);
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
-  padding: 25px 30px;
-  margin-bottom: 30px;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-
-.admin-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
-}
-
-/* ================================
-   👍 RESPONSIVE SIDEBAR
-=================================== */
-@media (max-width: 900px) {
-  .admin-sidebar {
-    width: 75px;
-  }
-
-  .sidebar-header h2,
-  .sidebar-header p {
-    display: none;
-  }
-
-  .sidebar-link {
-    justify-content: center;
-    font-size: 0;
-    padding: 18px 0;
-  }
-
-  .sidebar-link::after {
-    font-size: 20px;
-    content: attr(data-icon);
-    color: #e0e0e0;
-  }
-
-  .sidebar-link:hover::after {
-    color: #00c6ff;
-  }
-
-  .logout-btn {
-    font-size: 12px;
-    margin: 10px;
-  }
-}
-
-/* ================================
-   🔝 Scrollbar Style
-=================================== */
+/* SCROLLBAR */
 .admin-main::-webkit-scrollbar {
   width: 8px;
 }
 .admin-main::-webkit-scrollbar-thumb {
   background: #c1c1c1;
   border-radius: 4px;
-}
-.admin-main::-webkit-scrollbar-thumb:hover {
-  background: #999;
 }
