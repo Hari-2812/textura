@@ -21,6 +21,9 @@ const AdminDashboard = () => {
   });
 
   const [graphData, setGraphData] = useState([]);
+  const [notifications, setNotifications] = useState([]);
+  const [alerts, setAlerts] = useState([]);
+  const [connectionStatus, setConnectionStatus] = useState("🟢 Connected");
   const [loading, setLoading] = useState(true);
 
   const backendUrl = "http://localhost:5000";
@@ -34,9 +37,8 @@ const AdminDashboard = () => {
 
       setStats(statsRes.data);
       setGraphData(graphRes.data);
-
     } catch (err) {
-      console.error(err);
+      console.error("Dashboard error", err);
     } finally {
       setLoading(false);
     }
@@ -44,6 +46,33 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     loadDashboard();
+  }, []);
+
+  /* ================= SOCKET.IO REALTIME ================= */
+  useEffect(() => {
+    const socket = io(backendUrl);
+
+    socket.on("connect", () => setConnectionStatus("🟢 Connected"));
+
+    socket.on("disconnect", () =>
+      setConnectionStatus("🔴 Reconnecting...")
+    );
+
+    socket.on("newOrder", (data) => {
+      setNotifications((prev) => [...prev, data.message]);
+      setAlerts((prev) => [
+        ...prev,
+        { id: Date.now(), message: data.message },
+      ]);
+      loadDashboard();
+    });
+
+    socket.on("orderUpdated", (data) => {
+      setNotifications((prev) => [...prev, data.message]);
+      loadDashboard();
+    });
+
+    return () => socket.disconnect();
   }, []);
 
   const statsArray = [
@@ -80,8 +109,46 @@ const AdminDashboard = () => {
   return (
     <div className="admin-dashboard-page">
 
+      {/* Status */}
+      <div
+        className={`connection-status ${
+          connectionStatus.includes("Reconnecting") ? "error" : ""
+        }`}
+      >
+        {connectionStatus}
+      </div>
+
+      {/* Persistent Alerts */}
+      {alerts.length > 0 && (
+        <div className="alert-box">
+          {alerts.map((a) => (
+            <div key={a.id} className="alert-item">
+              <p>{a.message}</p>
+              <button
+                onClick={() =>
+                  setAlerts(alerts.filter((x) => x.id !== a.id))
+                }
+              >
+                Mark as Seen
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Toasts */}
+      <div className="toast-container">
+        {notifications.map((msg, i) => (
+          <div key={i} className="toast">
+            {msg}
+          </div>
+        ))}
+      </div>
+
+      {/* Heading */}
       <h2>📊 Dashboard Overview</h2>
 
+      {/* Stat Cards */}
       <div className="stats-grid">
         {statsArray.map((item, i) => (
           <div
@@ -96,6 +163,7 @@ const AdminDashboard = () => {
         ))}
       </div>
 
+      {/* Chart */}
       <div className="admin-card" style={{ marginTop: "35px" }}>
         <h3>📈 Sales Analytics</h3>
         <PaymentChart data={graphData} />
