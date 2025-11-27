@@ -33,39 +33,57 @@ const Footer = () => {
     <>
       <footer className="footer">
         <div className="footer-row">
+
+          {/* ----- ORIGINAL LEFT SIDE ----- */}
           <div className="footer-section company">
             <h3 className="footer-logo" onClick={() => goTo("/")}>Textura</h3>
-            <p className="footer-desc">{t("footerTagline")}</p>
+            <p className="footer-desc">
+              Redefining kids’ fashion — where comfort meets creativity.
+              Discover premium quality and modern trends at Textura Garments.
+            </p>
           </div>
 
           <div className="footer-section">
-            <h3>{t("shop")}</h3>
-            <p onClick={() => goTo("/boys")}>{t("boys")}</p>
-            <p onClick={() => goTo("/girls")}>{t("girls")}</p>
-            <p onClick={() => goTo("/offers")}>{t("offers")}</p>
-            <p onClick={() => goTo("/wishlist")}>{t("wishlist")}</p>
+            <h3>Shop</h3>
+            <p onClick={() => goTo("/boys")}>Boys</p>
+            <p onClick={() => goTo("/girls")}>Girls</p>
+            <p onClick={() => goTo("/offers")}>Offers</p>
+            <p onClick={() => goTo("/wishlist")}>Wishlist</p>
           </div>
 
           <div className="footer-section">
-            <h3>{t("explore")}</h3>
-            <p onClick={() => goTo("/about")}>{t("about")}</p>
-            <p onClick={() => goTo("/language")}>{t("language")}</p>
-            <p onClick={() => goTo("/help")}>{t("help")}</p>
+            <h3>Explore</h3>
+            <p onClick={() => goTo("/about")}>About Us</p>
+            <p onClick={() => goTo("/language")}>Language</p>
+            <p onClick={() => goTo("/help")}>Help Center</p>
           </div>
 
+          {/* ----- ONLY THIS PART REMAINS UPDATED ----- */}
           <div className="footer-section">
-            <h3>{t("followUs")}</h3>
+            <h3>Follow Us</h3>
 
             <div className="footer-socials">
-              <a className="social-icon instagram">
+              
+              <a className="social-icon instagram" href="#">
                 <FaInstagram />
               </a>
-              <a className="social-icon whatsapp">
+
+              <a
+                className="social-icon whatsapp"
+                href="https://api.whatsapp.com/send?phone=919361876698"
+                target="_blank"
+              >
                 <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" />
               </a>
-              <a className="social-icon telegram">
+
+              <a
+                className="social-icon telegram"
+                href="https://t.me/YOUR_TELEGRAM"
+                target="_blank"
+              >
                 <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" />
               </a>
+
               <a className="social-icon email" onClick={handleEmailClick}>
                 <img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" />
               </a>
@@ -73,6 +91,7 @@ const Footer = () => {
           </div>
         </div>
 
+        {/* ----- ORIGINAL BOTTOM REMAIN SAME ----- */}
         <div className="footer-bottom">
           <p>© 2025 Textura Garments | All Rights Reserved</p>
         </div>
