@@ -13,13 +13,15 @@ import {
   FaHeart,
   FaFilter,
   FaCompass,
-  FaGlobe, // 🌐 added for language
+  FaGlobe,
+  FaBars,
 } from "react-icons/fa";
 
 const Header = ({ onFilterToggle }) => {
   const [search, setSearch] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [showProfile, setShowProfile] = useState(false);
+  const [openMenu, setOpenMenu] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -71,8 +73,15 @@ const Header = ({ onFilterToggle }) => {
 
       <header className="header">
         <nav className="navbar">
+
           {/* LEFT SECTION */}
           <div className="navbar-left">
+
+            {/* MOBILE MENU ICON */}
+            <div className="menu-icon" onClick={() => setOpenMenu(true)}>
+              <FaBars />
+            </div>
+
             <div className="logo" onClick={() => navigate("/")}>
               <img
                 src="https://cdn-icons-png.flaticon.com/512/2769/2769346.png"
@@ -107,6 +116,7 @@ const Header = ({ onFilterToggle }) => {
 
           {/* RIGHT ICONS */}
           <div className="navbar-right">
+
             <div className="nav-item" onClick={() => navigate("/wishlist")}>
               <FaHeart />
               <span>{t("wishlist")}</span>
@@ -130,7 +140,6 @@ const Header = ({ onFilterToggle }) => {
               </div>
             )}
 
-            {/* 🌐 LANGUAGE OPTION */}
             <div className="nav-item" onClick={() => navigate("/language")}>
               <FaGlobe />
               <span>{t("language") || "Language"}</span>
@@ -160,7 +169,31 @@ const Header = ({ onFilterToggle }) => {
         </nav>
       </header>
 
-      {/* MOBILE NAV */}
+      {/* SIDEBAR */}
+      <div className={`sidebar ${openMenu ? "open" : ""}`}>
+        <div className="sidebar-header">
+          <h3>Menu</h3>
+          <span className="close-btn" onClick={() => setOpenMenu(false)}>×</span>
+        </div>
+
+        <ul className="sidebar-links">
+          <li onClick={() => { navigate("/"); setOpenMenu(false); }}>Home</li>
+          <li onClick={() => { navigate("/boys"); setOpenMenu(false); }}>Boys</li>
+          <li onClick={() => { navigate("/girls"); setOpenMenu(false); }}>Girls</li>
+          {/* <li onClick={() => { navigate("/wishlist"); setOpenMenu(false); }}>Wishlist</li>
+          <li onClick={() => { navigate("/cart"); setOpenMenu(false); }}>Cart</li>
+          <li onClick={() => { navigate("/offers"); setOpenMenu(false); }}>Offers</li> */}
+          <li onClick={() => { navigate("/orders"); setOpenMenu(false); }}>Orders</li>
+          {/* <li onClick={() => { navigate("/profile"); setOpenMenu(false); }}>Profile</li> */}
+          <li onClick={() => { navigate("/language"); setOpenMenu(false); }}>Language</li>
+          <li onClick={() => { handleLogout(); setOpenMenu(false); }}>Logout</li>
+        </ul>
+
+      </div>
+
+      {openMenu && <div className="overlay" onClick={() => setOpenMenu(false)} />}
+
+      {/* BOTTOM NAV */}
       <div className="bottom-nav">
         <div className="bottom-nav-item" onClick={() => navigate("/wishlist")}>
           <FaHeart />
@@ -185,7 +218,6 @@ const Header = ({ onFilterToggle }) => {
           </div>
         )}
 
-        {/* 🌐 LANGUAGE OPTION (MOBILE) */}
         <div className="bottom-nav-item" onClick={() => navigate("/language")}>
           <FaGlobe />
           <span>{t("language") || "Language"}</span>
