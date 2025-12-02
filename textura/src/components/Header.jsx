@@ -13,6 +13,7 @@ import {
   FaHeart,
   FaFilter,
   FaCompass,
+  FaGlobe, // 🌐 added for language
 } from "react-icons/fa";
 
 const Header = ({ onFilterToggle }) => {
@@ -70,7 +71,6 @@ const Header = ({ onFilterToggle }) => {
 
       <header className="header">
         <nav className="navbar">
-
           {/* LEFT SECTION */}
           <div className="navbar-left">
             <div className="logo" onClick={() => navigate("/")}>
@@ -107,7 +107,6 @@ const Header = ({ onFilterToggle }) => {
 
           {/* RIGHT ICONS */}
           <div className="navbar-right">
-
             <div className="nav-item" onClick={() => navigate("/wishlist")}>
               <FaHeart />
               <span>{t("wishlist")}</span>
@@ -130,6 +129,12 @@ const Header = ({ onFilterToggle }) => {
                 <span>{t("offers")}</span>
               </div>
             )}
+
+            {/* 🌐 LANGUAGE OPTION */}
+            <div className="nav-item" onClick={() => navigate("/language")}>
+              <FaGlobe />
+              <span>{t("language") || "Language"}</span>
+            </div>
 
             <div
               className="nav-item profile-box"
@@ -157,7 +162,6 @@ const Header = ({ onFilterToggle }) => {
 
       {/* MOBILE NAV */}
       <div className="bottom-nav">
-
         <div className="bottom-nav-item" onClick={() => navigate("/wishlist")}>
           <FaHeart />
           <span>{t("wishlist")}</span>
@@ -180,6 +184,12 @@ const Header = ({ onFilterToggle }) => {
             <span>{t("offers")}</span>
           </div>
         )}
+
+        {/* 🌐 LANGUAGE OPTION (MOBILE) */}
+        <div className="bottom-nav-item" onClick={() => navigate("/language")}>
+          <FaGlobe />
+          <span>{t("language") || "Language"}</span>
+        </div>
 
         <div className="bottom-nav-item" onClick={() => navigate("/profile")}>
           <img
