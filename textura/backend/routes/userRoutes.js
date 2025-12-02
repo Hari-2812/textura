@@ -2,6 +2,7 @@ import express from "express";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import admin from "../firebase.js";
+import axios from "axios";
 import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
@@ -18,38 +19,48 @@ const generateToken = (id) => {
 =========================================================== */
 router.post("/register", async (req, res) => {
   try {
-    const { token, name } = req.body;
+    const { token, name, captcha } = req.body;
 
     if (!token) return res.status(400).json({ message: "Token missing" });
+    if (!captcha) return res.status(400).json({ message: "Captcha missing" });
 
-    // 1️⃣ Verify Firebase token
+    // 1️⃣ VERIFY RECAPTCHA
+    const verifyCaptcha = await axios.post(
+      `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET}&response=${captcha}`
+    );
+
+    if (!verifyCaptcha.data.success)
+      return res.status(400).json({ message: "Captcha failed" });
+
+    // 2️⃣ VERIFY FIREBASE TOKEN
     const decoded = await admin.auth().verifyIdToken(token);
+
+    if (!decoded.email_verified)
+      return res.status(401).json({ message: "Verify your email first" });
 
     const { uid, email } = decoded;
 
-    // 2️⃣ Check if user already exists in MongoDB
+    // 3️⃣ Check if user already exists in MongoDB
     let user = await User.findOne({
       $or: [{ firebaseUid: uid }, { email }],
     });
 
-    // 3️⃣ Create new MongoDB user if required
+    // 4️⃣ Create new MongoDB user if required
     if (!user) {
       user = await User.create({
         firebaseUid: uid,
         name,
         email,
         provider: "password",
-        password: "FIREBASE_AUTH", // placeholder (never used)
       });
     } else {
-      // If existing user has no firebaseUid, attach it
       if (!user.firebaseUid) {
         user.firebaseUid = uid;
         await user.save();
       }
     }
 
-    // 4️⃣ Create backend JWT
+    // 5️⃣ Create backend JWT
     const backendToken = generateToken(user._id);
 
     res.json({
@@ -65,18 +76,28 @@ router.post("/register", async (req, res) => {
 });
 
 /* ===========================================================
-    LOGIN (Google OR Email/Password through Firebase)
+    LOGIN (Google OR Email/Password)
 =========================================================== */
 router.post("/login", async (req, res) => {
   try {
-    const { token } = req.body; // Firebase ID Token
+    const { token, captcha } = req.body;
 
-    if (!token) {
-      return res.status(400).json({ message: "Token missing" });
-    }
+    if (!token) return res.status(400).json({ message: "Token missing" });
+    if (!captcha) return res.status(400).json({ message: "Captcha missing" });
 
-    // 1️⃣ Verify Firebase token
+    // 1️⃣ CAPTCHA VALIDATE
+    const verifyCaptcha = await axios.post(
+      `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET}&response=${captcha}`
+    );
+
+    if (!verifyCaptcha.data.success)
+      return res.status(400).json({ message: "Captcha failed" });
+
+    // 2️⃣ FIREBASE VERIFY
     const decoded = await admin.auth().verifyIdToken(token);
+
+    if (!decoded.email_verified)
+      return res.status(401).json({ message: "Verify your email first" });
 
     const {
       uid,
@@ -86,12 +107,12 @@ router.post("/login", async (req, res) => {
       firebase: { sign_in_provider },
     } = decoded;
 
-    // 2️⃣ Check if user exists by firebaseUid OR email
+    // 3️⃣ verify user exists
     let user = await User.findOne({
       $or: [{ firebaseUid: uid }, { email }],
     });
 
-    // 3️⃣ If user does not exist → Create new
+    // 4️⃣ If user does not exist → create one
     if (!user) {
       user = await User.create({
         firebaseUid: uid,
@@ -99,17 +120,15 @@ router.post("/login", async (req, res) => {
         name: name || "",
         picture: picture || "",
         provider: sign_in_provider,
-        password: "FIREBASE_AUTH",
       });
     } else {
-      // Ensure firebaseUid is saved for old accounts
       if (!user.firebaseUid) {
         user.firebaseUid = uid;
         await user.save();
       }
     }
 
-    // 4️⃣ Issue backend JWT
+    // 5️⃣ Generate backend JWT
     const backendToken = generateToken(user._id);
 
     res.json({
@@ -125,7 +144,7 @@ router.post("/login", async (req, res) => {
 });
 
 /* ===========================================================
-    GET PROFILE
+    PROFILE
 =========================================================== */
 router.get("/me", protect, async (req, res) => {
   try {

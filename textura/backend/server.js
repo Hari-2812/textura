@@ -12,6 +12,9 @@ import http from "http";
 import { Server } from "socket.io";
 import cors from "cors";
 import connectDB from "./config/db.js";
+import cookieParser from "cookie-parser";
+
+
 
 // Routes
 import productRoutes from "./routes/productRoutes.js";
@@ -51,6 +54,7 @@ connectDB();
 // ---------------------------------------------
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 // ---------------------------------------------
 // 7️⃣ Debug check: See if JWT loaded

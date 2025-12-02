@@ -8,10 +8,8 @@ const userSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true },
     picture: { type: String, default: "" },
 
-    // login provider: email / google
     provider: { type: String, default: "email" },
 
-    // ⭐ Your profile fields (unchanged)
     phone: { type: String, default: "" },
     address: { type: String, default: "" },
     state: { type: String, default: "" },

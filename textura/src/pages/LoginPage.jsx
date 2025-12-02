@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../styles/LoginPage.css";
+import ReCAPTCHA from "react-google-recaptcha";
 
 import { auth, googleProvider } from "../firebase";
 import {
@@ -10,7 +11,6 @@ import {
   sendPasswordResetEmail,
 } from "firebase/auth";
 
-// React Icons
 import { FiEye, FiEyeOff } from "react-icons/fi";
 
 const Login = () => {
@@ -19,6 +19,8 @@ const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });
   const [loadingGoogle, setLoadingGoogle] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  const [captchaToken, setCaptchaToken] = useState("");
 
   const [toast, setToast] = useState("");
   const showToast = (msg) => {
@@ -30,8 +32,14 @@ const Login = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  /* ================================
+      NORMAL LOGIN
+  ================================== */
   const handleLogin = async (e) => {
     e.preventDefault();
+
+    if (!captchaToken)
+      return showToast("Please verify captcha first");
 
     try {
       const userCredential = await signInWithEmailAndPassword(
@@ -40,11 +48,18 @@ const Login = () => {
         form.password
       );
 
+      if (!userCredential.user.emailVerified)
+        return showToast("Please verify your email first");
+
       const idToken = await userCredential.user.getIdToken();
 
-      const res = await axios.post("http://localhost:5000/api/users/login", {
-        token: idToken,
-      });
+      const res = await axios.post(
+        "http://localhost:5000/api/users/login",
+        {
+          token: idToken,
+          captcha: captchaToken,
+        }
+      );
 
       localStorage.setItem("userToken", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
@@ -56,7 +71,13 @@ const Login = () => {
     }
   };
 
+  /* ================================
+      GOOGLE LOGIN
+  ================================== */
   const handleGoogleLogin = async () => {
+    if (!captchaToken)
+      return showToast("Verify captcha first");
+
     if (loadingGoogle) return;
     setLoadingGoogle(true);
 
@@ -64,9 +85,13 @@ const Login = () => {
       const googleUser = await signInWithPopup(auth, googleProvider);
       const idToken = await googleUser.user.getIdToken();
 
-      const res = await axios.post("http://localhost:5000/api/users/login", {
-        token: idToken,
-      });
+      const res = await axios.post(
+        "http://localhost:5000/api/users/login",
+        {
+          token: idToken,
+          captcha: captchaToken,
+        }
+      );
 
       localStorage.setItem("userToken", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
@@ -82,6 +107,9 @@ const Login = () => {
     setLoadingGoogle(false);
   };
 
+  /* ================================
+      FORGOT PASSWORD
+  ================================== */
   const handleForgotPassword = async () => {
     if (!form.email) return showToast("Enter your email first");
 
@@ -110,7 +138,6 @@ const Login = () => {
             onChange={handleChange}
           />
 
-          {/* Password With Icon */}
           <div className="password-wrapper">
             <input
               type={showPassword ? "text" : "password"}
@@ -127,6 +154,12 @@ const Login = () => {
               {showPassword ? <FiEye size={22} /> : <FiEyeOff size={22} />}
             </span>
           </div>
+
+          <ReCAPTCHA
+           sitekey={process.env.REACT_APP_RECAPTCHA_KEY}
+
+            onChange={(value) => setCaptchaToken(value)}
+          />
 
           <p className="forgot-password" onClick={handleForgotPassword}>
             Forgot Password?
