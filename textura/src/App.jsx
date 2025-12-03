@@ -26,6 +26,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import OffersPage from "./pages/OffersPage";
 import ScrollToTop from "./components/ScrollToTop";
 
+
 import AdminLayout from "./pages/admin/AdminLayout";
 import AdminLogin from "./pages/AdminLogin";
 
@@ -79,6 +80,7 @@ const AppContent = () => {
 
           {/* Blog */}
           <Route path="/blog/:id" element={<BlogDetails />} />
+          
 
           {/* Protected Routes */}
           <Route

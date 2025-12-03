@@ -1,22 +1,17 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
-
- 
 const firebaseConfig = {
-  apiKey: "AIzaSyBBBt3ueFVF7N21HCbAUMTccSkNNqjDeWQ",
-  authDomain: "textura-40687.firebaseapp.com",
-  projectId: "textura-40687",
-  storageBucket: "textura-40687.appspot.com",   // ✅ FIXED
-  messagingSenderId: "702969125738",
-  appId: "1:702969125738:web:2dac2b9f0aa9cf0530e313",
-  measurementId: "G-6D2ELTKNW7"
+  apiKey: "AIzaSyCuG8O8qpseW3oIHGyNKNB4Q_72eejGISo",
+  authDomain: "textura-new.firebaseapp.com",
+  projectId: "textura-new",
+  storageBucket: "textura-new.appspot.com",   // FIXED
+  messagingSenderId: "828817428728",
+  appId: "1:828817428728:web:8747e2d9743044b887ab0d",
+  measurementId: "G-6FF17HNKCF"
 };
 
-
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Auth & Providers
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();

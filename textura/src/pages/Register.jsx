@@ -2,14 +2,11 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./register.css";
-import ReCAPTCHA from "react-google-recaptcha";
 
-// Firebase imports
 import { auth, googleProvider } from "../firebase";
 import {
   createUserWithEmailAndPassword,
   updateProfile,
-  signInWithPopup,
   sendEmailVerification,
 } from "firebase/auth";
 
@@ -23,9 +20,6 @@ const Register = () => {
   });
 
   const [showPassword, setShowPassword] = useState(false);
-  const [captchaToken, setCaptchaToken] = useState("");
-  const [loadingGoogle, setLoadingGoogle] = useState(false);
-
   const [toast, setToast] = useState("");
 
   const showToast = (msg) => {
@@ -39,7 +33,6 @@ const Register = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    if (!captchaToken) return showToast("Please verify captcha first");
 
     try {
       const userCredential = await createUserWithEmailAndPassword(
@@ -56,18 +49,16 @@ const Register = () => {
 
       const idToken = await userCredential.user.getIdToken();
 
-      const res = await axios.post(
+      await axios.post(
         "http://localhost:5000/api/users/register",
         {
           token: idToken,
           name: form.name,
-          captcha: captchaToken,
         },
         { withCredentials: true }
       );
 
       showToast("Verify email before login!");
-
       setTimeout(() => navigate("/login"), 1500);
     } catch (err) {
       showToast(err.message);
@@ -82,13 +73,27 @@ const Register = () => {
         <h2>Create Account</h2>
 
         <form onSubmit={handleRegister}>
-          <input type="text" name="name" required onChange={handleChange} />
-          <input type="email" name="email" required onChange={handleChange} />
+          <input
+            type="text"
+            name="name"
+            placeholder="Full Name"
+            required
+            onChange={handleChange}
+          />
+
+          <input
+            type="email"
+            name="email"
+            placeholder="Email Address"
+            required
+            onChange={handleChange}
+          />
 
           <div className="password-wrapper">
             <input
               type={showPassword ? "text" : "password"}
               name="password"
+              placeholder="Password"
               required
               onChange={handleChange}
             />
@@ -96,11 +101,6 @@ const Register = () => {
               {showPassword ? "🙈" : "👁️"}
             </span>
           </div>
-
-          <ReCAPTCHA
-            sitekey={import.meta.env.VITE_RECAPTCHA_KEY}
-            onChange={(v) => setCaptchaToken(v)}
-          />
 
           <button className="register-btn">Register</button>
         </form>

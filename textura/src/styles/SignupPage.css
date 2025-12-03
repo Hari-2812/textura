@@ -1,73 +1,246 @@
-/* Background */
-.signup-container {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #fdfbfb, #ebedee);
+/* ============================================
+   MAIN WRAPPER
+============================================ */
+.signup-wrapper {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  background: linear-gradient(135deg, #a8edea, #fed6e3);
+  overflow: hidden;
+}
+
+/* ============================================
+   LEFT SIDE IMAGE + TEXT
+============================================ */
+.signup-left {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border-right: 1px solid rgba(255, 255, 255, 0.3);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  padding: 3rem;
+  text-align: center;
+  animation: slideInLeft 0.8s ease;
+}
+
+.company-image {
+  width: 80%;
+  max-width: 350px;
+  border-radius: 20px;
+  object-fit: cover;
+
+  margin-bottom: 1.8rem;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+
+  transition: transform 0.3s ease;
+}
+.company-image:hover {
+  transform: scale(1.04);
+}
+
+.company-title {
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: #063742;
+  margin-top: 1rem;
+}
+
+.company-desc {
+  font-size: 1.15rem;
+  width: 75%;
+  margin-top: 0.9rem;
+  color: #333;
+  font-weight: 500;
+}
+
+/* ============================================
+   RIGHT SIDE SIGNUP BOX
+============================================ */
+.signup-right {
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 1rem;
+
+  animation: slideInRight 0.8s ease;
 }
 
-/* Card */
 .signup-box {
-  background: white;
-  padding: 2.8rem;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+
+  padding: 3rem;
   width: 100%;
   max-width: 400px;
-  border-radius: 16px;
+  border-radius: 22px;
   text-align: center;
+
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  animation: fadeUp 0.6s ease;
 }
 
-/* Inputs */
+.signup-box h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+  color: #063742;
+}
+
+.subtitle {
+  color: #333;
+  font-size: 0.95rem;
+  margin-bottom: 1.6rem;
+}
+
+/* ============================================
+   INPUT FIELDS
+============================================ */
 .signup-box input {
   width: 100%;
   padding: 0.95rem;
-  border-radius: 10px;
-  border: 1px solid #ccc;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.2);
   margin-bottom: 1rem;
+
+  background: rgba(255, 255, 255, 0.8);
   font-size: 1rem;
+  transition: 0.25s ease;
 }
 
-/* Password Wrapper */
+.signup-box input:focus {
+  outline: none;
+  box-shadow: 0 0 8px rgba(6, 55, 66, 0.25);
+}
+
+/* ============================================
+   PASSWORD FIELD
+============================================ */
 .password-wrapper {
   position: relative;
 }
 
 .password-wrapper input {
-  padding-right: 48px;
+  padding-right: 50px;
 }
 
-/* Eye Icon */
 .eye-icon {
   position: absolute;
   right: 14px;
   top: 50%;
   transform: translateY(-52%);
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  font-size: 1.2rem;
+  color: #444;
 }
 
-/* Button */
+/* ============================================
+   SIGNUP BUTTON
+============================================ */
 .signup-btn {
   width: 100%;
-  padding: 0.95rem;
-  border-radius: 10px;
+  padding: 1rem;
+  border-radius: 12px;
   border: none;
-  background: #073b4c;
+
+  background: #063742;
   color: white;
-  font-weight: 600;
+
+  font-size: 1rem;
+  font-weight: 700;
+
   cursor: pointer;
+  transition: 0.25s ease;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.2);
 }
 
-/* Redirect */
+.signup-btn:hover {
+  background: #0a5261;
+  transform: translateY(-3px);
+}
+
+/* ============================================
+   REDIRECT TEXT
+============================================ */
 .redirect-text {
-  margin-top: 18px;
+  margin-top: 1rem;
 }
 
 .redirect-text span {
   color: #ef476f;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 700;
+}
+
+/* ============================================
+   TOAST MESSAGE
+============================================ */
+.signup-toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+
+  background: #063742;
+  color: white;
+
+  padding: 12px 20px;
+  border-radius: 12px;
+
+  box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+  animation: fadeIn 0.3s ease;
+}
+
+/* ANIMATIONS */
+@keyframes slideInLeft {
+  0% { transform: translateX(-40px); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideInRight {
+  0% { transform: translateX(40px); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeUp {
+  0% { opacity: 0; transform: translateY(15px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+============================================ */
+@media (max-width: 900px) {
+  .signup-wrapper {
+    flex-direction: column;
+    height: auto;
+    padding: 2rem;
+  }
+
+  .signup-left {
+    width: 100%;
+    margin-bottom: 2rem;
+  }
+
+  .company-desc {
+    width: 90%;
+  }
+}
+
+@media (max-width: 500px) {
+  .signup-box {
+    padding: 2rem;
+  }
+
+  .company-title {
+    font-size: 1.9rem;
+  }
 }
