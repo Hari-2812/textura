@@ -3,12 +3,11 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./register.css";
 
-// Firebase imports
 import { auth, googleProvider } from "../firebase";
 import {
   createUserWithEmailAndPassword,
   updateProfile,
-  signInWithPopup,
+  sendEmailVerification,
 } from "firebase/auth";
 
 const Register = () => {
@@ -21,9 +20,6 @@ const Register = () => {
   });
 
   const [showPassword, setShowPassword] = useState(false);
-  const [loadingGoogle, setLoadingGoogle] = useState(false);
-
-  // ⭐ Toast state
   const [toast, setToast] = useState("");
 
   const showToast = (msg) => {
@@ -35,9 +31,6 @@ const Register = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // ----------------------------------------
-  // EMAIL + PASSWORD SIGNUP
-  // ----------------------------------------
   const handleRegister = async (e) => {
     e.preventDefault();
 
@@ -48,68 +41,36 @@ const Register = () => {
         form.password
       );
 
-      // Add display name
+      await sendEmailVerification(auth.currentUser);
+
       await updateProfile(userCredential.user, {
         displayName: form.name,
       });
 
       const idToken = await userCredential.user.getIdToken();
 
-      // Send token to backend
-      const res = await axios.post("http://localhost:5000/api/users/login", {
-        token: idToken,
-      });
+      await axios.post(
+        "http://localhost:5000/api/users/register",
+        {
+          token: idToken,
+          name: form.name,
+        },
+        { withCredentials: true }
+      );
 
-      localStorage.setItem("userToken", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
-
-      // ⭐ Replace alert with toast
-      showToast("Registration successful 🎉");
-
-      // Auto redirect
-      setTimeout(() => navigate("/profile"), 1200);
-    } catch (err) {
-      showToast(err.message || "Registration failed");
-    }
-  };
-
-  // ----------------------------------------
-  // GOOGLE SIGNUP
-  // ----------------------------------------
-  const handleGoogleSignup = async () => {
-    if (loadingGoogle) return;
-
-    setLoadingGoogle(true);
-
-    try {
-      const googleUser = await signInWithPopup(auth, googleProvider);
-      const idToken = await googleUser.user.getIdToken();
-
-      const res = await axios.post("http://localhost:5000/api/users/login", {
-        token: idToken,
-      });
-
-      localStorage.setItem("userToken", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
-
-      showToast("Google signup successful 🎉");
-
-      setTimeout(() => navigate("/profile"), 1200);
+      showToast("Verify email before login!");
+      setTimeout(() => navigate("/login"), 1500);
     } catch (err) {
       showToast(err.message);
     }
-
-    setLoadingGoogle(false);
   };
 
   return (
     <div className="register-container">
-      {/* ⭐ Toast message */}
       {toast && <div className="login-toast">{toast}</div>}
 
       <div className="register-box">
         <h2>Create Account</h2>
-        <p className="subtitle">Join Textura and enjoy the best styles!</p>
 
         <form onSubmit={handleRegister}>
           <input
@@ -123,12 +84,11 @@ const Register = () => {
           <input
             type="email"
             name="email"
-            placeholder="Email"
+            placeholder="Email Address"
             required
             onChange={handleChange}
           />
 
-          {/* Password + Eye Toggle */}
           <div className="password-wrapper">
             <input
               type={showPassword ? "text" : "password"}
@@ -137,39 +97,13 @@ const Register = () => {
               required
               onChange={handleChange}
             />
-
-            <span
-              className="eye-icon"
-              onClick={() => setShowPassword(!showPassword)}
-            >
+            <span onClick={() => setShowPassword(!showPassword)}>
               {showPassword ? "🙈" : "👁️"}
             </span>
           </div>
 
-          <button type="submit" className="register-btn">
-            Register
-          </button>
+          <button className="register-btn">Register</button>
         </form>
-
-        {/* Google Signup Button */}
-        <button
-          onClick={handleGoogleSignup}
-          className="google-btn"
-          disabled={loadingGoogle}
-          style={{ opacity: loadingGoogle ? 0.6 : 1 }}
-        >
-          <img
-            src="https://developers.google.com/identity/images/g-logo.png"
-            alt="Google"
-            className="google-icon"
-          />
-          {loadingGoogle ? "Please wait..." : "Sign up with Google"}
-        </button>
-
-        <p className="redirect-text">
-          Already have an account?
-          <span onClick={() => navigate("/login")}> Login</span>
-        </p>
       </div>
     </div>
   );

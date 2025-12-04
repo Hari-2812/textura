@@ -2,158 +2,100 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { FaInstagram } from "react-icons/fa";
 import "../styles/Footer.css";
+import { useTranslation } from "react-i18next";
 
 const Footer = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [showEmailPopup, setShowEmailPopup] = React.useState(false);
 
-  // 🔥 Handles email icon click
   const handleEmailClick = (e) => {
     e.preventDefault();
-
     const isMobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent);
-
     if (!isMobile) {
-      // DESKTOP → always open Gmail web
       window.open(
         "https://mail.google.com/mail/?view=cm&fs=1&to=Textura0511@gmail.com",
         "_blank"
       );
     } else {
-      // MOBILE → show option popup
       setShowEmailPopup(true);
     }
+  };
+
+  const goTo = (path) => {
+    navigate(path);
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }, 20);
   };
 
   return (
     <>
       <footer className="footer">
         <div className="footer-row">
-          {/* 🏢 Company Info */}
+
+          {/* ----- ORIGINAL LEFT SIDE ----- */}
           <div className="footer-section company">
-            <h3 className="footer-logo" onClick={() => navigate("/")}>
-              Textura
-            </h3>
+            <h3 className="footer-logo" onClick={() => goTo("/")}>Textura</h3>
             <p className="footer-desc">
               Redefining kids’ fashion — where comfort meets creativity.
               Discover premium quality and modern trends at Textura Garments.
             </p>
           </div>
 
-          {/* 🛍️ Shop */}
           <div className="footer-section">
             <h3>Shop</h3>
-            <p onClick={() => navigate("/boys")}>Boys</p>
-            <p onClick={() => navigate("/girls")}>Girls</p>
-            <p onClick={() => navigate("/offers")}>Offers</p>
-            <p onClick={() => navigate("/wishlist")}>Wishlist</p>
+            <p onClick={() => goTo("/boys")}>Boys</p>
+            <p onClick={() => goTo("/girls")}>Girls</p>
+            <p onClick={() => goTo("/offers")}>Offers</p>
+            <p onClick={() => goTo("/wishlist")}>Wishlist</p>
           </div>
 
-          {/* 🌍 Explore */}
           <div className="footer-section">
             <h3>Explore</h3>
-            <p onClick={() => navigate("/about")}>About Us</p>
-            <p onClick={() => navigate("/language")}>Language</p>
-            <p onClick={() => navigate("/help")}>Help Center</p>
+            <p onClick={() => goTo("/about")}>About Us</p>
+            <p onClick={() => goTo("/language")}>Language</p>
+            <p onClick={() => goTo("/help")}>Help Center</p>
           </div>
 
-          {/* 🌐 Follow Us */}
+          {/* ----- ONLY THIS PART REMAINS UPDATED ----- */}
           <div className="footer-section">
             <h3>Follow Us</h3>
+
             <div className="footer-socials">
-              {/* Instagram */}
-              <a
-                href="https://instagram.com/YOUR_INSTAGRAM"
-                target="_blank"
-                rel="noreferrer"
-                className="social-icon instagram"
-              >
+              
+              <a className="social-icon instagram" href="#">
                 <FaInstagram />
               </a>
 
-              {/* WhatsApp */}
               <a
+                className="social-icon whatsapp"
                 href="https://api.whatsapp.com/send?phone=919361876698"
                 target="_blank"
-                rel="noreferrer"
-                className="social-icon whatsapp"
               >
-                <img
-                  src="https://cdn-icons-png.flaticon.com/512/733/733585.png"
-                  alt="WhatsApp"
-                />
+                <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" />
               </a>
 
-              {/* Telegram */}
               <a
+                className="social-icon telegram"
                 href="https://t.me/YOUR_TELEGRAM"
                 target="_blank"
-                rel="noreferrer"
-                className="social-icon telegram"
               >
-                <img
-                  src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png"
-                  alt="Telegram"
-                />
+                <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" />
               </a>
 
-              {/* Email */}
               <a className="social-icon email" onClick={handleEmailClick}>
-                <img
-                  src="https://cdn-icons-png.flaticon.com/512/732/732200.png"
-                  alt="Email"
-                />
+                <img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" />
               </a>
             </div>
           </div>
         </div>
 
+        {/* ----- ORIGINAL BOTTOM REMAIN SAME ----- */}
         <div className="footer-bottom">
           <p>© 2025 Textura Garments | All Rights Reserved</p>
         </div>
       </footer>
-
-      {/* 🌟 Email Selection Popup (Mobile Only) */}
-      {showEmailPopup && (
-        <div className="email-popup-overlay">
-          <div className="email-popup">
-            <h4>Send Email</h4>
-            <p>How would you like to open your email?</p>
-
-            <div className="email-popup-buttons">
-              <button
-                className="email-btn app"
-                onClick={() => {
-                  window.location.href = "mailto:Textura0511@gmail.com";
-                  setShowEmailPopup(false);
-                }}
-              >
-                Gmail App
-              </button>
-
-              <button
-                className="email-btn browser"
-                onClick={() => {
-                  window.open(
-                    "https://mail.google.com/mail/?view=cm&fs=1&to=Textura0511@gmail.com",
-                    "_blank"
-                  );
-                  setShowEmailPopup(false);
-                }}
-              >
-                Browser
-              </button>
-
-              <button
-                className="email-btn cancel"
-                onClick={() => setShowEmailPopup(false)}
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 };

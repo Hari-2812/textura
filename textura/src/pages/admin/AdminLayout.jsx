@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   NavLink,
   Routes,
@@ -9,13 +9,16 @@ import {
 
 import { useUser } from "../../context/UserContext";
 
-// Import Admin Pages
+// Pages
 import AdminDashboard from "./AdminDashboard";
 import OrdersPage from "./OrdersPage";
 import ProductsList from "./ProductsList";
 import EditProduct from "./EditProduct";
 import BulkAddProducts from "./BulkAddProducts";
 import AdminOffersPage from "./AdminOffersPage";
+import PaymentsPage from "./PaymentsPage";
+import TrackOrdersPage from "./TrackOrdersPage";
+import DeliveryPartner from "./DeliveryPartner";
 
 import "../../styles/AdminLayout.css";
 
@@ -23,47 +26,39 @@ const AdminLayout = () => {
   const { logout, user } = useUser();
   const navigate = useNavigate();
 
-  // Protect Admin Access
   if (!user || user.role !== "admin") {
     return <Navigate to="/admin-login" replace />;
   }
 
   const handleLogout = () => {
     logout();
-    alert("Admin logged out successfully!");
     navigate("/admin-login");
   };
 
+  const menuItems = [
+    { to: "/admin/dashboard", icon: "📊", label: "Dashboard" },
+    { to: "/admin/orders", icon: "📦", label: "Orders" },
+    { to: "/admin/products", icon: "🛍", label: "Products" },
+    { to: "/admin/bulk-add", icon: "📥", label: "Bulk Add" },
+    { to: "/admin/revenue", icon: "💰", label: "Payments" },
+    { to: "/admin/delivery", icon: "🚚", label: "Delivery Status" },
+    { to: "/admin/offers", icon: "🎁", label: "Offers" },
+  ];
+
   return (
     <div className="admin-layout">
-      {/* Sidebar */}
       <aside className="admin-sidebar">
         <div className="sidebar-header">
-          <h2>Textura</h2>
-          <p>Admin Panel</p>
+          <h2>TEXTURA</h2>
         </div>
 
-        <nav className="sidebar-nav">
-          <NavLink to="/admin/dashboard" className="sidebar-link">
-            📊 Dashboard
-          </NavLink>
-
-          <NavLink to="/admin/orders" className="sidebar-link">
-            📦 Orders
-          </NavLink>
-
-          <NavLink to="/admin/products" className="sidebar-link">
-            🛍 Products
-          </NavLink>
-
-          <NavLink to="/admin/bulk-add" className="sidebar-link">
-            📥 Bulk Add
-          </NavLink>
-
-          {/* ⭐ NEW OFFERS PAGE LINK */}
-          <NavLink to="/admin/offers" className="sidebar-link">
-            🎁 Offers
-          </NavLink>
+        <nav className="sidebar-menu">
+          {menuItems.map((item, i) => (
+            <NavLink key={i} to={item.to} className="menu-link">
+              <span className="icon">{item.icon}</span>
+              {item.label}
+            </NavLink>
+          ))}
         </nav>
 
         <button className="logout-btn" onClick={handleLogout}>
@@ -71,23 +66,27 @@ const AdminLayout = () => {
         </button>
       </aside>
 
-      {/* Main Content */}
       <main className="admin-main">
         <Routes>
-          {/* Default Redirect */}
           <Route path="/" element={<Navigate to="dashboard" />} />
 
-          {/* Product Management */}
+          {/* Dashboard */}
+          <Route path="dashboard" element={<AdminDashboard />} />
+
+          {/* Orders */}
+          <Route path="orders" element={<OrdersPage />} />
+
+          {/* Product CRUD */}
           <Route path="products" element={<ProductsList />} />
           <Route path="edit-product/:id" element={<EditProduct />} />
           <Route path="bulk-add" element={<BulkAddProducts />} />
-          <Route path="add-product" element={<BulkAddProducts />} />
 
-          {/* Admin Pages */}
-          <Route path="dashboard" element={<AdminDashboard />} />
-          <Route path="orders" element={<OrdersPage />} />
+          {/* FIXED working pages */}
+          <Route path="revenue" element={<PaymentsPage />} />
+          <Route path="delivery" element={<TrackOrdersPage />} />
+          <Route path="partner" element={<DeliveryPartner />} />
 
-          {/* ⭐ NEW OFFERS ROUTE */}
+          {/* Offers */}
           <Route path="offers" element={<AdminOffersPage />} />
         </Routes>
       </main>

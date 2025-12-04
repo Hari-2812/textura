@@ -1,20 +1,22 @@
 import express from "express";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
-import admin from "../firebase.js";
+import admin from "../firebaseAdmin.js";   // MUST BE ADMIN SDK
 import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-/* Generate Backend JWT */
+/* --------------------------
+   Generate Backend JWT
+-------------------------- */
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN || "30d",
+    expiresIn: "30d",
   });
 };
 
 /* ===========================================================
-    REGISTER (Firebase Email/Password Signup)
+    REGISTER (NO CAPTCHA)
 =========================================================== */
 router.post("/register", async (req, res) => {
   try {
@@ -22,61 +24,53 @@ router.post("/register", async (req, res) => {
 
     if (!token) return res.status(400).json({ message: "Token missing" });
 
-    // 1️⃣ Verify Firebase token
+    // 1️⃣ VERIFY FIREBASE TOKEN
     const decoded = await admin.auth().verifyIdToken(token);
+
+    if (!decoded.email_verified)
+      return res.status(400).json({ message: "Please verify your email" });
 
     const { uid, email } = decoded;
 
-    // 2️⃣ Check if user already exists in MongoDB
+    // 2️⃣ FIND USER
     let user = await User.findOne({
       $or: [{ firebaseUid: uid }, { email }],
     });
 
-    // 3️⃣ Create new MongoDB user if required
+    // 3️⃣ CREATE USER IF NOT EXIST
     if (!user) {
       user = await User.create({
         firebaseUid: uid,
-        name,
+        name: name || "",
         email,
-        provider: "password",
-        password: "FIREBASE_AUTH", // placeholder (never used)
+        provider: decoded.firebase.sign_in_provider || "password",
       });
-    } else {
-      // If existing user has no firebaseUid, attach it
-      if (!user.firebaseUid) {
-        user.firebaseUid = uid;
-        await user.save();
-      }
     }
 
-    // 4️⃣ Create backend JWT
+    // 4️⃣ BACKEND JWT
     const backendToken = generateToken(user._id);
 
-    res.json({
-      success: true,
-      token: backendToken,
-      user,
-    });
-
+    res.json({ success: true, token: backendToken, user });
   } catch (err) {
-    console.error("Signup Error:", err);
-    res.status(500).json({ message: "Signup failed" });
+    console.error("Register Error:", err);
+    return res.status(500).json({ message: "Registration failed" });
   }
 });
 
 /* ===========================================================
-    LOGIN (Google OR Email/Password through Firebase)
+    LOGIN (NO CAPTCHA)
 =========================================================== */
 router.post("/login", async (req, res) => {
   try {
-    const { token } = req.body; // Firebase ID Token
+    const { token } = req.body;
 
-    if (!token) {
-      return res.status(400).json({ message: "Token missing" });
-    }
+    if (!token) return res.status(400).json({ message: "Token missing" });
 
-    // 1️⃣ Verify Firebase token
+    // 1️⃣ VERIFY FIREBASE TOKEN
     const decoded = await admin.auth().verifyIdToken(token);
+
+    if (!decoded.email_verified)
+      return res.status(400).json({ message: "Please verify your email" });
 
     const {
       uid,
@@ -86,12 +80,9 @@ router.post("/login", async (req, res) => {
       firebase: { sign_in_provider },
     } = decoded;
 
-    // 2️⃣ Check if user exists by firebaseUid OR email
-    let user = await User.findOne({
-      $or: [{ firebaseUid: uid }, { email }],
-    });
+    // 2️⃣ FIND OR CREATE USER
+    let user = await User.findOne({ email });
 
-    // 3️⃣ If user does not exist → Create new
     if (!user) {
       user = await User.create({
         firebaseUid: uid,
@@ -99,40 +90,29 @@ router.post("/login", async (req, res) => {
         name: name || "",
         picture: picture || "",
         provider: sign_in_provider,
-        password: "FIREBASE_AUTH",
       });
     } else {
-      // Ensure firebaseUid is saved for old accounts
       if (!user.firebaseUid) {
         user.firebaseUid = uid;
         await user.save();
       }
     }
 
-    // 4️⃣ Issue backend JWT
+    // 3️⃣ BACKEND JWT
     const backendToken = generateToken(user._id);
 
-    res.json({
-      success: true,
-      token: backendToken,
-      user,
-    });
-
+    res.json({ success: true, token: backendToken, user });
   } catch (err) {
-    console.error("Firebase Login Error:", err);
-    res.status(401).json({ message: "Invalid Firebase token" });
+    console.error("Login Error:", err);
+    return res.status(401).json({ message: "Invalid Firebase token" });
   }
 });
 
 /* ===========================================================
-    GET PROFILE
+    PROFILE
 =========================================================== */
 router.get("/me", protect, async (req, res) => {
-  try {
-    res.json({ success: true, user: req.user });
-  } catch (err) {
-    res.status(500).json({ success: false, message: "Failed to load user" });
-  }
+  res.json({ success: true, user: req.user });
 });
 
 /* ===========================================================
@@ -154,12 +134,12 @@ router.put("/update", protect, async (req, res) => {
         },
       },
       { new: true }
-    ).select("-password");
+    );
 
     res.json({ success: true, user: updatedUser });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false, message: "Update failed" });
+    console.error("Update Error:", err);
+    res.status(500).json({ message: "Update failed" });
   }
 });
 

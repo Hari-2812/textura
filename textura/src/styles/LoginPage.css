@@ -1,85 +1,195 @@
-/* Background */
-.login-container {
-  min-height: 100vh;
+/* ============================================
+   MAIN WRAPPER
+============================================ */
+.login-wrapper {
+  display: flex;
+  height: 100vh;
+  width: 100%;
   background: linear-gradient(135deg, #a8edea, #fed6e3);
+  overflow: hidden;
+}
+
+/* ============================================
+   LEFT SIDE - IMAGE & TEXT
+============================================ */
+.login-left {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border-right: 1px solid rgba(255, 255, 255, 0.3);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  padding: 3rem;
+  text-align: center;
+  animation: slideInLeft 0.8s ease;
+}
+
+.company-image {
+  width: 80%;
+  max-width: 350px;
+  border-radius: 20px;
+  object-fit: cover;
+
+  box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+  margin-bottom: 1.8rem;
+
+  transition: transform 0.3s ease;
+}
+.company-image:hover {
+  transform: scale(1.04);
+}
+
+.company-title {
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: #063742;
+  margin-top: 1rem;
+}
+
+.company-desc {
+  font-size: 1.15rem;
+  width: 75%;
+  margin-top: 0.9rem;
+  color: #333;
+  font-weight: 500;
+}
+
+/* ============================================
+   RIGHT SIDE - LOGIN BOX
+============================================ */
+.login-right {
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 1rem;
+
+  animation: slideInRight 0.8s ease;
 }
 
-/* Card */
 .login-box {
   background: rgba(255, 255, 255, 0.85);
-  padding: 2.5rem;
+  backdrop-filter: blur(12px);
+
+  padding: 3rem;
   width: 100%;
-  max-width: 380px;
-  border-radius: 18px;
+  max-width: 400px;
+
+  border-radius: 22px;
   text-align: center;
+
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+
+  animation: fadeUp 0.6s ease;
 }
 
-/* Inputs */
+.login-box h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+  color: #063742;
+}
+
+.subtitle {
+  color: #333;
+  font-size: 0.95rem;
+  margin-bottom: 1.6rem;
+}
+
+/* ============================================
+   INPUTS
+============================================ */
 .login-box input {
   width: 100%;
-  padding: 0.9rem;
-  border-radius: 10px;
-  border: 1px solid #ccc;
+  padding: 0.95rem;
+  border-radius: 12px;
+
+  border: 1px solid rgba(0,0,0,0.2);
   margin-bottom: 1rem;
+
   font-size: 1rem;
+
+  background: rgba(255, 255, 255, 0.8);
+  transition: box-shadow 0.2s ease;
 }
 
-/* Password wrapper */
+.login-box input:focus {
+  outline: none;
+  box-shadow: 0 0 8px rgba(6, 55, 66, 0.25);
+}
+
+/* ============================================
+   PASSWORD FIELD
+============================================ */
 .password-wrapper {
   position: relative;
 }
 
 .password-wrapper input {
-  padding-right: 48px;
+  padding-right: 50px;
 }
 
-/* Eye Icon */
 .eye-icon {
   position: absolute;
   right: 14px;
   top: 50%;
   transform: translateY(-52%);
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  color: #444;
+  font-size: 1.2rem;
 }
 
-/* Forgot Password */
+/* ============================================
+   FORGOT PASSWORD
+============================================ */
 .forgot-password {
   text-align: right;
-  margin-top: -8px;
-  margin-bottom: 12px;
+  margin-top: -10px;
+  margin-bottom: 14px;
   font-size: 0.9rem;
   color: #ef476f;
   cursor: pointer;
-}
-
-/* Button */
-.login-btn {
-  width: 100%;
-  padding: 0.9rem;
-  border-radius: 10px;
-  border: none;
-  background: #073b4c;
-  color: white;
   font-weight: 600;
 }
 
-/* ===========================
-   Google Login Button
-   =========================== */
+/* ============================================
+   LOGIN BUTTON
+============================================ */
+.login-btn {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 12px;
+  border: none;
 
+  background: #063742;
+  color: white;
+
+  font-size: 1rem;
+  font-weight: 700;
+
+  cursor: pointer;
+  transition: 0.25s ease;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+}
+
+.login-btn:hover {
+  background: #0a5261;
+  transform: translateY(-3px);
+}
+
+/* ============================================
+   GOOGLE LOGIN BUTTON
+============================================ */
 .google-btn {
   width: 100%;
-  padding: 0.9rem;
+  padding: 1rem;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.75);
-  border: 1px solid rgba(0, 0, 0, 0.1);
+
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0,0,0,0.15);
 
   display: flex;
   align-items: center;
@@ -87,36 +197,115 @@
   gap: 12px;
 
   font-size: 1rem;
-  font-weight: 600;
-  color: #444;
+  font-weight: 700;
+  color: #333;
 
   cursor: pointer;
-  margin-top: 1rem;
+  margin-top: 1.2rem;
 
-  backdrop-filter: blur(8px);
-  transition: 0.3s ease, transform 0.25s ease;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+  transition: 0.3s ease;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.12);
 }
 
 .google-btn:hover {
   transform: translateY(-3px);
-  background: rgba(255, 255, 255, 0.9);
-  border-color: rgba(0,0,0,0.2);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  background: rgba(255, 255, 255, 0.95);
 }
 
-/* Google Icon */
+/* GOOGLE ICON */
 .google-icon {
   width: 22px;
   height: 22px;
-  background: white;
   padding: 3px;
   border-radius: 50%;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  background: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
-/* Redirect */
+
+/* ============================================
+   REDIRECT TEXT
+============================================ */
+.redirect-text {
+  margin-top: 1.2rem;
+  font-size: 0.95rem;
+}
+
 .redirect-text span {
   color: #ef476f;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 700;
+}
+
+/* ============================================
+   TOAST MESSAGE
+============================================ */
+.login-toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+
+  background: #063742;
+  color: white;
+
+  padding: 12px 20px;
+  border-radius: 12px;
+
+  box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================
+   KEYFRAME ANIMATIONS
+============================================ */
+@keyframes slideInLeft {
+  0% { transform: translateX(-40px); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideInRight {
+  0% { transform: translateX(40px); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeUp {
+  0% { opacity: 0; transform: translateY(15px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+============================================ */
+@media (max-width: 900px) {
+  .login-wrapper {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .login-left {
+    width: 100%;
+    padding: 2rem;
+  }
+
+  .company-desc {
+    width: 90%;
+  }
+
+  .login-right {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 500px) {
+  .login-box {
+    padding: 2rem;
+  }
+
+  .company-title {
+    font-size: 1.9rem;
+  }
 }

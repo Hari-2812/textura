@@ -8,7 +8,6 @@ const ProductCard = ({ product, onAddToCart }) => {
   const navigate = useNavigate();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
 
-  // ❤️ Toggle wishlist
   const toggleWishlist = (e) => {
     e.stopPropagation();
     if (isInWishlist(product._id)) {
@@ -18,25 +17,19 @@ const ProductCard = ({ product, onAddToCart }) => {
     }
   };
 
-  // 🔔 Toast Notification
-  const showToast = (message) => {
-    const container = document.getElementById("toast-container");
-    if (!container) return;
+  const showToast = (msg) => {
+    const box = document.getElementById("toast-container");
+    const div = document.createElement("div");
 
-    const toast = document.createElement("div");
-    toast.className = "toast";
-    toast.innerText = message;
+    div.className = "toast";
+    div.innerText = msg;
+    box.appendChild(div);
 
-    container.appendChild(toast);
-
-    setTimeout(() => {
-      toast.remove();
-    }, 3000);
+    setTimeout(() => div.remove(), 2000);
   };
 
   return (
     <div className="product-card">
-      {/* 🖼️ Product Image */}
       <div
         className="product-image-container"
         onClick={() => navigate(`/product/${product._id}`)}
@@ -47,7 +40,6 @@ const ProductCard = ({ product, onAddToCart }) => {
           className="product-img"
         />
 
-        {/* ❤️ Wishlist Button */}
         <button
           className={`pc-wishlist-btn ${
             isInWishlist(product._id) ? "active" : ""
@@ -58,19 +50,17 @@ const ProductCard = ({ product, onAddToCart }) => {
         </button>
       </div>
 
-      {/* 📋 Product Info */}
       <div className="product-info">
         <h3 className="product-name">{product.name}</h3>
         <p className="product-price">₹{product.price}</p>
       </div>
 
-      {/* 🛒 Actions */}
       <div className="product-actions">
         <button
           className="add-cart-btn"
           onClick={() => {
             onAddToCart(product);
-            // showToast(`${product.name} added to cart`);
+            showToast(`${product.name} added to cart 🛒`);
           }}
         >
           <FaShoppingCart />

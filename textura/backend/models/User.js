@@ -2,16 +2,12 @@ import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
   {
-    firebaseUid: { type: String, required: true, unique: true },
-
+    firebaseUid: { type: String },   // ❌ removed required + unique
     name: { type: String, default: "" },
     email: { type: String, required: true, unique: true },
     picture: { type: String, default: "" },
+    provider: { type: String, default: "password" },
 
-    // login provider: email / google
-    provider: { type: String, default: "email" },
-
-    // ⭐ Your profile fields (unchanged)
     phone: { type: String, default: "" },
     address: { type: String, default: "" },
     state: { type: String, default: "" },
@@ -22,5 +18,4 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const User = mongoose.model("User", userSchema);
-export default User;
+export default mongoose.model("User", userSchema);
