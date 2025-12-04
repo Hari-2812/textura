@@ -1,14 +1,14 @@
 console.log("🔥 SERVER FILE LOADED");
 
-// ---------------------------------------------
+// -------------------------------------------------
 // 1️⃣ Load .env FIRST
-// ---------------------------------------------
+// -------------------------------------------------
 import dotenv from "dotenv";
 dotenv.config();
 
-// ---------------------------------------------
+// -------------------------------------------------
 // 2️⃣ Import modules
-// ---------------------------------------------
+// -------------------------------------------------
 import express from "express";
 import http from "http";
 import { Server } from "socket.io";
@@ -25,18 +25,18 @@ import subscriberRoutes from "./routes/subscriberRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import tryOnRoutes from "./routes/tryon.js";
 
-// ---------------------------------------------
+// -------------------------------------------------
 // 3️⃣ App + Server setup
-// ---------------------------------------------
+// -------------------------------------------------
 const app = express();
 const server = http.createServer(app);
 
-// ---------------------------------------------
+// -------------------------------------------------
 // 4️⃣ Socket.io Setup
-// ---------------------------------------------
+// -------------------------------------------------
 const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:3000"], // frontend
+    origin: ["http://localhost:3000"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   },
@@ -46,47 +46,52 @@ const io = new Server(server, {
 // Make io globally available
 app.set("io", io);
 
-// ---------------------------------------------
+// -------------------------------------------------
 // 5️⃣ Connect MongoDB
-// ---------------------------------------------
+// -------------------------------------------------
 connectDB();
 
-// ---------------------------------------------
-// 6️⃣ Middleware
-// ---------------------------------------------
-app.use(cors({ origin: "http://localhost:3000", credentials: true }));
-app.use(express.json());
+// -------------------------------------------------
+// 6️⃣ Middleware (VERY IMPORTANT)
+// -------------------------------------------------
+
+// ⚠ FIX 400 BAD REQUEST FOR FIREBASE TOKEN
+app.use(express.json({ limit: "5mb" }));
+app.use(express.urlencoded({ extended: true, limit: "5mb" }));
+
 app.use(cookieParser());
 
-// ---------------------------------------------
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
+
+// -------------------------------------------------
 // 7️⃣ Debug check
-// ---------------------------------------------
+// -------------------------------------------------
 console.log("🔐 Loaded JWT_SECRET:", process.env.JWT_SECRET);
 
-// ---------------------------------------------
+// -------------------------------------------------
 // 8️⃣ API Routes
-// ---------------------------------------------
+// -------------------------------------------------
 app.use("/api/users", userRoutes);
 app.use("/api/products", productRoutes);
-
 app.use("/api/admin", adminStatsRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/offers", offerRoutes);
 app.use("/api/newsletter", subscriberRoutes);
 app.use("/api/tryon", tryOnRoutes);
 
-// Root test routes
-app.get("/test-news", (req, res) => {
-  res.send("NEWS ROUTE WORKING");
-});
-
+// Root test
 app.get("/", (req, res) => {
   res.send("API running...");
 });
 
-// ---------------------------------------------
-// 9️⃣ Socket Listener
-// ---------------------------------------------
+// -------------------------------------------------
+// 9️⃣ Socket Listeners
+// -------------------------------------------------
 io.on("connection", (socket) => {
   console.log("🟢 Socket connected:", socket.id);
 
@@ -95,9 +100,9 @@ io.on("connection", (socket) => {
   });
 });
 
-// ---------------------------------------------
+// -------------------------------------------------
 // 🔟 Start Server
-// ---------------------------------------------
+// -------------------------------------------------
 const PORT = process.env.PORT || 5000;
 
 server.listen(PORT, () => {
