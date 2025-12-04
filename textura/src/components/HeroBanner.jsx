@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import "../styles/HeroBanner.css";
@@ -11,81 +11,64 @@ import img3 from "../assets/images/polo3.jpg";
 
 const HeroBanner = () => {
   const navigate = useNavigate();
-  const [showSelectPopup, setShowSelectPopup] = useState(false);
 
   const settings = {
     dots: true,
+    arrows: false,
     infinite: true,
-    speed: 800,
+    autoplay: true,
+    speed: 700,
+    autoplaySpeed: 3000,
     slidesToShow: 1,
     slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 3000,
-    arrows: true,
     pauseOnHover: false,
+    fade: true,
   };
 
   const slides = [
     {
       id: 1,
       image: img1,
-      text: "Flat 50% Off on New Collection",
+      title: "New Kids Collection",
+      subtitle: "Minimal • Comfortable • Stylish",
+      link: "/boys",
+    },
+    {
+      id: 2,
+      image: img2,
+      title: "Daily Wear Essentials",
+      subtitle: "Soft and breathable outfits for kids",
+      link: "/girls",
+    },
+    {
+      id: 3,
+      image: img3,
+      title: "Trending This Season",
+      subtitle: "Fresh arrivals for boys & girls",
       link: "/offers",
     },
-    { id: 2, image: img2, text: "Fresh Styles for Boys", link: "/boys" },
-    { id: 3, image: img3, text: "Comfort Meets Fashion", link: "/girls" },
   ];
 
   return (
-    <div className="hero-banner">
+    <div className="minimal-hero-banner">
       <Slider {...settings}>
         {slides.map((slide) => (
-          <div key={slide.id} className="hero-slide">
-            <img src={slide.image} alt={slide.text} />
-            <div className="hero-text">
-              <h2>{slide.text}</h2>
+          <div className="minimal-hero-slide" key={slide.id}>
+            <img
+              src={slide.image}
+              alt={slide.title}
+              className="minimal-hero-img"
+            />
 
-              {/* Direct Navigate Based on Slide */}
-              <button onClick={() => navigate(slide.link)}>Explore Now</button>
+            <div className="minimal-hero-content">
+              <h1>{slide.title}</h1>
+              <p>{slide.subtitle}</p>
+
+              <button onClick={() => navigate(slide.link)}>Shop Now</button>
             </div>
           </div>
         ))}
       </Slider>
-
-      {/* POPUP (New Part) */}
-      {showSelectPopup && (
-        <div
-          className="hb-popup-overlay"
-          onClick={() => setShowSelectPopup(false)}
-        >
-          <div className="hb-popup" onClick={(e) => e.stopPropagation()}>
-            <h3>Select Category</h3>
-
-            <div className="hb-options">
-              <button
-                className="hb-option-btn"
-                onClick={() => navigate("/boys")}
-              >
-                👦 Boys
-              </button>
-
-              <button
-                className="hb-option-btn"
-                onClick={() => navigate("/girls")}
-              >
-                👧 Girls
-              </button>
-            </div>
-
-            <button
-              className="hb-close-btn"
-              onClick={() => setShowSelectPopup(false)}
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

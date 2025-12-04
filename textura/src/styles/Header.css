@@ -19,8 +19,14 @@
   position: sticky;
   top: 0;
   z-index: 1100;
+<<<<<<< Updated upstream
   background: linear-gradient(180deg, #5bbcff 0%, #ffffff 85%);
   box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+=======
+  /* background: linear-gradient(180deg, #5bbcff 0%, #ffffff 85%); */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  scroll-margin-top: 0 !important;
+>>>>>>> Stashed changes
 }
 
 /* =========================
