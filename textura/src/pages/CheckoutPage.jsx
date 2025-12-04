@@ -8,8 +8,6 @@ const CheckoutPage = () => {
   const { user, setUser } = useUser();
   const { cartItems, clearCart } = useCart();
 
-  const [paymentMethod, setPaymentMethod] = useState("cod");
-  const [upiId, setUpiId] = useState("");
   const [showEditModal, setShowEditModal] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [orderId, setOrderId] = useState("");
@@ -94,20 +92,23 @@ const CheckoutPage = () => {
 
     setModalError("");
     setErrorMsg("Delivery details updated successfully ✓");
-
     setShowEditModal(false);
   };
 
   /* ============================================================
-      PLACE ORDER
+      TOTAL
   ============================================================ */
-  const handlePlaceOrder = async (e) => {
-    e.preventDefault();
+  const totalPrice = cartItems.reduce(
+    (sum, item) => sum + Number(item.price) * item.quantity,
+    0
+  );
 
+  /* ============================================================
+      GPay Handler (UPI Deep Link)
+  ============================================================ */
+  const handleGooglePay = async () => {
     if (!user?.name || !user?.address || !user?.state) {
-      setErrorMsg(
-        "Please complete your delivery details before placing the order."
-      );
+      setErrorMsg("Please complete your delivery details before payment.");
       return;
     }
 
@@ -116,13 +117,32 @@ const CheckoutPage = () => {
       return;
     }
 
-    if (paymentMethod === "upi" && !upiId) {
-      setErrorMsg("Please enter a valid UPI ID.");
-      return;
-    }
-
     setErrorMsg("");
 
+    // ⚠️ Change UPI ID if needed
+    const upiId = "hariprasath2812@oksbi";
+    const upiName = "Hari Prasath";
+
+    const upiDeepLink = `upi://pay?pa=${encodeURIComponent(
+      upiId
+    )}&pn=${encodeURIComponent(
+      upiName
+    )}&am=${totalPrice}&cu=INR&tn=${encodeURIComponent("Textura Order Payment")}`;
+
+    // This works on MOBILE with UPI apps installed (GPay, PhonePe, Paytm, etc.)
+    window.location.href = upiDeepLink;
+
+    // After opening UPI app, assume payment success and place order
+    // (No real verification – basic flow as you requested)
+    setTimeout(async () => {
+      await placeOrder("Google Pay (UPI)");
+    }, 2500);
+  };
+
+  /* ============================================================
+      PLACE ORDER (called after UPI intent)
+  ============================================================ */
+  const placeOrder = async (paymentMethod) => {
     const orderData = {
       customerName: user.name,
       customerEmail: user.email,
@@ -131,8 +151,7 @@ const CheckoutPage = () => {
       district: user.district,
       pincode: user.pincode,
       landmark: user.landmark,
-      paymentMethod,
-      upiId: paymentMethod === "upi" ? upiId : null,
+      paymentMethod, // "Google Pay (UPI)"
 
       items: cartItems.map((item) => ({
         name: item.name,
@@ -140,17 +159,13 @@ const CheckoutPage = () => {
         quantity: item.quantity,
       })),
 
-      total: cartItems.reduce(
-        (sum, item) => sum + Number(item.price) * item.quantity,
-        0
-      ),
-
+      total: totalPrice,
       status: "Pending",
       createdAt: new Date(),
     };
 
     try {
-      const response = await fetch(`${backendUrl}/api/admin/orders`, {
+      const response = await fetch(`${backendUrl}/api/orders`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(orderData),
@@ -171,8 +186,8 @@ const CheckoutPage = () => {
         setErrorMsg("Order failed. Please try again.");
       }
     } catch (error) {
-      setErrorMsg("Server error. Please try again later.");
       console.error(error);
+      setErrorMsg("Server error. Please try again later.");
     }
   };
 
@@ -185,27 +200,13 @@ const CheckoutPage = () => {
           {/* CUSTOMER INFO */}
           <div className="customer-info">
             <h3>Delivery Details</h3>
-            <p>
-              <strong>Name:</strong> {user?.name}
-            </p>
-            <p>
-              <strong>Phone:</strong> {user?.phone}
-            </p>
-            <p>
-              <strong>Address:</strong> {user?.address}
-            </p>
-            <p>
-              <strong>State:</strong> {user?.state}
-            </p>
-            <p>
-              <strong>District:</strong> {user?.district}
-            </p>
-            <p>
-              <strong>Pincode:</strong> {user?.pincode}
-            </p>
-            <p>
-              <strong>Landmark:</strong> {user?.landmark || "—"}
-            </p>
+            <p><strong>Name:</strong> {user?.name}</p>
+            <p><strong>Phone:</strong> {user?.phone}</p>
+            <p><strong>Address:</strong> {user?.address}</p>
+            <p><strong>State:</strong> {user?.state}</p>
+            <p><strong>District:</strong> {user?.district}</p>
+            <p><strong>Pincode:</strong> {user?.pincode}</p>
+            <p><strong>Landmark:</strong> {user?.landmark || "—"}</p>
 
             <button
               className="update-btn"
@@ -215,64 +216,22 @@ const CheckoutPage = () => {
             </button>
           </div>
 
-          {/* PAYMENT SECTION */}
-          <div className="payment-method">
-            <h3>Payment Method</h3>
+          {/* TOTAL */}
+          <h3 style={{ textAlign: "center", marginBottom: "12px" }}>
+            Total Amount: <strong>₹{totalPrice}</strong>
+          </h3>
 
-            <label className="radio-option">
-              <input
-                type="radio"
-                value="cod"
-                checked={paymentMethod === "cod"}
-                onChange={() => setPaymentMethod("cod")}
-              />
-              Cash on Delivery
-            </label>
-
-            <label className="radio-option">
-              <input
-                type="radio"
-                value="upi"
-                checked={paymentMethod === "upi"}
-                onChange={() => setPaymentMethod("upi")}
-              />
-              UPI Payment
-            </label>
-
-            {paymentMethod === "upi" && (
-              <div className="upi-input">
-                <input
-                  type="text"
-                  placeholder="example@upi"
-                  value={upiId}
-                  onChange={(e) => setUpiId(e.target.value)}
-                />
-              </div>
-            )}
-
-            <label className="radio-option">
-              <input
-                type="radio"
-                value="qr"
-                checked={paymentMethod === "qr"}
-                onChange={() => setPaymentMethod("qr")}
-              />
-              QR Code Payment
-            </label>
-
-            {paymentMethod === "qr" && (
-              <div className="qr-box">
-                <p>Scan to Pay</p>
-                <img src="/assets/qr-demo.png" alt="qr" className="qr-image" />
-              </div>
-            )}
-          </div>
-
-          {/* INLINE ERROR BOX */}
+          {/* INLINE ERROR */}
           {errorMsg && <div className="checkout-error-box">{errorMsg}</div>}
 
-          <button className="place-order-btn" onClick={handlePlaceOrder}>
-            Place Order
+          {/* GPay BUTTON */}
+          <button className="gpay-btn" onClick={handleGooglePay}>
+            <img
+              src="/images/gpay-logo.png"
+              alt="Google Pay"
+              className="gpay-logo"
+            />
+            Pay with Google Pay
           </button>
         </div>
       </div>
@@ -295,8 +254,9 @@ const CheckoutPage = () => {
           <div className="edit-modal-content">
             <h3>Update Delivery Details</h3>
 
-            {/* MODAL ERROR */}
-            {modalError && <div className="modal-error-box">{modalError}</div>}
+            {modalError && (
+              <div className="modal-error-box">{modalError}</div>
+            )}
 
             <input
               type="text"

@@ -329,6 +329,69 @@
 }
 
 /* ---------------------------------------------
+   💳 Google Pay Button
+--------------------------------------------- */
+.gpay-btn {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  background: #000000;
+  color: white;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 14px;
+  transition: 0.3s ease;
+}
+
+.gpay-btn:hover {
+  background: #202020;
+  transform: translateY(-2px);
+}
+
+.gpay-logo {
+  width: 32px;
+  height: auto;
+}
+
+/* -----------------------------
+   ⭐ GOOGLE PAY BUTTON
+------------------------------*/
+
+.gpay-btn {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  background: #000;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 18px;
+  transition: 0.3s ease;
+}
+
+.gpay-btn:hover {
+  background: #222;
+  transform: translateY(-2px);
+}
+
+.gpay-logo {
+  width: 32px;
+  height: auto;
+}
+
+/* ---------------------------------------------
    📱 Responsive
 --------------------------------------------- */
 @media (max-width: 600px) {
