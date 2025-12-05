@@ -25,7 +25,7 @@ const CreateOffer = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/offers/create",
+        "https://textura-z80b.onrender.com/api/offers/create",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },

@@ -50,7 +50,7 @@ const Register = () => {
       const idToken = await userCredential.user.getIdToken();
 
       await axios.post(
-        "http://localhost:5000/api/users/register",
+        "https://textura-z80b.onrender.com/api/users/register",
         {
           token: idToken,
           name: form.name,

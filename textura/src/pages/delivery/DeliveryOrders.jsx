@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 const DeliveryOrders = () => {
-  const backendUrl = process.env.REACT_APP_API_URL || "http://localhost:5000";
+  const backendUrl = process.env.REACT_APP_API_URL || "https://textura-z80b.onrender.com";
   const [orders, setOrders] = useState([]);
 
   const fetchOrders = async () => {

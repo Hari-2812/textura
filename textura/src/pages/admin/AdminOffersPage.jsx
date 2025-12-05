@@ -55,7 +55,7 @@ const AdminOffersPage = () => {
       if (image) formData.append("image", image);
 
       const response = await fetch(
-        "http://localhost:5000/api/offers/send-offer",
+        "https://textura-z80b.onrender.com/api/offers/send-offer",
         {
           method: "POST",
           body: formData,

@@ -25,7 +25,7 @@ const Newsletter = () => {
 
     try {
       const res = await fetch(
-        "http://localhost:5000/api/newsletter/subscribe",
+        "https://textura-z80b.onrender.com/api/newsletter/subscribe",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

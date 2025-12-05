@@ -25,7 +25,7 @@ const OffersPage = () => {
 
   // ⭐ Socket Real-time Updates
   useEffect(() => {
-    const socket = io("http://localhost:5000");
+    const socket = io("https://textura-z80b.onrender.com");
 
     socket.on("newOffer", (offer) => {
       setOffers((prev) => [offer, ...prev]);
@@ -39,7 +39,7 @@ const OffersPage = () => {
   useEffect(() => {
     const fetchOffers = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/offers");
+        const res = await axios.get("https://textura-z80b.onrender.com/api/offers");
         setOffers(res.data.offers || []);
       } catch (error) {
         console.error("Error fetching offers:", error);
@@ -55,7 +55,7 @@ const OffersPage = () => {
       id: offer._id,
       name: offer.title,
       price: offer.price || 0,
-      img: `http://localhost:5000${offer.image}`,
+      img: `https://textura-z80b.onrender.com${offer.image}`,
     };
 
     addToCart(item); // add item to cart
@@ -76,7 +76,7 @@ const OffersPage = () => {
           offers.map((offer) => (
             <div className="offer-card" key={offer._id}>
               <img
-                src={`http://localhost:5000${offer.image}`}
+                src={`https://textura-z80b.onrender.com${offer.image}`}
                 alt={offer.title}
               />
 

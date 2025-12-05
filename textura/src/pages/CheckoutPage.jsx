@@ -25,7 +25,7 @@ const CheckoutPage = () => {
     landmark: user?.landmark || "",
   });
 
-  const backendUrl = process.env.REACT_APP_API_URL || "http://localhost:5000";
+  const backendUrl = process.env.REACT_APP_API_URL || "https://textura-z80b.onrender.com";
 
   /* ============================================================
       VALIDATION (FOR MODAL)

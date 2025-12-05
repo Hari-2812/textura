@@ -17,7 +17,7 @@ const MyOrders = () => {
     }
 
     const user = JSON.parse(stored);
-    const backendUrl = process.env.REACT_APP_API_URL || "http://localhost:5000";
+    const backendUrl = process.env.REACT_APP_API_URL || "https://textura-z80b.onrender.com";
     const url = `${backendUrl}/api/orders/user/${encodeURIComponent(
       user.email
     )}`;

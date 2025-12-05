@@ -26,7 +26,7 @@ const AdminDashboard = () => {
   const [connectionStatus, setConnectionStatus] = useState("🟢 Connected");
   const [loading, setLoading] = useState(true);
 
-  const backendUrl = "http://localhost:5000";
+  const backendUrl = "https://textura-z80b.onrender.com";
 
   const loadDashboard = async () => {
     try {

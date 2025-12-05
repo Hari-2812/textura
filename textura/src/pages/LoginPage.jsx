@@ -44,7 +44,7 @@ const Login = () => {
 
       const idToken = await userCred.user.getIdToken();
 
-      const res = await axios.post("http://localhost:5000/api/users/login", {
+      const res = await axios.post("https://textura-z80b.onrender.com/api/users/login", {
         token: idToken,
       });
 
@@ -70,7 +70,7 @@ const Login = () => {
       const idToken = await googleUser.user.getIdToken();
 
       const res = await axios.post(
-        "http://localhost:5000/api/users/login",
+        "https://textura-z80b.onrender.com/api/users/login",
         { token: idToken }
       );
 

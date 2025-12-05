@@ -130,7 +130,7 @@ const ProfilePage = () => {
     const loadUser = async () => {
       const token = localStorage.getItem("userToken");
 
-      const res = await axios.get("http://localhost:5000/api/users/me", {
+      const res = await axios.get("https://textura-z80b.onrender.com/api/users/me", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -188,7 +188,7 @@ const ProfilePage = () => {
     try {
       const token = localStorage.getItem("userToken");
 
-      await axios.put("http://localhost:5000/api/users/update", form, {
+      await axios.put("https://textura-z80b.onrender.com/api/users/update", form, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

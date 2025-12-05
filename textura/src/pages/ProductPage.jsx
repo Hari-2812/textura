@@ -71,7 +71,7 @@ const ProductPage = () => {
     const userBase64 = canvas.toDataURL("image/png");
 
     try {
-      const response = await axios.post("http://localhost:5000/api/tryon/generate", {
+      const response = await axios.post("https://textura-z80b.onrender.com/api/tryon/generate", {
         userImage: userBase64,
         clothImage: product.img, // product image for try-on
       });

@@ -26,7 +26,7 @@ const GirlsPage = ({ showFilters, setShowFilters }) => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/products");
+        const res = await axios.get("https://textura-z80b.onrender.com/api/products");
         const allProducts = res.data.products || [];
 
         const girls = allProducts.filter(

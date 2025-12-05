@@ -31,11 +31,11 @@ const ProductDetails = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/products/${id}`);
+        const res = await axios.get(`https://textura-z80b.onrender.com/api/products/${id}`);
         const p = res.data.product;
         setProduct(p);
 
-        const all = await axios.get("http://localhost:5000/api/products");
+        const all = await axios.get("https://textura-z80b.onrender.com/api/products");
         const rec = all.data.products
           .filter((item) => item.category === p.category && item._id !== p._id)
           .slice(0, 4);

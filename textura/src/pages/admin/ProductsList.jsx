@@ -10,7 +10,7 @@ const ProductsList = () => {
 
   const fetchProducts = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/products");
+      const res = await axios.get("https://textura-z80b.onrender.com/api/products");
       setProducts(res.data.products || []);
     } catch (err) {
       console.error(err);
@@ -23,7 +23,7 @@ const ProductsList = () => {
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this product?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/products/${id}`);
+      await axios.delete(`https://textura-z80b.onrender.com/api/products/${id}`);
       alert("Deleted");
       fetchProducts();
     } catch (err) {

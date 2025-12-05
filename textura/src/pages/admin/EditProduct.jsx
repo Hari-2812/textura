@@ -16,7 +16,7 @@ const EditProduct = () => {
   useEffect(() => {
     const load = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/products/${id}`);
+        const res = await axios.get(`https://textura-z80b.onrender.com/api/products/${id}`);
         const p = res.data.product;
         // Normalize images to array of {url, public_id}
         p.images = (p.images || []).map(img => (typeof img === "string" ? { url: img, public_id: "" } : img));
@@ -60,7 +60,7 @@ const EditProduct = () => {
       // new files all as "images" (backend accepts any and maps)
       newFiles.forEach(f => formData.append("images", f));
 
-      const res = await axios.put(`http://localhost:5000/api/products/${id}`, formData, {
+      const res = await axios.put(`https://textura-z80b.onrender.com/api/products/${id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 

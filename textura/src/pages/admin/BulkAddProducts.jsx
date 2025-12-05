@@ -106,7 +106,7 @@ const BulkAddProducts = () => {
       });
 
       const res = await axios.post(
-        "http://localhost:5000/api/products/bulk",
+        "https://textura-z80b.onrender.com/api/products/bulk",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
