@@ -3,6 +3,7 @@ import "../styles/CheckoutPage.css";
 import { useUser } from "../context/UserContext";
 import { useCart } from "../context/CartContext";
 import { STATES, DISTRICTS } from "./ProfilePage";
+// test commit - gpay check
 
 const CheckoutPage = () => {
   const { user, setUser } = useUser();
@@ -358,3 +359,4 @@ const CheckoutPage = () => {
 };
 
 export default CheckoutPage;
+// Hello
