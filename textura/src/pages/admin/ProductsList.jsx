@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { buildApiUrl } from "../../api";
 import { useNavigate } from "react-router-dom";
 import "../../styles/ProductsList.css";
 
@@ -10,7 +11,7 @@ const ProductsList = () => {
 
   const fetchProducts = async () => {
     try {
-      const res = await axios.get("https://textura-z80b.onrender.com/api/products");
+      const res = await axios.get(buildApiUrl("/products"));
       setProducts(res.data.products || []);
     } catch (err) {
       console.error(err);
@@ -23,7 +24,7 @@ const ProductsList = () => {
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this product?")) return;
     try {
-      await axios.delete(`https://textura-z80b.onrender.com/api/products/${id}`);
+      await axios.delete(buildApiUrl(`/products/${id}`));
       alert("Deleted");
       fetchProducts();
     } catch (err) {

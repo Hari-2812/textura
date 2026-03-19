@@ -1,8 +1,26 @@
-// src/api.js
 import axios from "axios";
 
-export const API_URL = "https://textura-z80b.onrender.com";
+const DEFAULT_BACKEND_URL = "https://textura-z80b.onrender.com";
+
+const normalizeBaseUrl = (url) => {
+  if (!url) return DEFAULT_BACKEND_URL;
+  return url.replace(/\/+$/, "");
+};
+
+const normalizePath = (path = "") => {
+  if (!path) return "";
+  return path.startsWith("/") ? path : `/${path}`;
+};
+
+export const BACKEND_URL = normalizeBaseUrl(process.env.REACT_APP_API_URL);
+export const API_URL = `${BACKEND_URL}/api`;
+
+export const buildApiUrl = (path = "") => `${API_URL}${normalizePath(path)}`;
+export const buildBackendUrl = (path = "") => `${BACKEND_URL}${normalizePath(path)}`;
 
 export const api = axios.create({
-  baseURL: API_URL + "/api",
+  baseURL: API_URL,
+  withCredentials: true,
 });
+
+export default api;

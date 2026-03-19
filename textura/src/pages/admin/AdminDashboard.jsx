@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import io from "socket.io-client";
+import { BACKEND_URL } from "../../api";
 import { useNavigate } from "react-router-dom";
 
 import { FaBox, FaRupeeSign, FaTruck, FaClock } from "react-icons/fa";
@@ -26,7 +27,7 @@ const AdminDashboard = () => {
   const [connectionStatus, setConnectionStatus] = useState("🟢 Connected");
   const [loading, setLoading] = useState(true);
 
-  const backendUrl = "https://textura-z80b.onrender.com";
+  const backendUrl = BACKEND_URL;
 
   const loadDashboard = async () => {
     try {
