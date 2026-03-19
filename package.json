@@ -1,0 +1,13 @@
+{
+  "name": "textura-repo",
+  "private": true,
+  "engines": {
+    "node": ">=20 <23"
+  },
+  "scripts": {
+    "build": "npm install --prefix textura && npm run build --prefix textura",
+    "start": "npm start --prefix textura",
+    "backend:build": "npm install --prefix textura/backend",
+    "backend:start": "npm start --prefix textura/backend"
+  }
+}

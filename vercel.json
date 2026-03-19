@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "installCommand": "npm install --prefix textura",
+  "buildCommand": "npm run build --prefix textura",
+  "outputDirectory": "textura/build",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

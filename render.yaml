@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: textura-backend
+    env: node
+    rootDir: textura/backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: CLIENT_URLS
+        value: https://textura-navy.vercel.app
