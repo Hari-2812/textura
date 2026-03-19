@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../../styles/AdminOffersPage.css";
-import socket from "../../socket"; // FIXED
+import { buildApiUrl } from "../../api";
 
 const AdminOffersPage = () => {
   const [offerData, setOfferData] = useState({
@@ -13,8 +13,6 @@ const AdminOffersPage = () => {
 
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
-
-  // ⭐ Toast State
   const [toast, setToast] = useState({
     show: false,
     message: "",
@@ -29,10 +27,10 @@ const AdminOffersPage = () => {
   };
 
   const handleChange = (e) => {
-    setOfferData({
-      ...offerData,
+    setOfferData((prev) => ({
+      ...prev,
       [e.target.name]: e.target.value,
-    });
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -54,23 +52,15 @@ const AdminOffersPage = () => {
 
       if (image) formData.append("image", image);
 
-      const response = await fetch(
-        "https://textura-z80b.onrender.com/api/offers/send-offer",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      const response = await fetch(buildApiUrl("/offers/send-offer"), {
+        method: "POST",
+        body: formData,
+      });
 
       const result = await response.json();
 
       if (result.success) {
         showToast("🎉 Offer posted & notifications sent!", "success");
-
-        // Notify all customers in real-time
-        socket.emit("newOffer", result.offer);
-
-        // Reset form
         setOfferData({
           title: "",
           description: "",
@@ -80,20 +70,18 @@ const AdminOffersPage = () => {
         });
         setImage(null);
       } else {
-        showToast("Failed to send offer", "error");
+        showToast(result.message || "Failed to send offer", "error");
       }
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      console.error(error);
       showToast("Something went wrong!", "error");
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (
     <div className="offers-page-container">
-
-      {/* ⭐ Beautiful Toast Popup */}
       <div className={`notify-popup ${toast.show ? "show" : ""} ${toast.type}`}>
         <i className="fa-solid fa-circle-check"></i>
         {toast.message}
@@ -103,12 +91,7 @@ const AdminOffersPage = () => {
 
       <form className="offer-form" onSubmit={handleSubmit}>
         <label>Offer Title</label>
-        <input
-          type="text"
-          name="title"
-          value={offerData.title}
-          onChange={handleChange}
-        />
+        <input type="text" name="title" value={offerData.title} onChange={handleChange} />
 
         <label>Description</label>
         <textarea
@@ -118,11 +101,7 @@ const AdminOffersPage = () => {
         ></textarea>
 
         <label>Category</label>
-        <select
-          name="category"
-          value={offerData.category}
-          onChange={handleChange}
-        >
+        <select name="category" value={offerData.category} onChange={handleChange}>
           <option value="">Select Category</option>
           <option value="Clothing">Clothing</option>
           <option value="Kids Wear">Kids Wear</option>
@@ -133,23 +112,13 @@ const AdminOffersPage = () => {
         </select>
 
         <label>Start Date</label>
-        <input
-          type="date"
-          name="startDate"
-          value={offerData.startDate}
-          onChange={handleChange}
-        />
+        <input type="date" name="startDate" value={offerData.startDate} onChange={handleChange} />
 
         <label>End Date</label>
-        <input
-          type="date"
-          name="endDate"
-          value={offerData.endDate}
-          onChange={handleChange}
-        />
+        <input type="date" name="endDate" value={offerData.endDate} onChange={handleChange} />
 
         <label>Offer Image</label>
-        <input type="file" onChange={(e) => setImage(e.target.files[0])} />
+        <input type="file" accept="image/*" onChange={(e) => setImage(e.target.files[0] || null)} />
 
         <button type="submit" className="offer-submit-btn" disabled={loading}>
           {loading ? "Sending Offer..." : "Create Offer"}

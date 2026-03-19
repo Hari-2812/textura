@@ -6,6 +6,7 @@ import { products } from "../data/products";
 import { FaHeart, FaShoppingCart, FaArrowLeft } from "react-icons/fa";
 import { useCart } from "../context/CartContext";
 import axios from "axios"; // <-- NEW
+import { buildApiUrl } from "../api";
 
 const ProductPage = () => {
   const { id } = useParams();
@@ -71,7 +72,7 @@ const ProductPage = () => {
     const userBase64 = canvas.toDataURL("image/png");
 
     try {
-      const response = await axios.post("https://textura-z80b.onrender.com/api/tryon/generate", {
+      const response = await axios.post(buildApiUrl("/tryon/generate"), {
         userImage: userBase64,
         clothImage: product.img, // product image for try-on
       });

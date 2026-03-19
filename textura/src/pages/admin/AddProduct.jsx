@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { buildApiUrl } from "../../api";
 
 const AddProduct = () => {
   const [productData, setProductData] = useState({
@@ -42,7 +43,7 @@ const AddProduct = () => {
 
     try {
       const res = await axios.post(
-        "https://textura-z80b.onrender.com/api/products",
+        buildApiUrl("/products"),
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },

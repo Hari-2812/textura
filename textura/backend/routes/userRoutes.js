@@ -1,43 +1,55 @@
 import express from "express";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
-import admin from "../firebaseAdmin.js";   // MUST BE ADMIN SDK
+import admin, {
+  getFirebaseAdminError,
+  isFirebaseConfigured,
+} from "../firebaseAdmin.js";
 import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-/* --------------------------
-   Generate Backend JWT
--------------------------- */
+const requireFirebaseAdmin = (res) => {
+  if (isFirebaseConfigured && admin) {
+    return true;
+  }
+
+  res.status(503).json({
+    success: false,
+    message:
+      "Firebase authentication is not configured on the server. Add FIREBASE_SERVICE_ACCOUNT in Render.",
+    error: getFirebaseAdminError(),
+  });
+
+  return false;
+};
+
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: "30d",
+    expiresIn: process.env.JWT_EXPIRES_IN || "30d",
   });
 };
 
-/* ===========================================================
-    REGISTER (NO CAPTCHA)
-=========================================================== */
 router.post("/register", async (req, res) => {
   try {
+    if (!requireFirebaseAdmin(res)) return;
+
     const { token, name } = req.body;
 
     if (!token) return res.status(400).json({ message: "Token missing" });
 
-    // 1️⃣ VERIFY FIREBASE TOKEN
     const decoded = await admin.auth().verifyIdToken(token);
 
-    if (!decoded.email_verified)
+    if (!decoded.email_verified) {
       return res.status(400).json({ message: "Please verify your email" });
+    }
 
     const { uid, email } = decoded;
 
-    // 2️⃣ FIND USER
     let user = await User.findOne({
       $or: [{ firebaseUid: uid }, { email }],
     });
 
-    // 3️⃣ CREATE USER IF NOT EXIST
     if (!user) {
       user = await User.create({
         firebaseUid: uid,
@@ -47,7 +59,6 @@ router.post("/register", async (req, res) => {
       });
     }
 
-    // 4️⃣ BACKEND JWT
     const backendToken = generateToken(user._id);
 
     res.json({ success: true, token: backendToken, user });
@@ -57,20 +68,19 @@ router.post("/register", async (req, res) => {
   }
 });
 
-/* ===========================================================
-    LOGIN (NO CAPTCHA)
-=========================================================== */
 router.post("/login", async (req, res) => {
   try {
+    if (!requireFirebaseAdmin(res)) return;
+
     const { token } = req.body;
 
     if (!token) return res.status(400).json({ message: "Token missing" });
 
-    // 1️⃣ VERIFY FIREBASE TOKEN
     const decoded = await admin.auth().verifyIdToken(token);
 
-    if (!decoded.email_verified)
+    if (!decoded.email_verified) {
       return res.status(400).json({ message: "Please verify your email" });
+    }
 
     const {
       uid,
@@ -80,7 +90,6 @@ router.post("/login", async (req, res) => {
       firebase: { sign_in_provider },
     } = decoded;
 
-    // 2️⃣ FIND OR CREATE USER
     let user = await User.findOne({ email });
 
     if (!user) {
@@ -91,14 +100,11 @@ router.post("/login", async (req, res) => {
         picture: picture || "",
         provider: sign_in_provider,
       });
-    } else {
-      if (!user.firebaseUid) {
-        user.firebaseUid = uid;
-        await user.save();
-      }
+    } else if (!user.firebaseUid) {
+      user.firebaseUid = uid;
+      await user.save();
     }
 
-    // 3️⃣ BACKEND JWT
     const backendToken = generateToken(user._id);
 
     res.json({ success: true, token: backendToken, user });
@@ -108,16 +114,10 @@ router.post("/login", async (req, res) => {
   }
 });
 
-/* ===========================================================
-    PROFILE
-=========================================================== */
 router.get("/me", protect, async (req, res) => {
   res.json({ success: true, user: req.user });
 });
 
-/* ===========================================================
-    UPDATE PROFILE
-=========================================================== */
 router.put("/update", protect, async (req, res) => {
   try {
     const updatedUser = await User.findByIdAndUpdate(

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { BACKEND_URL } from "../../api";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import "../../styles/admin-theme.css";
 
 const TrackOrder = () => {
   const { id } = useParams(); // id = orderId (TXRxxxxx)
-  const backendUrl = process.env.REACT_APP_API_URL || "https://textura-z80b.onrender.com";
+  const backendUrl = BACKEND_URL;
 
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);

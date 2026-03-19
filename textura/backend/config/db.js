@@ -2,8 +2,11 @@ import mongoose from "mongoose";
 
 const connectDB = async () => {
   try {
+    if (!process.env.MONGO_URL) {
+      throw new Error("MONGO_URL is not configured");
+    }
+
     console.log("🔄 Connecting to MongoDB...");
-    console.log("🔗 URL:", process.env.MONGO_URL); // helpful for debugging
 
     await mongoose.connect(process.env.MONGO_URL, {
       serverSelectionTimeoutMS: 10000,

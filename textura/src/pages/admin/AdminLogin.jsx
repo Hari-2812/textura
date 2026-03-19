@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { buildApiUrl } from "../../api";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
@@ -16,7 +17,7 @@ const Login = () => {
 
     try {
       const res = await axios.post(
-        "https://textura-z80b.onrender.com/api/users/login",
+        buildApiUrl("/users/login"),
         form
       );
 

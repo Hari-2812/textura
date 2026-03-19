@@ -1,19 +1,31 @@
-// firebaseAdmin.js
 import admin from "firebase-admin";
 
-let serviceAccount;
+let firebaseAdmin = null;
+let firebaseAdminError = "FIREBASE_SERVICE_ACCOUNT is not configured.";
 
-if (process.env.FIREBASE_SERVICE_ACCOUNT) {
-  serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+const rawServiceAccount = process.env.FIREBASE_SERVICE_ACCOUNT;
+
+if (rawServiceAccount) {
+  try {
+    const serviceAccount = JSON.parse(rawServiceAccount);
+
+    if (!admin.apps.length) {
+      admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount),
+      });
+    }
+
+    firebaseAdmin = admin;
+    firebaseAdminError = "";
+  } catch (error) {
+    firebaseAdminError = `Invalid FIREBASE_SERVICE_ACCOUNT JSON: ${error.message}`;
+    console.error("❌ Firebase Admin initialization failed:", firebaseAdminError);
+  }
 } else {
-  console.error("❌ Missing FIREBASE_SERVICE_ACCOUNT env variable");
-  process.exit(1);
+  console.warn("⚠️ FIREBASE_SERVICE_ACCOUNT is not set. Firebase auth routes will return 503 until it is added.");
 }
 
-if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-  });
-}
+export const isFirebaseConfigured = Boolean(firebaseAdmin);
+export const getFirebaseAdminError = () => firebaseAdminError;
 
-export default admin;
+export default firebaseAdmin;

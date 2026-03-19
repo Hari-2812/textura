@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { buildApiUrl } from "../../api";
 import "../../styles/BulkAddProducts.css";
 
 const AGE_SIZES = [
@@ -106,7 +107,7 @@ const BulkAddProducts = () => {
       });
 
       const res = await axios.post(
-        "https://textura-z80b.onrender.com/api/products/bulk",
+        buildApiUrl("/products/bulk"),
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { BACKEND_URL } from "../../api";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../../styles/Admin.css";
@@ -6,7 +7,7 @@ import "../../styles/Admin.css";
 const OrdersPage = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
-  const backendUrl = process.env.REACT_APP_API_URL || "https://textura-z80b.onrender.com";
+  const backendUrl = BACKEND_URL;
 
   const navigate = useNavigate();
 
