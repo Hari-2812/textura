@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useUser } from "../context/UserContext";
 import axios from "axios";
+import { buildApiUrl } from "../api";
 import "../styles/ProfilePage.css";
 
 export const STATES = [
@@ -130,7 +131,7 @@ const ProfilePage = () => {
     const loadUser = async () => {
       const token = localStorage.getItem("userToken");
 
-      const res = await axios.get("https://textura-z80b.onrender.com/api/users/me", {
+      const res = await axios.get(buildApiUrl("/users/me"), {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -188,7 +189,7 @@ const ProfilePage = () => {
     try {
       const token = localStorage.getItem("userToken");
 
-      await axios.put("https://textura-z80b.onrender.com/api/users/update", form, {
+      await axios.put(buildApiUrl("/users/update"), form, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

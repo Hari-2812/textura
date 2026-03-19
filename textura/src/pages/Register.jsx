@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { buildApiUrl } from "../api";
 import { useNavigate } from "react-router-dom";
 import "./register.css";
 
@@ -50,7 +51,7 @@ const Register = () => {
       const idToken = await userCredential.user.getIdToken();
 
       await axios.post(
-        "https://textura-z80b.onrender.com/api/users/register",
+        buildApiUrl("/users/register"),
         {
           token: idToken,
           name: form.name,

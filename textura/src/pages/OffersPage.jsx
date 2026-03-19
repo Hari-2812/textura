@@ -1,45 +1,47 @@
 import React, { useEffect, useState } from "react";
 import "../styles/OffersPage.css";
 import axios from "axios";
-import io from "socket.io-client";
-import { useCart } from "../context/CartContext"; // ⭐ Added
+import socket from "../socket";
+import { buildApiUrl, buildBackendUrl } from "../api";
+import { useCart } from "../context/CartContext";
+
+const getOfferImage = (image) => {
+  if (!image) return "";
+  return image.startsWith("http") ? image : buildBackendUrl(image);
+};
 
 const OffersPage = () => {
   const [offers, setOffers] = useState([]);
-
-  // ⭐ Cart
-  const { addToCart } = useCart(); // ⭐ Use cart context
-
-  // ⭐ Toast State
+  const { addToCart } = useCart();
   const [toast, setToast] = useState({
     show: false,
     message: "",
   });
 
-  const showToast = (msg) => {
-    setToast({ show: true, message: msg });
+  const showToast = (message) => {
+    setToast({ show: true, message });
     setTimeout(() => {
       setToast({ show: false, message: "" });
     }, 2000);
   };
 
-  // ⭐ Socket Real-time Updates
   useEffect(() => {
-    const socket = io("https://textura-z80b.onrender.com");
-
-    socket.on("newOffer", (offer) => {
-      setOffers((prev) => [offer, ...prev]);
+    const handleOfferUpdated = (offer) => {
+      setOffers((prev) => [offer, ...prev.filter((item) => item._id !== offer._id)]);
       showToast("🔥 New Offer Added!");
-    });
+    };
 
-    return () => socket.disconnect();
+    socket.on("offerUpdated", handleOfferUpdated);
+
+    return () => {
+      socket.off("offerUpdated", handleOfferUpdated);
+    };
   }, []);
 
-  // ⭐ Fetch Offers
   useEffect(() => {
     const fetchOffers = async () => {
       try {
-        const res = await axios.get("https://textura-z80b.onrender.com/api/offers");
+        const res = await axios.get(buildApiUrl("/offers"));
         setOffers(res.data.offers || []);
       } catch (error) {
         console.error("Error fetching offers:", error);
@@ -49,22 +51,19 @@ const OffersPage = () => {
     fetchOffers();
   }, []);
 
-  // ⭐ Add to Cart Handler
   const handleAddToCart = (offer) => {
-    const item = {
+    addToCart({
       id: offer._id,
       name: offer.title,
       price: offer.price || 0,
-      img: `https://textura-z80b.onrender.com${offer.image}`,
-    };
+      img: getOfferImage(offer.image),
+    });
 
-    addToCart(item); // add item to cart
     showToast("✔ Added to Cart!");
   };
 
   return (
     <section className="offers-page">
-      {/* ⭐ Toast */}
       {toast.show && <div className="offer-toast">{toast.message}</div>}
 
       <h2 className="offers-title">🔥 Latest Offers</h2>
@@ -75,10 +74,7 @@ const OffersPage = () => {
         ) : (
           offers.map((offer) => (
             <div className="offer-card" key={offer._id}>
-              <img
-                src={`https://textura-z80b.onrender.com${offer.image}`}
-                alt={offer.title}
-              />
+              {offer.image && <img src={getOfferImage(offer.image)} alt={offer.title} />}
 
               <div className="offer-text">
                 <h3>{offer.title}</h3>
@@ -91,11 +87,7 @@ const OffersPage = () => {
                 )}
               </div>
 
-              {/* ⭐ NEW BUTTON */}
-              <button
-                className="add-cart-btn"
-                onClick={() => handleAddToCart(offer)}
-              >
+              <button className="add-cart-btn" onClick={() => handleAddToCart(offer)}>
                 Add to Cart
               </button>
             </div>

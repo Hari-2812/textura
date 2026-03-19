@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { buildApiUrl } from "../../api";
 import "../../styles/CreateOffer.css";
 
 const CreateOffer = () => {
@@ -25,7 +26,7 @@ const CreateOffer = () => {
 
     try {
       const response = await axios.post(
-        "https://textura-z80b.onrender.com/api/offers/create",
+        buildApiUrl("/offers/create"),
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },

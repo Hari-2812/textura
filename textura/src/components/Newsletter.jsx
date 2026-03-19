@@ -1,6 +1,7 @@
 // src/components/Newsletter.jsx
 import React, { useState } from "react";
 import "../styles/Newsletter.css";
+import { buildApiUrl } from "../api";
 
 const Newsletter = () => {
   const [email, setEmail] = useState("");
@@ -25,7 +26,7 @@ const Newsletter = () => {
 
     try {
       const res = await fetch(
-        "https://textura-z80b.onrender.com/api/newsletter/subscribe",
+        buildApiUrl("/newsletter/subscribe"),
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

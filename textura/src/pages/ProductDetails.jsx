@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import "../styles/ProductDetails.css";
 import axios from "axios";
+import { buildApiUrl } from "../api";
 import { FaShoppingCart, FaPlay } from "react-icons/fa";
 import { useCart } from "../context/CartContext";
 import SizeGuideModal from "../components/SizeGuideModal";
@@ -31,11 +32,11 @@ const ProductDetails = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await axios.get(`https://textura-z80b.onrender.com/api/products/${id}`);
+        const res = await axios.get(buildApiUrl(`/products/${id}`));
         const p = res.data.product;
         setProduct(p);
 
-        const all = await axios.get("https://textura-z80b.onrender.com/api/products");
+        const all = await axios.get(buildApiUrl("/products"));
         const rec = all.data.products
           .filter((item) => item.category === p.category && item._id !== p._id)
           .slice(0, 4);

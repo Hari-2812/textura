@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { BACKEND_URL } from "../../api";
 import axios from "axios";
 
 const DeliveryOrders = () => {
-  const backendUrl = process.env.REACT_APP_API_URL || "https://textura-z80b.onrender.com";
+  const backendUrl = BACKEND_URL;
   const [orders, setOrders] = useState([]);
 
   const fetchOrders = async () => {

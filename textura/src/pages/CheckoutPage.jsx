@@ -3,6 +3,7 @@ import "../styles/CheckoutPage.css";
 import { useUser } from "../context/UserContext";
 import { useCart } from "../context/CartContext";
 import { STATES, DISTRICTS } from "./ProfilePage";
+import { BACKEND_URL } from "../api";
 // test commit - gpay check
 
 const CheckoutPage = () => {
@@ -26,7 +27,7 @@ const CheckoutPage = () => {
     landmark: user?.landmark || "",
   });
 
-  const backendUrl = process.env.REACT_APP_API_URL || "https://textura-z80b.onrender.com";
+  const backendUrl = BACKEND_URL;
 
   /* ============================================================
       VALIDATION (FOR MODAL)

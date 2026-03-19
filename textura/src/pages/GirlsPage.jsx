@@ -3,6 +3,7 @@ import "../styles/GirlsPage.css";
 import "../styles/ProductFilters.css";
 import { useCart } from "../context/CartContext";
 import axios from "axios";
+import { buildApiUrl } from "../api";
 import ProductCard from "../components/ProductCard";
 
 const GirlsPage = ({ showFilters, setShowFilters }) => {
@@ -26,7 +27,7 @@ const GirlsPage = ({ showFilters, setShowFilters }) => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get("https://textura-z80b.onrender.com/api/products");
+        const res = await axios.get(buildApiUrl("/products"));
         const allProducts = res.data.products || [];
 
         const girls = allProducts.filter(

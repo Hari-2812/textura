@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { buildApiUrl } from "../../api";
 import { useParams, useNavigate } from "react-router-dom";
 import "../../styles/EditProduct.css";
 
@@ -16,7 +17,7 @@ const EditProduct = () => {
   useEffect(() => {
     const load = async () => {
       try {
-        const res = await axios.get(`https://textura-z80b.onrender.com/api/products/${id}`);
+        const res = await axios.get(buildApiUrl(`/products/${id}`));
         const p = res.data.product;
         // Normalize images to array of {url, public_id}
         p.images = (p.images || []).map(img => (typeof img === "string" ? { url: img, public_id: "" } : img));
@@ -60,7 +61,7 @@ const EditProduct = () => {
       // new files all as "images" (backend accepts any and maps)
       newFiles.forEach(f => formData.append("images", f));
 
-      const res = await axios.put(`https://textura-z80b.onrender.com/api/products/${id}`, formData, {
+      const res = await axios.put(buildApiUrl(`/products/${id}`), formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
