@@ -46,6 +46,10 @@ const productSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+productSchema.index({ category: 1, createdAt: -1 });
+productSchema.index({ isFeatured: 1, createdAt: -1 });
+productSchema.index({ name: "text", description: "text" });
+
 productSchema.pre("save", function (next) {
   if (this.discountPrice && this.discountPrice < this.price) {
     this.discountPercent = Math.round(

@@ -13,7 +13,10 @@ const OrdersPage = () => {
 
   const fetchOrders = async () => {
     try {
-      const res = await axios.get(`${backendUrl}/api/admin/orders`);
+      const token = localStorage.getItem("userToken");
+      const res = await axios.get(`${backendUrl}/api/admin/orders`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setOrders(res.data.orders || []);
     } catch (error) {
       console.error("❌ Error fetching orders:", error);

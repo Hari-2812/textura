@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const DEFAULT_BACKEND_URL = "https://textura-z80b.onrender.com";
+const DEFAULT_BACKEND_URL = "http://localhost:5000";
 
 const normalizeBaseUrl = (url) => {
   if (!url) return DEFAULT_BACKEND_URL;

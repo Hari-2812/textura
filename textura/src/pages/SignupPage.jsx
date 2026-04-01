@@ -1,12 +1,8 @@
 import React, { useState } from "react";
 import "../styles/LoginPage.css";
 import { useNavigate } from "react-router-dom";
-
-import { auth } from "../firebase";
-import {
-  createUserWithEmailAndPassword,
-  sendEmailVerification,
-} from "firebase/auth";
+import axios from "axios";
+import { buildApiUrl } from "../api";
 
 import { FiEye, FiEyeOff } from "react-icons/fi";
 
@@ -38,20 +34,15 @@ const Signup = () => {
       return showToast("Passwords do not match");
 
     try {
-      const userCred = await createUserWithEmailAndPassword(
-        auth,
-        form.email,
-        form.password
-      );
-
-      await sendEmailVerification(userCred.user);
-
-      const idToken = await userCred.user.getIdToken();
-
-      showToast("Account created! Verify email before login.");
+      await axios.post(buildApiUrl("/users/register"), {
+        name: form.email.split("@")[0],
+        email: form.email,
+        password: form.password,
+      });
+      showToast("Account created! Please login.");
       setTimeout(() => navigate("/login"), 1500);
     } catch (err) {
-      showToast(err.message);
+      showToast(err.response?.data?.message || "Signup failed");
     }
   };
 
@@ -60,7 +51,7 @@ const Signup = () => {
       {toast && <div className="login-toast">{toast}</div>}
 
       <div className="login-left">
-        <img src="/images/company.jpg" className="company-image" alt="" />
+        <img src="/images/company.jpg" className="company-image" alt="Textura storefront" />
         <h1 className="company-title">Textura Shopping</h1>
         <p className="company-desc">Create your account and start shopping.</p>
       </div>
@@ -87,12 +78,13 @@ const Signup = () => {
                 required
                 onChange={handleChange}
               />
-              <span
+              <button
+                type="button"
                 className="eye-icon"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? <FiEye /> : <FiEyeOff />}
-              </span>
+              </button>
             </div>
 
             <input
@@ -110,7 +102,7 @@ const Signup = () => {
 
           <p className="redirect-text">
             Already have an account?
-            <span onClick={() => navigate("/login")}> Login</span>
+            <button type="button" onClick={() => navigate("/login")}> Login</button>
           </p>
         </div>
       </div>
