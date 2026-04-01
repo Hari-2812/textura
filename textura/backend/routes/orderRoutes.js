@@ -1,13 +1,19 @@
 import express from "express";
 import mongoose from "mongoose";   // ✅ REQUIRED FIX
 import Order from "../models/Order.js";
+import { adminOnly, protect } from "../middleware/authMiddleware.js";
+import { orderCreateSchema, validate } from "../middleware/validate.js";
 
 const router = express.Router();
+const isRequestAdmin = (req) =>
+  req.user?.isAdmin ||
+  (process.env.ADMIN_EMAIL &&
+    req.user?.email?.toLowerCase() === process.env.ADMIN_EMAIL.toLowerCase());
 
 /* ============================================================
    📌 CREATE NEW ORDER
 ============================================================ */
-router.post("/", async (req, res) => {
+router.post("/", protect, validate(orderCreateSchema), async (req, res) => {
   try {
     const io = req.app.get("io");
 
@@ -15,6 +21,7 @@ router.post("/", async (req, res) => {
 
     const newOrder = await Order.create({
       ...req.body,
+      customerEmail: req.user.email,
       orderId,
     });
 
@@ -36,7 +43,7 @@ router.post("/", async (req, res) => {
 /* ============================================================
    📌 UPDATE ORDER STATUS
 ============================================================ */
-router.put("/:id/status", async (req, res) => {
+router.put("/:id/status", protect, adminOnly, async (req, res) => {
   try {
     const io = req.app.get("io");
 
@@ -68,7 +75,7 @@ router.put("/:id/status", async (req, res) => {
 /* ============================================================
    📌 GET ALL ORDERS (Admin)
 ============================================================ */
-router.get("/", async (req, res) => {
+router.get("/", protect, adminOnly, async (req, res) => {
   try {
     const orders = await Order.find().sort({ createdAt: -1 });
 
@@ -85,8 +92,11 @@ router.get("/", async (req, res) => {
 /* ============================================================
    📌 GET ORDERS BY USER EMAIL
 ============================================================ */
-router.get("/user/:email", async (req, res) => {
+router.get("/user/:email", protect, async (req, res) => {
   try {
+    if (req.user.email !== req.params.email && !isRequestAdmin(req)) {
+      return res.status(403).json({ message: "Forbidden" });
+    }
     const orders = await Order.find({
       customerEmail: req.params.email,
     }).sort({ createdAt: -1 });
@@ -104,7 +114,7 @@ router.get("/user/:email", async (req, res) => {
 /* ============================================================
    🔍 3️⃣ GET ORDER BY ID or orderId
 ============================================================ */
-router.get("/:id", async (req, res) => {
+router.get("/:id", protect, async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -124,6 +134,13 @@ router.get("/:id", async (req, res) => {
       return res.status(404).json({
         success: false,
         message: "Order not found",
+      });
+    }
+
+    if (order.customerEmail !== req.user.email && !isRequestAdmin(req)) {
+      return res.status(403).json({
+        success: false,
+        message: "Forbidden",
       });
     }
 

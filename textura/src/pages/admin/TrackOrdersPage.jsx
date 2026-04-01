@@ -13,7 +13,10 @@ const TrackOrder = () => {
 
   const fetchOrderDetails = async () => {
     try {
-      const res = await axios.get(`${backendUrl}/api/admin/orders/${id}`);
+      const token = localStorage.getItem("userToken");
+      const res = await axios.get(`${backendUrl}/api/admin/orders/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       if (res.data && res.data.order) {
         setOrder(res.data.order);
@@ -28,9 +31,9 @@ const TrackOrder = () => {
   };
 
   useEffect(() => {
-  if (!id) return;    // ⛔ prevents first 404 call
-  fetchOrderDetails();
-}, [id]);
+    if (!id) return;
+    fetchOrderDetails();
+  }, [id]);
 
 
   if (loading) return <p className="loading-text">Loading Order...</p>;

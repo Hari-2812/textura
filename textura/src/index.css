@@ -1,6 +1,21 @@
+:root {
+  --bg-primary: #ffffff;
+  --text-primary: #0f172a;
+  --card-bg: #ffffff;
+}
+
+html[data-theme="dark"] {
+  --bg-primary: #0b1120;
+  --text-primary: #e2e8f0;
+  --card-bg: #111827;
+}
+
 body {
   margin: 0;
   font-family: "Poppins", sans-serif;
+  background: var(--bg-primary) !important;
+  color: var(--text-primary);
+  transition: background-color .25s ease, color .25s ease;
 }
 
 html, body {
@@ -8,7 +23,7 @@ html, body {
   padding: 0;
   width: 100%;
   /* overflow-x: hidden; */
-  background: #ffffff !important;
+  background: var(--bg-primary) !important;
 }
 
 * {
@@ -62,4 +77,9 @@ body, html, #root {
 .icons span {
   margin-left: 1rem;
   cursor: pointer;
+}
+
+@keyframes shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: 0 0; }
 }

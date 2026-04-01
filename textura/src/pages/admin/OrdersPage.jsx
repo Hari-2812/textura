@@ -3,6 +3,7 @@ import { BACKEND_URL } from "../../api";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../../styles/Admin.css";
+import SkeletonBlock from "../../components/SkeletonBlock";
 
 const OrdersPage = () => {
   const [orders, setOrders] = useState([]);
@@ -13,7 +14,10 @@ const OrdersPage = () => {
 
   const fetchOrders = async () => {
     try {
-      const res = await axios.get(`${backendUrl}/api/admin/orders`);
+      const token = localStorage.getItem("userToken");
+      const res = await axios.get(`${backendUrl}/api/admin/orders`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setOrders(res.data.orders || []);
     } catch (error) {
       console.error("❌ Error fetching orders:", error);
@@ -26,7 +30,16 @@ const OrdersPage = () => {
     fetchOrders();
   }, []);
 
-  if (loading) return <p className="loading-text">Loading Orders...</p>;
+  if (loading) {
+    return (
+      <div style={{ display: "grid", gap: 12 }}>
+        <SkeletonBlock height={20} width="40%" />
+        <SkeletonBlock height={52} />
+        <SkeletonBlock height={52} />
+        <SkeletonBlock height={52} />
+      </div>
+    );
+  }
 
   return (
     <div className="admin-page">

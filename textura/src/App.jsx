@@ -40,6 +40,7 @@ import { UserProvider } from "./context/UserContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import HelpCenter from "./pages/HelpCenter";
 import MyOrders from "./pages/MyOrders";
+import { Toaster } from "react-hot-toast";
 
 
 // ===============================
@@ -57,6 +58,7 @@ const AppContent = () => {
 
   return (
     <>
+      <Toaster position="top-right" toastOptions={{ duration: 2500 }} />
       {!hideHeaderFooter && (
         <Header onFilterToggle={() => setShowFilters((prev) => !prev)} />
       )}

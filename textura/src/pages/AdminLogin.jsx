@@ -2,6 +2,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
+import axios from "axios";
+import { buildApiUrl } from "../api";
 import "../styles/AdminLogin.css";
 
 const AdminLogin = () => {
@@ -15,21 +17,22 @@ const AdminLogin = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { email, password } = form;
-
-    // ✅ Hardcoded admin credentials
-    if (email === "admin@textura.com" && password === "admin123") {
-      const adminUser = { name: "Admin", email, role: "admin" };
-      localStorage.setItem("user", JSON.stringify(adminUser));
-      setUser(adminUser);
+    try {
+      const { data } = await axios.post(buildApiUrl("/users/login"), form);
+      if (!data?.user?.isAdmin) {
+        setError("Access denied: admin account required");
+        return;
+      }
+      localStorage.setItem("userToken", data.token);
+      localStorage.setItem("user", JSON.stringify({ ...data.user, role: "admin" }));
+      setUser({ ...data.user, role: "admin" });
       navigate("/admin/dashboard");
-      return;
+    } catch (err) {
+      setError(err.response?.data?.message || "Invalid admin credentials ❌");
     }
-
-    setError("Invalid admin credentials ❌");
   };
 
   return (

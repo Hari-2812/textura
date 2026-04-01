@@ -183,6 +183,13 @@
   transform: translateY(-2px);
 }
 
+.dark-toggle {
+  border: none;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 10px;
+  padding: 6px 10px;
+}
+
 /* Filter / Offers button sizes */
 .nav-item.filter-btn,
 .nav-item.offers-btn {
