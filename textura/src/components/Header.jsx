@@ -15,6 +15,8 @@ import {
   FaCompass,
   FaGlobe,
   FaBars,
+  FaMoon,
+  FaSun,
 } from "react-icons/fa";
 
 const Header = ({ onFilterToggle }) => {
@@ -22,6 +24,9 @@ const Header = ({ onFilterToggle }) => {
   const [suggestions, setSuggestions] = useState([]);
   const [showProfile, setShowProfile] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
+  const [darkMode, setDarkMode] = useState(
+    () => localStorage.getItem("theme") === "dark"
+  );
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -32,7 +37,12 @@ const Header = ({ onFilterToggle }) => {
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
     if (savedUser) setUser(JSON.parse(savedUser));
-  }, []);
+  }, [setUser]);
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = darkMode ? "dark" : "light";
+    localStorage.setItem("theme", darkMode ? "dark" : "light");
+  }, [darkMode]);
 
   const isProductPage =
     location.pathname.includes("/boys") ||
@@ -145,6 +155,11 @@ const Header = ({ onFilterToggle }) => {
               <span>{t("language") || "Language"}</span>
             </div>
 
+            <button className="nav-item dark-toggle" onClick={() => setDarkMode((prev) => !prev)}>
+              {darkMode ? <FaSun /> : <FaMoon />}
+              <span>{darkMode ? "Light" : "Dark"}</span>
+            </button>
+
             <div
               className="nav-item profile-box"
               onClick={() => setShowProfile(!showProfile)}
@@ -152,6 +167,7 @@ const Header = ({ onFilterToggle }) => {
               <img
                 src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
                 className="profile-avatar"
+                alt="User profile"
               />
               <span className="profile-username">
                 {user?.name || t("guest")}
@@ -186,6 +202,7 @@ const Header = ({ onFilterToggle }) => {
           <li onClick={() => { navigate("/orders"); setOpenMenu(false); }}>Orders</li>
           {/* <li onClick={() => { navigate("/profile"); setOpenMenu(false); }}>Profile</li> */}
           <li onClick={() => { navigate("/language"); setOpenMenu(false); }}>Language</li>
+          <li onClick={() => setDarkMode((prev) => !prev)}>{darkMode ? "Light mode" : "Dark mode"}</li>
           <li onClick={() => { handleLogout(); setOpenMenu(false); }}>Logout</li>
         </ul>
 
@@ -227,6 +244,7 @@ const Header = ({ onFilterToggle }) => {
           <img
             src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
             className="profile-avatar-small"
+            alt="Profile"
           />
           <span>{t("profile")}</span>
         </div>

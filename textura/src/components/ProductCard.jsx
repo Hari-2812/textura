@@ -3,6 +3,7 @@ import "../styles/ProductCard.css";
 import { FaHeart, FaShoppingCart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useWishlist } from "../context/WishlistContext";
+import toast from "react-hot-toast";
 
 const ProductCard = ({ product, onAddToCart }) => {
   const navigate = useNavigate();
@@ -17,17 +18,6 @@ const ProductCard = ({ product, onAddToCart }) => {
     }
   };
 
-  const showToast = (msg) => {
-    const box = document.getElementById("toast-container");
-    const div = document.createElement("div");
-
-    div.className = "toast";
-    div.innerText = msg;
-    box.appendChild(div);
-
-    setTimeout(() => div.remove(), 2000);
-  };
-
   return (
     <div className="product-card">
       <div
@@ -38,6 +28,7 @@ const ProductCard = ({ product, onAddToCart }) => {
           src={product.images?.[0]?.url}
           alt={product.name}
           className="product-img"
+          loading="lazy"
         />
 
         <button
@@ -60,7 +51,7 @@ const ProductCard = ({ product, onAddToCart }) => {
           className="add-cart-btn"
           onClick={() => {
             onAddToCart(product);
-            showToast(`${product.name} added to cart 🛒`);
+            toast.success(`${product.name} added to cart 🛒`);
           }}
         >
           <FaShoppingCart />
@@ -71,4 +62,4 @@ const ProductCard = ({ product, onAddToCart }) => {
   );
 };
 
-export default ProductCard;
+export default React.memo(ProductCard);

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "../styles/SizeGuideModal.css";
 
 const SIZE_CHART = [
@@ -15,8 +15,16 @@ const SIZE_CHART = [
 ];
 
 const SizeGuideModal = ({ onClose }) => {
+  useEffect(() => {
+    const closeOnEscape = (e) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [onClose]);
+
   return (
-    <div className="sg-overlay">
+    <div className="sg-overlay" role="dialog" aria-modal="true" aria-label="Size guide">
       <div className="sg-modal">
         <div className="sg-header">
           <h3>Size Guide</h3>

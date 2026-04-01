@@ -3,20 +3,16 @@ import axios from "axios";
 import { buildApiUrl } from "../api";
 import { useNavigate } from "react-router-dom";
 import "../styles/LoginPage.css";
+import toast from "react-hot-toast";
 
-import { FiEye, FiEyeOff } from "react-icons/fi";
+import { FiEye, FiEyeOff, FiLock, FiMail } from "react-icons/fi";
 
 const Login = () => {
   const navigate = useNavigate();
 
   const [form, setForm] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
-  const [toast, setToast] = useState("");
-
-  const showToast = (msg) => {
-    setToast(msg);
-    setTimeout(() => setToast(""), 2500);
-  };
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -27,6 +23,8 @@ const Login = () => {
   ========================= */
   const handleLogin = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
+    setIsSubmitting(true);
 
     try {
       const res = await axios.post(buildApiUrl("/users/login"), {
@@ -37,66 +35,63 @@ const Login = () => {
       localStorage.setItem("userToken", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
 
-      showToast("Login successful 🎉");
+      toast.success("Login successful 🎉");
       setTimeout(() => navigate("/"), 1000);
     } catch (err) {
-      showToast(err.response?.data?.message || "Login failed");
+      toast.error(err.response?.data?.message || "Login failed");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="login-wrapper">
-      {toast && <div className="login-toast">{toast}</div>}
+    <div className="auth-page">
+      <div className="auth-card">
+        <h2>Welcome Back</h2>
+        <p className="subtitle">Sign in to continue shopping</p>
 
-      <div className="login-left">
-        <img src="/images/company.jpg" className="company-image" alt="Textura storefront" />
-        <h1 className="company-title">Textura Shopping</h1>
-        <p className="company-desc">
-          Shop premium products with the best offers daily.
-        </p>
-      </div>
-
-      <div className="login-right">
-        <div className="login-box">
-          <h2>Welcome Back</h2>
-          <p className="subtitle">Login to continue</p>
-
-          <form onSubmit={handleLogin}>
+        <form onSubmit={handleLogin} className="auth-form">
+          <div className="auth-input-wrap">
+            <FiMail className="auth-input-icon" />
             <input
               type="email"
               name="email"
               placeholder="Email Address"
               required
               onChange={handleChange}
+              value={form.email}
             />
+          </div>
 
-            <div className="password-wrapper">
-              <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                placeholder="Password"
-                required
-                onChange={handleChange}
-              />
-              <button
-                type="button"
-                className="eye-icon"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? <FiEye /> : <FiEyeOff />}
-              </button>
-            </div>
+          <div className="auth-input-wrap">
+            <FiLock className="auth-input-icon" />
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Password"
+              required
+              onChange={handleChange}
+              value={form.password}
+            />
+            <button
+              type="button"
+              className="eye-icon"
+              onClick={() => setShowPassword(!showPassword)}
+              aria-label="Toggle password visibility"
+            >
+              {showPassword ? <FiEye /> : <FiEyeOff />}
+            </button>
+          </div>
 
-            <p className="forgot-password">Use your registered account password.</p>
+          <button className="login-btn" disabled={isSubmitting}>
+            {isSubmitting ? "Signing in..." : "Login"}
+          </button>
+        </form>
 
-            <button className="login-btn">Login</button>
-          </form>
-
-          <p className="redirect-text">
-            Don’t have an account?
-            <button type="button" onClick={() => navigate("/signup")}> Register</button>
-          </p>
-        </div>
+        <p className="redirect-text">
+          Don’t have an account?
+          <button type="button" onClick={() => navigate("/signup")}> Register</button>
+        </p>
       </div>
     </div>
   );
