@@ -1,7 +1,9 @@
 import express from "express";
 import Order from "../models/Order.js";
+import { adminOnly, protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
+router.use(protect, adminOnly);
 
 /* ============================================================
    📊 Dashboard Stats

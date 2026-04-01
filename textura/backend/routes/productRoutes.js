@@ -2,6 +2,7 @@ import express from "express";
 import Product from "../models/Product.js";
 import upload from "../middleware/upload.js";
 import cloudinary from "../config/cloudinary.js";
+import { adminOnly, protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
@@ -28,7 +29,7 @@ router.get("/", async (req, res) => {
 /* ============================
    2️⃣ Bulk Upload Products
 ============================ */
-router.post("/bulk", upload.any(), async (req, res) => {
+router.post("/bulk", protect, adminOnly, upload.any(), async (req, res) => {
   try {
     const products = JSON.parse(req.body.products || "[]");
 
@@ -110,7 +111,7 @@ router.get("/:id", async (req, res) => {
 /* ============================
    4️⃣ Update Product (MAIN FIX)
 ============================ */
-router.put("/:id", upload.any(), async (req, res) => {
+router.put("/:id", protect, adminOnly, upload.any(), async (req, res) => {
   try {
     let product = await Product.findById(req.params.id);
 
@@ -208,7 +209,7 @@ router.put("/:id", upload.any(), async (req, res) => {
 /* ============================
    5️⃣ Delete Product
 ============================ */
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", protect, adminOnly, async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
 

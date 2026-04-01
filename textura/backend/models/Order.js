@@ -38,6 +38,9 @@ const orderSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+orderSchema.index({ customerEmail: 1, createdAt: -1 });
+orderSchema.index({ createdAt: -1 });
+
 orderSchema.pre("save", function (next) {
   if (!this.orderId) {
     this.orderId = Math.random().toString(36).substring(2, 8).toUpperCase();
