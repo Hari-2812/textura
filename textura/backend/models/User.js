@@ -5,6 +5,7 @@ const userSchema = new mongoose.Schema(
     firebaseUid: { type: String },   // ❌ removed required + unique
     name: { type: String, default: "" },
     email: { type: String, required: true, unique: true },
+    password: { type: String, select: false },
     picture: { type: String, default: "" },
     provider: { type: String, default: "password" },
     isAdmin: { type: Boolean, default: false },

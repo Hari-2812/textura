@@ -20,6 +20,27 @@ export const authTokenSchema = (body) => {
   return errors;
 };
 
+export const userRegisterSchema = (body) => {
+  const errors = [];
+  if (!isString(body.name) || body.name.trim().length < 2) {
+    errors.push("name must be at least 2 characters");
+  }
+  if (!isString(body.email) || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email)) {
+    errors.push("valid email is required");
+  }
+  if (!isString(body.password) || body.password.length < 6) {
+    errors.push("password must be at least 6 characters");
+  }
+  return errors;
+};
+
+export const userLoginSchema = (body) => {
+  const errors = [];
+  if (!isString(body.email) || !body.email.trim()) errors.push("email is required");
+  if (!isString(body.password) || !body.password.trim()) errors.push("password is required");
+  return errors;
+};
+
 export const profileUpdateSchema = (body) => {
   const errors = [];
   const optionalFields = ["name", "phone", "address", "state", "district", "pincode", "landmark"];
@@ -38,9 +59,6 @@ export const orderCreateSchema = (body) => {
   const errors = [];
   if (!isString(body.customerName) || body.customerName.trim().length < 2) {
     errors.push("customerName is required");
-  }
-  if (!isString(body.customerEmail) || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.customerEmail)) {
-    errors.push("valid customerEmail is required");
   }
   if (!Array.isArray(body.items) || body.items.length === 0) {
     errors.push("items must be a non-empty array");

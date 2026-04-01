@@ -1,10 +1,18 @@
 import express from "express";
 import Product from "../models/Product.js";
 import upload from "../middleware/upload.js";
-import cloudinary from "../config/cloudinary.js";
 import { adminOnly, protect } from "../middleware/authMiddleware.js";
+import fs from "fs";
+import path from "path";
 
 const router = express.Router();
+const normalizeImage = (img) =>
+  typeof img === "string" ? { url: img, public_id: "" } : img;
+const deleteLocalFile = (imageUrl = "") => {
+  if (!imageUrl.startsWith("/uploads/")) return;
+  const filePath = path.join(process.cwd(), imageUrl.replace(/^\//, ""));
+  if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+};
 
 /* ============================
    1️⃣ Get All Products
@@ -13,12 +21,7 @@ router.get("/", async (req, res) => {
   try {
     let products = await Product.find().sort({ createdAt: -1 }).lean();
 
-    products = products.map((p) => ({
-      ...p,
-      images: p.images.map((img) =>
-        typeof img === "string" ? { url: img, public_id: "" } : img
-      ),
-    }));
+    products = products.map((p) => ({ ...p, images: p.images.map(normalizeImage) }));
 
     res.json({ success: true, products });
   } catch (error) {
@@ -46,7 +49,7 @@ router.post("/bulk", protect, adminOnly, upload.any(), async (req, res) => {
         groupedImages[file.fieldname] = [];
       }
       groupedImages[file.fieldname].push({
-        url: file.path,
+        url: `/uploads/${file.filename}`,
         public_id: file.filename || "",
       });
     });
@@ -98,9 +101,7 @@ router.get("/:id", async (req, res) => {
       });
     }
 
-    product.images = product.images.map((img) =>
-      typeof img === "string" ? { url: img, public_id: "" } : img
-    );
+    product.images = product.images.map(normalizeImage);
 
     res.json({ success: true, product });
   } catch (error) {
@@ -138,9 +139,11 @@ router.put("/:id", protect, adminOnly, upload.any(), async (req, res) => {
         publicId = parts[parts.length - 1].split(".")[0];
       }
 
-      try {
-        await cloudinary.uploader.destroy(publicId);
-      } catch {}
+      const imageToDelete = product.images.find((img) => {
+        const normalized = normalizeImage(img);
+        return normalized.public_id === publicId || normalized.url.includes(publicId);
+      });
+      deleteLocalFile(imageToDelete?.url || "");
 
       product.images = product.images.filter((img) => {
         if (typeof img === "string") return true;
@@ -151,7 +154,7 @@ router.put("/:id", protect, adminOnly, upload.any(), async (req, res) => {
     /* ⭐ Add new images */
     if (req.files.length > 0) {
       const newImgs = req.files.map((file) => ({
-        url: file.path,
+        url: `/uploads/${file.filename}`,
         public_id: file.filename || "",
       }));
       product.images.push(...newImgs);
@@ -225,9 +228,7 @@ router.delete("/:id", protect, adminOnly, async (req, res) => {
           ? img.split("/").pop().split(".")[0]
           : img.public_id;
 
-      try {
-        await cloudinary.uploader.destroy(publicId);
-      } catch {}
+      deleteLocalFile(normalizeImage(img).url);
     }
 
     await Product.findByIdAndDelete(req.params.id);

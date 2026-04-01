@@ -1,126 +1,83 @@
 import express from "express";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 import User from "../models/User.js";
-import admin, {
-  getFirebaseAdminError,
-  isFirebaseConfigured,
-} from "../firebaseAdmin.js";
 import { protect } from "../middleware/authMiddleware.js";
 import {
-  authTokenSchema,
   profileUpdateSchema,
+  userLoginSchema,
+  userRegisterSchema,
   validate,
 } from "../middleware/validate.js";
 
 const router = express.Router();
 
-const requireFirebaseAdmin = (res) => {
-  if (isFirebaseConfigured && admin) {
-    return true;
-  }
-
-  res.status(503).json({
-    success: false,
-    message:
-      "Firebase authentication is not configured on the server. Add FIREBASE_SERVICE_ACCOUNT in Render.",
-    error: getFirebaseAdminError(),
-  });
-
-  return false;
+const sanitizeUser = (user) => {
+  const obj = user.toObject ? user.toObject() : user;
+  delete obj.password;
+  delete obj.__v;
+  return obj;
 };
 
-const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
+const generateToken = (id) =>
+  jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN || "30d",
   });
-};
 
-router.post("/register", validate(authTokenSchema), async (req, res) => {
+router.post("/register", validate(userRegisterSchema), async (req, res) => {
   try {
-    if (!requireFirebaseAdmin(res)) return;
+    const { name, email, password } = req.body;
+    const normalizedEmail = email.trim().toLowerCase();
 
-    const { token, name } = req.body;
-
-    if (!token) return res.status(400).json({ message: "Token missing" });
-
-    const decoded = await admin.auth().verifyIdToken(token);
-
-    if (!decoded.email_verified) {
-      return res.status(400).json({ message: "Please verify your email" });
+    const existing = await User.findOne({ email: normalizedEmail });
+    if (existing) {
+      return res.status(409).json({ success: false, message: "Email already registered" });
     }
 
-    const { uid, email } = decoded;
-
-    let user = await User.findOne({
-      $or: [{ firebaseUid: uid }, { email }],
+    const hashed = await bcrypt.hash(password, 12);
+    const user = await User.create({
+      name: name.trim(),
+      email: normalizedEmail,
+      password: hashed,
+      provider: "local",
+      isAdmin:
+        process.env.ADMIN_EMAIL &&
+        normalizedEmail === process.env.ADMIN_EMAIL.toLowerCase(),
     });
 
-    if (!user) {
-      user = await User.create({
-        firebaseUid: uid,
-        name: name || "",
-        email,
-        provider: decoded.firebase.sign_in_provider || "password",
-      });
-    }
-
-    const backendToken = generateToken(user._id);
-
-    res.json({ success: true, token: backendToken, user });
+    const token = generateToken(user._id);
+    return res.status(201).json({ success: true, token, user: sanitizeUser(user) });
   } catch (err) {
-    console.error("Register Error:", err);
-    return res.status(500).json({ message: "Registration failed" });
+    console.error("Register error:", err);
+    return res.status(500).json({ success: false, message: "Registration failed" });
   }
 });
 
-router.post("/login", validate(authTokenSchema), async (req, res) => {
+router.post("/login", validate(userLoginSchema), async (req, res) => {
   try {
-    if (!requireFirebaseAdmin(res)) return;
+    const { email, password } = req.body;
+    const normalizedEmail = email.trim().toLowerCase();
 
-    const { token } = req.body;
-
-    if (!token) return res.status(400).json({ message: "Token missing" });
-
-    const decoded = await admin.auth().verifyIdToken(token);
-
-    if (!decoded.email_verified) {
-      return res.status(400).json({ message: "Please verify your email" });
+    const user = await User.findOne({ email: normalizedEmail }).select("+password");
+    if (!user || !user.password) {
+      return res.status(401).json({ success: false, message: "Invalid email or password" });
     }
 
-    const {
-      uid,
-      email,
-      name,
-      picture,
-      firebase: { sign_in_provider },
-    } = decoded;
-
-    let user = await User.findOne({ email });
-
-    if (!user) {
-      user = await User.create({
-        firebaseUid: uid,
-        email,
-        name: name || "",
-        picture: picture || "",
-        provider: sign_in_provider,
-      });
-    } else if (!user.firebaseUid) {
-      user.firebaseUid = uid;
-      await user.save();
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ success: false, message: "Invalid email or password" });
     }
 
-    const backendToken = generateToken(user._id);
-
-    res.json({ success: true, token: backendToken, user });
+    const token = generateToken(user._id);
+    return res.json({ success: true, token, user: sanitizeUser(user) });
   } catch (err) {
-    console.error("Login Error:", err);
-    return res.status(401).json({ message: "Invalid Firebase token" });
+    console.error("Login error:", err);
+    return res.status(500).json({ success: false, message: "Login failed" });
   }
 });
 
 router.get("/me", protect, async (req, res) => {
-  res.json({ success: true, user: req.user });
+  res.json({ success: true, user: sanitizeUser(req.user) });
 });
 
 router.put("/update", protect, validate(profileUpdateSchema), async (req, res) => {
@@ -141,10 +98,10 @@ router.put("/update", protect, validate(profileUpdateSchema), async (req, res) =
       { new: true }
     );
 
-    res.json({ success: true, user: updatedUser });
+    res.json({ success: true, user: sanitizeUser(updatedUser) });
   } catch (err) {
     console.error("Update Error:", err);
-    res.status(500).json({ message: "Update failed" });
+    res.status(500).json({ success: false, message: "Update failed" });
   }
 });
 

@@ -7,14 +7,20 @@ const DeliveryOrders = () => {
   const [orders, setOrders] = useState([]);
 
   const fetchOrders = async () => {
-    const res = await axios.get(`${backendUrl}/api/admin/orders`);
+    const token = localStorage.getItem("userToken");
+    const res = await axios.get(`${backendUrl}/api/admin/orders`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     setOrders(res.data.orders);
   };
 
   const updateStatus = async (id, status) => {
-    await axios.put(`${backendUrl}/api/admin/orders/partner/update-status/${id}`, {
-      status,
-    });
+    const token = localStorage.getItem("userToken");
+    await axios.put(
+      `${backendUrl}/api/admin/orders/partner/update-status/${id}`,
+      { status },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
 
     fetchOrders();
   };

@@ -4,13 +4,6 @@ import { buildApiUrl } from "../api";
 import { useNavigate } from "react-router-dom";
 import "./register.css";
 
-import { auth, googleProvider } from "../firebase";
-import {
-  createUserWithEmailAndPassword,
-  updateProfile,
-  sendEmailVerification,
-} from "firebase/auth";
-
 const Register = () => {
   const navigate = useNavigate();
 
@@ -36,33 +29,20 @@ const Register = () => {
     e.preventDefault();
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        form.email,
-        form.password
-      );
-
-      await sendEmailVerification(auth.currentUser);
-
-      await updateProfile(userCredential.user, {
-        displayName: form.name,
-      });
-
-      const idToken = await userCredential.user.getIdToken();
-
       await axios.post(
         buildApiUrl("/users/register"),
         {
-          token: idToken,
           name: form.name,
+          email: form.email,
+          password: form.password,
         },
         { withCredentials: true }
       );
 
-      showToast("Verify email before login!");
+      showToast("Registered successfully!");
       setTimeout(() => navigate("/login"), 1500);
     } catch (err) {
-      showToast(err.message);
+      showToast(err.response?.data?.message || "Registration failed");
     }
   };
 
@@ -98,9 +78,9 @@ const Register = () => {
               required
               onChange={handleChange}
             />
-            <span onClick={() => setShowPassword(!showPassword)}>
+            <button type="button" onClick={() => setShowPassword(!showPassword)}>
               {showPassword ? "🙈" : "👁️"}
-            </span>
+            </button>
           </div>
 
           <button className="register-btn">Register</button>

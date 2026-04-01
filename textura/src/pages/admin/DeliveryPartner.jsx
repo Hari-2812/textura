@@ -7,12 +7,18 @@ const DeliveryPartner = () => {
   const backendUrl = BACKEND_URL;
 
   const fetchOrders = async () => {
-    const res = await axios.get(`${backendUrl}/api/admin/orders`);
+    const token = localStorage.getItem("userToken");
+    const res = await axios.get(`${backendUrl}/api/admin/orders`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     setOrders(res.data.orders);
   };
 
   const updateStatus = async (id, status) => {
-    await axios.patch(`${backendUrl}/api/admin/orders/${id}`, { status });
+    const token = localStorage.getItem("userToken");
+    await axios.patch(`${backendUrl}/api/admin/orders/${id}`, { status }, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     fetchOrders();
   };
 
