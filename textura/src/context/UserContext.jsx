@@ -2,6 +2,8 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 
 const UserContext = createContext();
+const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL || "";
+const ADMIN_PASSWORD = process.env.REACT_APP_ADMIN_PASSWORD || "";
 
 export const UserProvider = ({ children }) => {
   // Load user from localStorage
@@ -38,7 +40,7 @@ export const UserProvider = ({ children }) => {
   // ✅ Login user (with admin support)
   const login = (email, password) => {
     // 🔐 Hardcoded admin login
-    if (email === "admin@textura.com" && password === "admin123") {
+    if (ADMIN_EMAIL && ADMIN_PASSWORD && email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
       const adminUser = {
         name: "Admin",
         email,

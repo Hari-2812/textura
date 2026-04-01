@@ -6,6 +6,11 @@ import admin, {
   isFirebaseConfigured,
 } from "../firebaseAdmin.js";
 import { protect } from "../middleware/authMiddleware.js";
+import {
+  authTokenSchema,
+  profileUpdateSchema,
+  validate,
+} from "../middleware/validate.js";
 
 const router = express.Router();
 
@@ -30,7 +35,7 @@ const generateToken = (id) => {
   });
 };
 
-router.post("/register", async (req, res) => {
+router.post("/register", validate(authTokenSchema), async (req, res) => {
   try {
     if (!requireFirebaseAdmin(res)) return;
 
@@ -68,7 +73,7 @@ router.post("/register", async (req, res) => {
   }
 });
 
-router.post("/login", async (req, res) => {
+router.post("/login", validate(authTokenSchema), async (req, res) => {
   try {
     if (!requireFirebaseAdmin(res)) return;
 
@@ -118,7 +123,7 @@ router.get("/me", protect, async (req, res) => {
   res.json({ success: true, user: req.user });
 });
 
-router.put("/update", protect, async (req, res) => {
+router.put("/update", protect, validate(profileUpdateSchema), async (req, res) => {
   try {
     const updatedUser = await User.findByIdAndUpdate(
       req.user._id,

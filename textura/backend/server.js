@@ -9,6 +9,7 @@ import { Server } from "socket.io";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import connectDB from "./config/db.js";
+import { basicSecurityHeaders, rateLimiter } from "./middleware/security.js";
 
 import productRoutes from "./routes/productRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
@@ -20,6 +21,7 @@ import tryOnRoutes from "./routes/tryon.js";
 
 const app = express();
 const server = http.createServer(app);
+app.set("trust proxy", 1);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -68,6 +70,8 @@ app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.use(cookieParser());
 app.use(cors(corsOptions));
+app.use(basicSecurityHeaders);
+app.use(rateLimiter);
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.get("/", (req, res) => {
@@ -89,6 +93,15 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/offers", offerRoutes);
 app.use("/api/newsletter", subscriberRoutes);
 app.use("/api/tryon", tryOnRoutes);
+
+app.use((err, req, res, next) => {
+  console.error("Unhandled error:", err);
+  if (res.headersSent) return next(err);
+  return res.status(500).json({
+    success: false,
+    message: "Internal server error",
+  });
+});
 
 io.on("connection", (socket) => {
   console.log("🟢 Socket connected:", socket.id);

@@ -10,6 +10,8 @@ const AdminLogin = () => {
 
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
+  const adminEmail = process.env.REACT_APP_ADMIN_EMAIL || "";
+  const adminPassword = process.env.REACT_APP_ADMIN_PASSWORD || "";
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -21,7 +23,7 @@ const AdminLogin = () => {
     const { email, password } = form;
 
     // ✅ Hardcoded admin credentials
-    if (email === "admin@textura.com" && password === "admin123") {
+    if (adminEmail && adminPassword && email === adminEmail && password === adminPassword) {
       const adminUser = { name: "Admin", email, role: "admin" };
       localStorage.setItem("user", JSON.stringify(adminUser));
       setUser(adminUser);
