@@ -1,86 +1,43 @@
-import React, { useState, useEffect } from "react";
+import React, { useMemo, useState } from "react";
 import "../styles/GirlsPage.css";
 import "../styles/ProductFilters.css";
 import { useCart } from "../context/CartContext";
-import axios from "axios";
-import { buildApiUrl } from "../api";
 import ProductCard from "../components/ProductCard";
+import toast from "react-hot-toast";
+import useProductsByCategory from "../hooks/useProductsByCategory";
+import ProductCollectionState, {
+  ProductGridSkeleton,
+} from "../components/common/ProductCollectionState";
 
 const GirlsPage = ({ showFilters, setShowFilters }) => {
-  const [girlsProducts, setGirlsProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
+  const { addToCart } = useCart();
+  const { products, loading, error } = useProductsByCategory("girls");
 
   const [price, setPrice] = useState("all");
   const [style, setStyle] = useState("all");
 
-  const { addToCart } = useCart();
+  const filteredProducts = useMemo(() => {
+    return products.filter((product) => {
+      const priceValue = Number(product.price) || 0;
+      const description = (product.description || "").toLowerCase();
 
-  // ⭐ Unified Toast
-  const [toast, setToast] = useState("");
+      const priceMatch =
+        price === "all" ||
+        (() => {
+          const [min, max] = price.split("-").map(Number);
+          return priceValue >= min && priceValue <= max;
+        })();
 
-  const showToast = (msg) => {
-    setToast(msg);
-    setTimeout(() => setToast(""), 2000);
-  };
+      const styleMatch = style === "all" || description.includes(style.toLowerCase());
 
-  // ⭐ Fetch products
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const res = await axios.get(buildApiUrl("/products"));
-        const allProducts = res.data.products || [];
-
-        const girls = allProducts.filter(
-          (p) => p.category === "2" || p.category.toLowerCase() === "girls"
-        );
-
-        setGirlsProducts(girls);
-        setFilteredProducts(girls);
-      } catch (error) {
-        console.log("Error fetching products:", error);
-      }
-    };
-
-    fetchProducts();
-  }, []);
-
-  // ⭐ Filter Logic
-  const handleFilter = () => {
-    let filtered = [...girlsProducts];
-
-    if (price !== "all") {
-      const [min, max] = price.split("-");
-      filtered = filtered.filter((p) => {
-        const pr = parseInt(p.price);
-        return pr >= parseInt(min) && pr <= parseInt(max);
-      });
-    }
-
-    if (style !== "all") {
-      filtered = filtered.filter((p) =>
-        p.description?.toLowerCase().includes(style.toLowerCase())
-      );
-    }
-
-    setFilteredProducts(filtered);
-    setShowFilters(false);
-  };
-
-  // ⭐ Reset on filter close
-  useEffect(() => {
-    if (!showFilters && filteredProducts.length === 0) {
-      setFilteredProducts(girlsProducts);
-    }
-  }, [showFilters, girlsProducts, filteredProducts.length]);
+      return priceMatch && styleMatch;
+    });
+  }, [products, price, style]);
 
   return (
-    <section className="girls-page">
-      {/* ⭐ Toast Notification */}
-      {toast && <div className="login-toast">{toast}</div>}
-
+    <section className="collection-page girls-page">
       <h2>Girls Collection</h2>
 
-      {/* Filter Popup */}
       {showFilters && (
         <div className="filter-popup">
           <div className="filter-header">
@@ -89,7 +46,6 @@ const GirlsPage = ({ showFilters, setShowFilters }) => {
               ✖
             </button>
           </div>
-
           <div className="filter-options">
             <label>Price Range</label>
             <select value={price} onChange={(e) => setPrice(e.target.value)}>
@@ -111,34 +67,45 @@ const GirlsPage = ({ showFilters, setShowFilters }) => {
               <option value="track">Track</option>
             </select>
 
-            <button className="apply-btn" onClick={handleFilter}>
+            <button className="apply-btn" onClick={() => setShowFilters(false)}>
               Apply Filters
             </button>
           </div>
         </div>
       )}
 
-      {/* Overlay */}
-      {showFilters && (
-        <div className="overlay" onClick={() => setShowFilters(false)} />
-      )}
+      {showFilters && <div className="overlay" onClick={() => setShowFilters(false)} />}
 
-      {/* Product Grid */}
-      <div className="girls-container">
-        {filteredProducts.length > 0 ? (
+      <div className="collection-grid">
+        {loading && <ProductGridSkeleton />}
+
+        {!loading && error && (
+          <ProductCollectionState
+            title="Couldn’t load products"
+            description={error}
+            actionLabel="Refresh"
+            onAction={() => window.location.reload()}
+          />
+        )}
+
+        {!loading && !error && filteredProducts.length === 0 && (
+          <ProductCollectionState
+            title="No products found"
+            description="Try changing filter options or come back later for fresh arrivals."
+          />
+        )}
+
+        {!loading && !error &&
           filteredProducts.map((p) => (
             <ProductCard
               key={p._id}
               product={p}
               onAddToCart={(item) => {
                 addToCart(item);
-                showToast("🛒 Item added to cart!");
+                toast.success("🛒 Item added to cart!");
               }}
             />
-          ))
-        ) : (
-          <p>No products found</p>
-        )}
+          ))}
       </div>
     </section>
   );

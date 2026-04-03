@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import "../styles/HeroBanner.css";
@@ -11,6 +11,13 @@ import img3 from "../assets/images/polo3.jpg";
 
 const HeroBanner = () => {
   const navigate = useNavigate();
+  const [offsetY, setOffsetY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => setOffsetY(window.scrollY * 0.2);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const settings = {
     dots: true,
@@ -18,7 +25,7 @@ const HeroBanner = () => {
     infinite: true,
     autoplay: true,
     speed: 700,
-    autoplaySpeed: 3000,
+    autoplaySpeed: 3500,
     slidesToShow: 1,
     slidesToScroll: 1,
     pauseOnHover: false,
@@ -29,47 +36,49 @@ const HeroBanner = () => {
     {
       id: 1,
       image: img1,
-      title: "New Kids Collection",
-      subtitle: "Minimal • Comfortable • Stylish",
+      title: "Premium Drop for Everyday Kidswear",
+      subtitle: "Crafted fits with soft textures, modern cuts, and all-day comfort.",
       link: "/boys",
     },
     {
       id: 2,
       image: img2,
-      title: "Daily Wear Essentials",
-      subtitle: "Soft and breathable outfits for kids",
+      title: "Fresh Styles for Girls Collection",
+      subtitle: "Elegant essentials with lightweight fabric and premium finish.",
       link: "/girls",
     },
     {
       id: 3,
       image: img3,
-      title: "Trending This Season",
-      subtitle: "Fresh arrivals for boys & girls",
+      title: "Seasonal Picks at Better Prices",
+      subtitle: "Limited-time offers and new arrivals curated for your cart.",
       link: "/offers",
     },
   ];
 
   return (
-    <div className="minimal-hero-banner">
+    <section className="hero-banner" id="hero">
       <Slider {...settings}>
         {slides.map((slide) => (
-          <div className="minimal-hero-slide" key={slide.id}>
+          <div className="hero-slide" key={slide.id}>
             <img
               src={slide.image}
               alt={slide.title}
-              className="minimal-hero-img"
+              className="hero-img"
+              style={{ transform: `translateY(${offsetY}px)` }}
             />
+            <div className="hero-overlay" />
 
-            <div className="minimal-hero-content">
+            <div className="hero-content">
+              <p>TEXTURA</p>
               <h1>{slide.title}</h1>
-              <p>{slide.subtitle}</p>
-
-              <button onClick={() => navigate(slide.link)}>Shop Now</button>
+              <span>{slide.subtitle}</span>
+              <button onClick={() => navigate(slide.link)}>Shop Collection</button>
             </div>
           </div>
         ))}
       </Slider>
-    </div>
+    </section>
   );
 };
 

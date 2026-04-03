@@ -1,6 +1,6 @@
 import React from "react";
 import "../styles/ProductCard.css";
-import { FaHeart, FaShoppingCart } from "react-icons/fa";
+import { FaEye, FaHeart, FaShoppingCart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useWishlist } from "../context/WishlistContext";
 import toast from "react-hot-toast";
@@ -15,30 +15,22 @@ const ProductCard = ({ product, onAddToCart }) => {
       removeFromWishlist(product._id);
     } else {
       addToWishlist(product);
+      toast.success("Added to wishlist");
     }
   };
 
   return (
-    <div className="product-card">
-      <div
-        className="product-image-container"
-        onClick={() => navigate(`/product/${product._id}`)}
-      >
-        <img
-          src={product.images?.[0]?.url}
-          alt={product.name}
-          className="product-img"
-          loading="lazy"
-        />
+    <article className="product-card" onClick={() => navigate(`/product/${product._id}`)}>
+      <div className="product-image-container">
+        <img src={product.images?.[0]?.url} alt={product.name} className="product-img" loading="lazy" />
 
-        <button
-          className={`pc-wishlist-btn ${
-            isInWishlist(product._id) ? "active" : ""
-          }`}
-          onClick={toggleWishlist}
-        >
+        <button className={`pc-wishlist-btn ${isInWishlist(product._id) ? "active" : ""}`} onClick={toggleWishlist}>
           <FaHeart className="pc-wishlist-icon" />
         </button>
+
+        <div className="quick-view">
+          <FaEye /> Quick View
+        </div>
       </div>
 
       <div className="product-info">
@@ -49,7 +41,8 @@ const ProductCard = ({ product, onAddToCart }) => {
       <div className="product-actions">
         <button
           className="add-cart-btn"
-          onClick={() => {
+          onClick={(e) => {
+            e.stopPropagation();
             onAddToCart(product);
             toast.success(`${product.name} added to cart 🛒`);
           }}
@@ -58,7 +51,7 @@ const ProductCard = ({ product, onAddToCart }) => {
           Add to Cart
         </button>
       </div>
-    </div>
+    </article>
   );
 };
 
