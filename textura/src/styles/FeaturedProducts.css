@@ -1,0 +1,29 @@
+.featured-products {
+  width: min(1200px, 92%);
+  margin: 2rem auto;
+}
+
+.featured-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+  flex-wrap: wrap;
+}
+
+.featured-head p { margin: 0; color: #67e8f9; }
+.featured-head h2 { margin: 0.25rem 0 0; color: #f8fafc; }
+.featured-head button {
+  border: none;
+  border-radius: 10px;
+  padding: 0.55rem 0.95rem;
+  color: #f8fafc;
+  background: rgba(99, 102, 241, 0.32);
+}
+
+.featured-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}

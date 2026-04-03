@@ -1,22 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import "../styles/Header.css";
-import { useNavigate, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useCart } from "../context/CartContext";
 import { useUser } from "../context/UserContext";
 import { products } from "../data/products";
 import OfferBar from "../components/OfferBar";
-
 import {
   FaShoppingCart,
   FaSearch,
   FaHeart,
   FaFilter,
-  FaCompass,
   FaGlobe,
   FaBars,
   FaMoon,
   FaSun,
+  FaTimes,
 } from "react-icons/fa";
 
 const Header = ({ onFilterToggle }) => {
@@ -24,9 +23,7 @@ const Header = ({ onFilterToggle }) => {
   const [suggestions, setSuggestions] = useState([]);
   const [showProfile, setShowProfile] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
-  const [darkMode, setDarkMode] = useState(
-    () => localStorage.getItem("theme") === "dark"
-  );
+  const [darkMode, setDarkMode] = useState(() => localStorage.getItem("theme") !== "light");
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -44,10 +41,18 @@ const Header = ({ onFilterToggle }) => {
     localStorage.setItem("theme", darkMode ? "dark" : "light");
   }, [darkMode]);
 
-  const isProductPage =
-    location.pathname.includes("/boys") ||
-    location.pathname.includes("/girls") ||
-    location.pathname.includes("/products");
+  const navLinks = useMemo(
+    () => [
+      { label: "Home", path: "/" },
+      { label: "Boys", path: "/boys" },
+      { label: "Girls", path: "/girls" },
+      { label: "Offers", path: "/offers" },
+      { label: "Contact", path: "/contact" },
+    ],
+    []
+  );
+
+  const isProductPage = location.pathname.includes("/boys") || location.pathname.includes("/girls");
 
   const handleSearchChange = (e) => {
     const value = e.target.value.toLowerCase();
@@ -55,18 +60,8 @@ const Header = ({ onFilterToggle }) => {
 
     if (value.trim() === "") return setSuggestions([]);
 
-    const filtered = products.filter((p) =>
-      p.name.toLowerCase().includes(value)
-    );
-
+    const filtered = products.filter((p) => p.name.toLowerCase().includes(value));
     setSuggestions(filtered.slice(0, 5));
-  };
-
-  const handleSuggestionClick = (product) => {
-    setSearch(product.name);
-    setSuggestions([]);
-    if (product.category === "boys") navigate("/boys");
-    if (product.category === "girls") navigate("/girls");
   };
 
   const handleLogout = () => {
@@ -80,41 +75,33 @@ const Header = ({ onFilterToggle }) => {
   return (
     <>
       <OfferBar />
-
       <header className="header">
         <nav className="navbar">
+          <button className="menu-icon" onClick={() => setOpenMenu(true)} aria-label="Open menu">
+            <FaBars />
+          </button>
 
-          {/* LEFT SECTION */}
-          <div className="navbar-left">
-
-            {/* MOBILE MENU ICON */}
-            <div className="menu-icon" onClick={() => setOpenMenu(true)}>
-              <FaBars />
-            </div>
-
-            <div className="logo" onClick={() => navigate("/")}>
-              <img
-                src="https://cdn-icons-png.flaticon.com/512/2769/2769346.png"
-                alt="Textura Logo"
-              />
-            </div>
+          <div className="logo" onClick={() => navigate("/")}>
+            <img src="https://cdn-icons-png.flaticon.com/512/2769/2769346.png" alt="Textura Logo" />
+            <span>Textura</span>
           </div>
 
-          {/* SEARCH BAR */}
+          <div className="desktop-links">
+            {navLinks.map((item) => (
+              <NavLink key={item.path} to={item.path} className={({ isActive }) => `header-link ${isActive ? "active" : ""}`}>
+                {item.label}
+              </NavLink>
+            ))}
+          </div>
+
           <div className="navbar-center">
             <div className="search-container">
-              <input
-                type="text"
-                placeholder={t("searchPlaceholder")}
-                value={search}
-                onChange={handleSearchChange}
-              />
+              <input type="text" placeholder={t("searchPlaceholder")} value={search} onChange={handleSearchChange} />
               <FaSearch className="search-icon" />
-
               {suggestions.length > 0 && (
                 <ul className="search-suggestions">
                   {suggestions.map((item) => (
-                    <li key={item.id} onClick={() => handleSuggestionClick(item)}>
+                    <li key={item.id} onClick={() => navigate(item.category === "boys" ? "/boys" : "/girls")}>
                       <img src={item.img} alt={item.name} />
                       <span>{item.name}</span>
                     </li>
@@ -124,60 +111,20 @@ const Header = ({ onFilterToggle }) => {
             </div>
           </div>
 
-          {/* RIGHT ICONS */}
           <div className="navbar-right">
+            <button className="nav-icon" onClick={() => navigate("/wishlist")}><FaHeart /></button>
+            <button className="nav-icon" onClick={() => navigate("/cart")}><FaShoppingCart />{cartCount > 0 && <span className="cart-badge">{cartCount}</span>}</button>
+            {isProductPage && <button className="nav-icon" onClick={onFilterToggle}><FaFilter /></button>}
+            <button className="nav-icon" onClick={() => navigate("/language")}><FaGlobe /></button>
+            <button className="nav-icon" onClick={() => setDarkMode((prev) => !prev)}>{darkMode ? <FaSun /> : <FaMoon />}</button>
 
-            <div className="nav-item" onClick={() => navigate("/wishlist")}>
-              <FaHeart />
-              <span>{t("wishlist")}</span>
-            </div>
-
-            <div className="nav-item" onClick={() => navigate("/cart")}>
-              <FaShoppingCart />
-              {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
-              <span>{t("cart")}</span>
-            </div>
-
-            {isProductPage ? (
-              <div className="nav-item" onClick={onFilterToggle}>
-                <FaFilter />
-                <span>{t("filter")}</span>
-              </div>
-            ) : (
-              <div className="nav-item" onClick={() => navigate("/offers")}>
-                <FaCompass />
-                <span>{t("offers")}</span>
-              </div>
-            )}
-
-            <div className="nav-item" onClick={() => navigate("/language")}>
-              <FaGlobe />
-              <span>{t("language") || "Language"}</span>
-            </div>
-
-            <button className="nav-item dark-toggle" onClick={() => setDarkMode((prev) => !prev)}>
-              {darkMode ? <FaSun /> : <FaMoon />}
-              <span>{darkMode ? "Light" : "Dark"}</span>
-            </button>
-
-            <div
-              className="nav-item profile-box"
-              onClick={() => setShowProfile(!showProfile)}
-            >
-              <img
-                src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-                className="profile-avatar"
-                alt="User profile"
-              />
-              <span className="profile-username">
-                {user?.name || t("guest")}
-              </span>
-
+            <div className="profile-box" onClick={() => setShowProfile((v) => !v)}>
+              <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" className="profile-avatar" alt="User profile" />
               {showProfile && (
                 <div className="profile-dropdown">
-                  <p onClick={() => navigate("/profile")}>{t("profile")}</p>
-                  <p onClick={() => navigate("/orders")}>{t("orders")}</p>
-                  <p onClick={handleLogout}>{t("logout")}</p>
+                  <p onClick={() => navigate("/profile")}>Profile</p>
+                  <p onClick={() => navigate("/orders")}>Orders</p>
+                  <p onClick={handleLogout}>Logout</p>
                 </div>
               )}
             </div>
@@ -185,70 +132,20 @@ const Header = ({ onFilterToggle }) => {
         </nav>
       </header>
 
-      {/* SIDEBAR */}
       <div className={`sidebar ${openMenu ? "open" : ""}`}>
         <div className="sidebar-header">
           <h3>Menu</h3>
-          <span className="close-btn" onClick={() => setOpenMenu(false)}>×</span>
+          <button onClick={() => setOpenMenu(false)}><FaTimes /></button>
         </div>
-
         <ul className="sidebar-links">
-          <li onClick={() => { navigate("/"); setOpenMenu(false); }}>Home</li>
-          <li onClick={() => { navigate("/boys"); setOpenMenu(false); }}>Boys</li>
-          <li onClick={() => { navigate("/girls"); setOpenMenu(false); }}>Girls</li>
-          {/* <li onClick={() => { navigate("/wishlist"); setOpenMenu(false); }}>Wishlist</li>
-          <li onClick={() => { navigate("/cart"); setOpenMenu(false); }}>Cart</li>
-          <li onClick={() => { navigate("/offers"); setOpenMenu(false); }}>Offers</li> */}
-          <li onClick={() => { navigate("/orders"); setOpenMenu(false); }}>Orders</li>
-          {/* <li onClick={() => { navigate("/profile"); setOpenMenu(false); }}>Profile</li> */}
-          <li onClick={() => { navigate("/language"); setOpenMenu(false); }}>Language</li>
-          <li onClick={() => setDarkMode((prev) => !prev)}>{darkMode ? "Light mode" : "Dark mode"}</li>
+          {navLinks.map((item) => (
+            <li key={item.path} onClick={() => { navigate(item.path); setOpenMenu(false); }}>{item.label}</li>
+          ))}
+          <li onClick={() => { setDarkMode((prev) => !prev); setOpenMenu(false); }}>Switch Theme</li>
           <li onClick={() => { handleLogout(); setOpenMenu(false); }}>Logout</li>
         </ul>
-
       </div>
-
       {openMenu && <div className="overlay" onClick={() => setOpenMenu(false)} />}
-
-      {/* BOTTOM NAV */}
-      <div className="bottom-nav">
-        <div className="bottom-nav-item" onClick={() => navigate("/wishlist")}>
-          <FaHeart />
-          <span>{t("wishlist")}</span>
-        </div>
-
-        <div className="bottom-nav-item" onClick={() => navigate("/cart")}>
-          <FaShoppingCart />
-          {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
-          <span>{t("cart")}</span>
-        </div>
-
-        {isProductPage ? (
-          <div className="bottom-nav-item" onClick={onFilterToggle}>
-            <FaFilter />
-            <span>{t("filter")}</span>
-          </div>
-        ) : (
-          <div className="bottom-nav-item" onClick={() => navigate("/offers")}>
-            <FaCompass />
-            <span>{t("offers")}</span>
-          </div>
-        )}
-
-        <div className="bottom-nav-item" onClick={() => navigate("/language")}>
-          <FaGlobe />
-          <span>{t("language") || "Language"}</span>
-        </div>
-
-        <div className="bottom-nav-item" onClick={() => navigate("/profile")}>
-          <img
-            src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-            className="profile-avatar-small"
-            alt="Profile"
-          />
-          <span>{t("profile")}</span>
-        </div>
-      </div>
     </>
   );
 };

@@ -4,21 +4,25 @@ import ProductSlider from "../components/ProductSlider";
 import CategorySection from "../components/CategorySection";
 import BlogSection from "../components/BlogSection";
 import Newsletter from "../components/Newsletter";
-import "../index.css";
+import FeaturedProducts from "../components/FeaturedProducts";
 
-const App = () => {
+const Home = () => {
   return (
     <>
-      {/* <Header /> */}
       <HeroBanner />
-      <ProductSlider title="New Arrivals" />
-      {/* <ProductSlider title="Back in Stock" /> */}
-      <CategorySection />
-      <BlogSection />
+      <section id="new-arrivals">
+        <ProductSlider title="New Arrivals" />
+      </section>
+      <FeaturedProducts />
+      <section id="categories">
+        <CategorySection />
+      </section>
+      <section id="blog-section">
+        <BlogSection />
+      </section>
       <Newsletter />
-      {/* <Footer /> */}
     </>
   );
 };
 
-export default App;
+export default Home;

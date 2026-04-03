@@ -1,85 +1,34 @@
 :root {
-  --bg-primary: #ffffff;
-  --text-primary: #0f172a;
-  --card-bg: #ffffff;
+  --bg-primary: #020617;
+  --text-primary: #e2e8f0;
 }
 
-html[data-theme="dark"] {
-  --bg-primary: #0b1120;
-  --text-primary: #e2e8f0;
-  --card-bg: #111827;
+html[data-theme="light"] {
+  --bg-primary: #f8fafc;
+  --text-primary: #0f172a;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
   font-family: "Poppins", sans-serif;
-  background: var(--bg-primary) !important;
+  background:
+    radial-gradient(circle at 10% 20%, rgba(14, 116, 144, 0.25), transparent 35%),
+    radial-gradient(circle at 90% 5%, rgba(99, 102, 241, 0.24), transparent 35%),
+    var(--bg-primary);
   color: var(--text-primary);
-  transition: background-color .25s ease, color .25s ease;
+  min-height: 100vh;
 }
 
-html, body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  /* overflow-x: hidden; */
-  background: var(--bg-primary) !important;
-}
+* { box-sizing: border-box; }
 
-* {
-  box-sizing: border-box;
-}
-
-.hero-banner,
-.product-slider,
-.blogs,
-.newsletter,
-.footer {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
-
-/* VERY IMPORTANT FIX */
-body, html, #root {
-  overflow: visible !important;
-}
-
-/* Toast CSS */
 #toast-container {
   position: fixed;
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 999999 !important;
-  pointer-events: none;
-}
-
-.toast {
-  background: #333;
-  color: #fff;
-  padding: 12px 20px;
-  border-radius: 8px;
-  margin-top: 10px;
-  animation: slideUp 0.3s ease, fadeOut 0.4s ease 2.5s forwards;
-  z-index: 999999 !important;
-  position: relative;
-}
-
-@keyframes slideUp {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
-@keyframes fadeOut {
-  to { opacity: 0; transform: translateY(20px); }
-}
-
-.icons span {
-  margin-left: 1rem;
-  cursor: pointer;
-}
-
-@keyframes shimmer {
-  0% { background-position: 100% 0; }
-  100% { background-position: 0 0; }
+  z-index: 999999;
 }
