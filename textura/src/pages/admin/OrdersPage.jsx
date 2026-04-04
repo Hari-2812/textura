@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BACKEND_URL } from "../../api";
-import axios from "axios";
+import { get } from "../../services/httpService";
 import { useNavigate } from "react-router-dom";
 import "../../styles/Admin.css";
 import SkeletonBlock from "../../components/SkeletonBlock";
@@ -8,17 +8,13 @@ import SkeletonBlock from "../../components/SkeletonBlock";
 const OrdersPage = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
-  const backendUrl = BACKEND_URL;
 
   const navigate = useNavigate();
 
   const fetchOrders = async () => {
     try {
-      const token = localStorage.getItem("userToken");
-      const res = await axios.get(`${backendUrl}/api/admin/orders`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setOrders(res.data.orders || []);
+      const res = await get("/admin/orders");
+      setOrders(res?.orders || []);
     } catch (error) {
       console.error("❌ Error fetching orders:", error);
     } finally {

@@ -13,6 +13,7 @@ const ProductCard = ({ product, onAddToCart }) => {
     e.stopPropagation();
     if (isInWishlist(product._id)) {
       removeFromWishlist(product._id);
+      toast("Removed from wishlist");
     } else {
       addToWishlist(product);
       toast.success("Added to wishlist");
@@ -20,11 +21,26 @@ const ProductCard = ({ product, onAddToCart }) => {
   };
 
   return (
-    <article className="product-card" onClick={() => navigate(`/product/${product._id}`)}>
+    <article
+      className="product-card"
+      onClick={() => navigate(`/product/${product._id}`)}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => e.key === "Enter" && navigate(`/product/${product._id}`)}
+    >
       <div className="product-image-container">
-        <img src={product.images?.[0]?.url} alt={product.name} className="product-img" loading="lazy" />
+        <img
+          src={product.images?.[0]?.url || "/logo192.png"}
+          alt={product.name}
+          className="product-img"
+          loading="lazy"
+        />
 
-        <button className={`pc-wishlist-btn ${isInWishlist(product._id) ? "active" : ""}`} onClick={toggleWishlist}>
+        <button
+          className={`pc-wishlist-btn ${isInWishlist(product._id) ? "active" : ""}`}
+          onClick={toggleWishlist}
+          aria-label="Toggle wishlist"
+        >
           <FaHeart className="pc-wishlist-icon" />
         </button>
 
@@ -35,7 +51,7 @@ const ProductCard = ({ product, onAddToCart }) => {
 
       <div className="product-info">
         <h3 className="product-name">{product.name}</h3>
-        <p className="product-price">₹{product.price}</p>
+        <p className="product-price">₹{Number(product.price || 0).toLocaleString("en-IN")}</p>
       </div>
 
       <div className="product-actions">
