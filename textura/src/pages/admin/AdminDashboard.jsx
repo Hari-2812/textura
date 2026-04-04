@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import io from "socket.io-client";
 import { BACKEND_URL } from "../../api";
+import { get } from "../../services/httpService";
 import { useNavigate } from "react-router-dom";
 
 import { FaBox, FaRupeeSign, FaTruck, FaClock } from "react-icons/fa";
@@ -25,23 +25,19 @@ const AdminDashboard = () => {
   const [notifications, setNotifications] = useState([]);
   const [alerts, setAlerts] = useState([]);
   const [connectionStatus, setConnectionStatus] = useState("🟢 Connected");
-  const [loading, setLoading] = useState(true);
 
-  const backendUrl = BACKEND_URL;
 
   const loadDashboard = async () => {
     try {
       const [statsRes, graphRes] = await Promise.all([
-        axios.get(`${backendUrl}/api/admin/stats`),
-        axios.get(`${backendUrl}/api/admin/sales-graph`),
+        get("/admin/stats"),
+        get("/admin/sales-graph"),
       ]);
 
-      setStats(statsRes.data);
-      setGraphData(graphRes.data);
+      setStats(statsRes);
+      setGraphData(Array.isArray(graphRes) ? graphRes : []);
     } catch (err) {
       console.error("Dashboard error", err);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -51,7 +47,7 @@ const AdminDashboard = () => {
 
   /* ================= SOCKET.IO REALTIME ================= */
   useEffect(() => {
-    const socket = io(backendUrl);
+    const socket = io(BACKEND_URL);
 
     socket.on("connect", () => setConnectionStatus("🟢 Connected"));
 

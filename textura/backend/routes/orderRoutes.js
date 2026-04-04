@@ -36,7 +36,7 @@ router.post("/", protect, validate(orderCreateSchema), async (req, res) => {
     });
   } catch (err) {
     console.error("Order Creation Error:", err);
-    res.status(500).json({ message: "Failed to create order" });
+    res.status(500).json({ success: false, message: "Failed to create order" });
   }
 });
 
@@ -54,7 +54,7 @@ router.put("/:id/status", protect, adminOnly, async (req, res) => {
     );
 
     if (!updatedOrder) {
-      return res.status(404).json({ message: "Order not found" });
+      return res.status(404).json({ success: false, message: "Order not found" });
     }
 
     io.emit("orderUpdated", {
@@ -68,7 +68,7 @@ router.put("/:id/status", protect, adminOnly, async (req, res) => {
     });
   } catch (err) {
     console.error("Order Update Error:", err);
-    res.status(500).json({ message: "Failed to update order" });
+    res.status(500).json({ success: false, message: "Failed to update order" });
   }
 });
 
@@ -85,7 +85,7 @@ router.get("/", protect, adminOnly, async (req, res) => {
     });
   } catch (err) {
     console.error("Fetch Orders Error:", err);
-    res.status(500).json({ message: "Failed to fetch orders" });
+    res.status(500).json({ success: false, message: "Failed to fetch orders" });
   }
 });
 
@@ -95,7 +95,7 @@ router.get("/", protect, adminOnly, async (req, res) => {
 router.get("/user/:email", protect, async (req, res) => {
   try {
     if (req.user.email !== req.params.email && !isRequestAdmin(req)) {
-      return res.status(403).json({ message: "Forbidden" });
+      return res.status(403).json({ success: false, message: "Forbidden" });
     }
     const orders = await Order.find({
       customerEmail: req.params.email,
@@ -107,7 +107,7 @@ router.get("/user/:email", protect, async (req, res) => {
     });
   } catch (err) {
     console.error("Error fetching user orders:", err);
-    res.status(500).json({ message: "Failed to fetch user orders" });
+    res.status(500).json({ success: false, message: "Failed to fetch user orders" });
   }
 });
 

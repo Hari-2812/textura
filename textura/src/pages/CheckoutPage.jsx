@@ -3,8 +3,7 @@ import "../styles/CheckoutPage.css";
 import { useUser } from "../context/UserContext";
 import { useCart } from "../context/CartContext";
 import { STATES, DISTRICTS } from "./ProfilePage";
-import { BACKEND_URL } from "../api";
-// test commit - gpay check
+import { post } from "../services/httpService";
 
 const CheckoutPage = () => {
   const { user, setUser } = useUser();
@@ -27,7 +26,6 @@ const CheckoutPage = () => {
     landmark: user?.landmark || "",
   });
 
-  const backendUrl = BACKEND_URL;
 
   /* ============================================================
       VALIDATION (FOR MODAL)
@@ -167,13 +165,7 @@ const CheckoutPage = () => {
     };
 
     try {
-      const response = await fetch(`${backendUrl}/api/orders`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(orderData),
-      });
-
-      const data = await response.json();
+      const data = await post("/orders", orderData);
 
       if (data.success) {
         const id = data.order?.orderId || data.orderId || data.id || "";
@@ -185,11 +177,11 @@ const CheckoutPage = () => {
           window.location.href = "/";
         }, 5000);
       } else {
-        setErrorMsg("Order failed. Please try again.");
+        setErrorMsg(data?.message || "Order failed. Please try again.");
       }
     } catch (error) {
       console.error(error);
-      setErrorMsg("Server error. Please try again later.");
+      setErrorMsg(error?.normalizedMessage || "Server error. Please try again later.");
     }
   };
 

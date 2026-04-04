@@ -1,6 +1,6 @@
 // src/pages/MyOrders.jsx
 import React, { useEffect, useState } from "react";
-import { BACKEND_URL } from "../api";
+import { get } from "../services/httpService";
 import "../styles/MyOrders.css";
 import { useNavigate } from "react-router-dom";
 
@@ -18,45 +18,22 @@ const MyOrders = () => {
     }
 
     const user = JSON.parse(stored);
-    const backendUrl = BACKEND_URL;
-    const url = `${backendUrl}/api/orders/user/${encodeURIComponent(
-      user.email
-    )}`;
 
     const fetchOrders = async () => {
       setLoading(true);
       setError("");
       try {
-        const res = await fetch(url, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            // If you later protect this route with JWT, add:
-            // Authorization: `Bearer ${localStorage.getItem("userToken")}`
-          },
-        });
+        const data = await get(`/orders/user/${encodeURIComponent(user.email)}`);
 
-        if (!res.ok) {
-          const text = await res.text();
-          throw new Error(
-            `Server responded ${res.status}: ${text || res.statusText}`
-          );
-        }
-
-        const data = await res.json();
-
-        // backend returns { success: true, orders: [...] }
-        if (data && data.success) {
+        if (data?.success) {
           setOrders(Array.isArray(data.orders) ? data.orders : []);
-        } else if (Array.isArray(data)) {
-          // fallback if backend returned raw array
-          setOrders(data);
         } else {
           setOrders([]);
+          setError(data?.message || "Could not load orders.");
         }
       } catch (err) {
         console.error("Error loading orders:", err);
-        setError("Failed to load orders. Please try again later.");
+        setError(err?.normalizedMessage || "Failed to load orders. Please try again later.");
       } finally {
         setLoading(false);
       }
